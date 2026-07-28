@@ -121,7 +121,7 @@ async def process_stream_pipeline(stream_id: int):
             return
             
         # Save raw transcript to GCS (or local storage fallback)
-        gcs_uri = storage_manager.save_transcript(stream.video_id, vtt_text)
+        gcs_uri = storage_manager.save_transcript(video_id, vtt_text)
         
         # Step 2: Parse VTT and Chunk into 15-min intervals
         cues = parse_vtt(vtt_text)

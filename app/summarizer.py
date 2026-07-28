@@ -32,7 +32,11 @@ Transcript segment:
 
 Instructions:
 1. Summarize all main topics, stories, jokes, lore references, or member interactions in this segment in detail.
-2. Extract all hilarious, bizarre, or standout quotes with approximate timestamps (HH:MM:SS format).
+2. Extract all hilarious, bizarre, or standout quotes with exact START timestamps (HH:MM:SS format).
+
+CRITICAL TIMESTAMP RULE:
+- Always use the exact START timestamp (HH:MM:SS) where a topic, anecdote, or story BEGINS in the transcript.
+- NEVER use the middle or end timestamp of a story segment.
 
 Output schema (JSON):
 {{
@@ -79,6 +83,7 @@ CRITICAL INSTRUCTIONS:
 - DO NOT start with long, wordy introductory paragraphs or essay-style preamble.
 - START IMMEDIATELY with bullet points (TL;DR Quick Summary).
 - Keep all bullet points direct, concise, and easy to scan.
+- TIMESTAMP ACCURACY: Ensure all story timestamps (HH:MM:SS) represent the exact STARTING moment when a story or topic begins.
 
 Structure:
 # {stream_title}

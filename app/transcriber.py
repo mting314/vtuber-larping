@@ -19,40 +19,58 @@ def download_youtube_subtitles(video_id: str) -> Tuple[Optional[str], Dict[str, 
     Returns (vtt_content, metadata_dict).
     """
     video_url = f"https://www.youtube.com/watch?v={video_id}"
+    meta = {}
     
+    # Step 1: Extract metadata
+    try:
+        import yt_dlp
+        ydl_opts = {'skip_download': True, 'quiet': True, 'no_warnings': True}
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(video_url, download=False)
+            if info:
+                meta = {
+                    'title': info.get('title', f'YouTube Stream ({video_id})'),
+                    'duration': info.get('duration', 0),
+                    'channel': info.get('uploader', ''),
+                    'thumbnail_url': info.get('thumbnail', f'https://i.ytimg.com/vi/{video_id}/hqdefault.jpg')
+                }
+    except Exception as e:
+        logger.warning(f"Could not fetch metadata for {video_id}: {e}")
+
+    # Step 2: Download VTT Subtitles
     with tempfile.TemporaryDirectory() as temp_dir:
-        output_tmpl = str(Path(temp_dir) / "%(id)s")
+        output_tmpl = str(Path(temp_dir) / "%(id)s.%(ext)s")
         cmd = [
             "yt-dlp",
             "--write-auto-subs",
-            "--sub-lang", "en",
+            "--write-subs",
+            "--sub-lang", "en,en-orig,en-US,ja,ja-orig",
+            "--sub-format", "vtt",
             "--skip-download",
-            "--dump-json",
+            "--no-warnings",
             "-o", output_tmpl,
             video_url
         ]
         
         try:
-            res = subprocess.run(cmd, capture_output=True, text=True, check=True)
-            meta = {}
-            if res.stdout:
-                import json
-                try:
-                    meta = json.loads(res.stdout.strip().split('\n')[0])
-                except Exception:
-                    pass
-            
-            # Find generated .vtt file
+            subprocess.run(cmd, capture_output=True, text=True, check=True)
             vtt_files = list(Path(temp_dir).glob("*.vtt"))
             if vtt_files:
-                vtt_content = vtt_files[0].read_text(encoding="utf-8")
+                # Prefer .en.vtt or .en-orig.vtt, or first available VTT
+                chosen_file = vtt_files[0]
+                for f in vtt_files:
+                    if ".en" in f.name:
+                        chosen_file = f
+                        break
+                vtt_content = chosen_file.read_text(encoding="utf-8")
+                logger.info(f"Successfully downloaded subtitle {chosen_file.name} for {video_id}")
                 return vtt_content, meta
             else:
                 logger.warning(f"No VTT subtitle files found for {video_id}")
                 return None, meta
         except subprocess.CalledProcessError as e:
             logger.error(f"yt-dlp failed for {video_id}: {e.stderr}")
-            return None, {}
+            return None, meta
 
 def parse_vtt(vtt_content: str) -> List[Cue]:
     """Parses raw VTT text into clean Cue objects, stripping tags and duplicate lines."""
