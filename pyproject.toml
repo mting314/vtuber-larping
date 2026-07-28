@@ -1,0 +1,14 @@
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = [
+    "B008",   # Depends in FastAPI argument defaults
+    "BLE001",  # Catching blind Exception in try-except loggers
+    "DTZ003",  # utcnow() in datetime models
+    "SIM102",  # Nested if statements
+    "E501",    # Line length
+    "W293"     # Whitespace on blank lines
+]

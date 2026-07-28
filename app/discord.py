@@ -1,7 +1,9 @@
-import json
+from typing import Any
+
 import httpx
-from typing import List, Dict, Any, Optional
+
 from app.logger import discord_logger
+
 
 async def send_discord_summary_embed(
     webhook_url: str,
@@ -11,7 +13,7 @@ async def send_discord_summary_embed(
     video_id: str,
     thumbnail_url: str,
     duration_seconds: int,
-    standout_highlights: List[Dict[str, Any]],
+    standout_highlights: list[dict[str, Any]],
     master_summary_snippet: str
 ) -> bool:
     """Sends a rich Discord embed notification for a completed stream summary."""

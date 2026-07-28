@@ -1,5 +1,6 @@
 import os
-from sqlmodel import SQLModel, create_engine, Session
+
+from sqlmodel import Session, SQLModel, create_engine
 
 DB_FILE = os.getenv("DATABASE_FILE", "vtuber_digest.db")
 DATABASE_URL = f"sqlite:///{DB_FILE}"

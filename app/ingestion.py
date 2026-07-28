@@ -1,7 +1,8 @@
-import xml.etree.ElementTree as ET
-import httpx
-from typing import List, Dict, Any, Optional
 import logging
+import xml.etree.ElementTree as ET
+from typing import Any
+
+import httpx
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ def is_strict_chatting_stream(title: str) -> bool:
         return True
     return False
 
-def parse_youtube_atom_feed(xml_content: str) -> List[Dict[str, Any]]:
+def parse_youtube_atom_feed(xml_content: str) -> list[dict[str, Any]]:
     """Parses YouTube Atom XML feed string and returns list of video objects."""
     entries = []
     try:
@@ -64,7 +65,7 @@ def parse_youtube_atom_feed(xml_content: str) -> List[Dict[str, Any]]:
         
     return entries
 
-async def poll_channel_rss(channel_id: str) -> List[Dict[str, Any]]:
+async def poll_channel_rss(channel_id: str) -> list[dict[str, Any]]:
     """Fetches public RSS XML feed for a YouTube channel without consuming API quota."""
     url = f"https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}"
     async with httpx.AsyncClient(timeout=10.0) as client:

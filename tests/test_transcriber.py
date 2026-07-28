@@ -1,4 +1,4 @@
-from app.transcriber import parse_vtt, chunk_cues
+from app.transcriber import chunk_cues, parse_vtt
 
 SAMPLE_VTT = """WEBVTT
 Kind: captions

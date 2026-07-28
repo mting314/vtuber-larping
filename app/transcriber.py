@@ -1,9 +1,9 @@
+import logging
 import re
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import List, Tuple, Dict, Any, Optional
-import logging
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +13,7 @@ class Cue:
         self.time_str = time_str
         self.text = text
 
-def download_youtube_subtitles(video_id: str) -> Tuple[Optional[str], Dict[str, Any]]:
+def download_youtube_subtitles(video_id: str) -> tuple[str | None, dict[str, Any]]:
     """
     Downloads YouTube English/auto-subtitles for a video using yt-dlp.
     Returns (vtt_content, metadata_dict).
@@ -79,10 +79,10 @@ def download_youtube_subtitles(video_id: str) -> Tuple[Optional[str], Dict[str, 
                     return None, meta
         return None, meta
 
-def parse_vtt(vtt_content: str) -> List[Cue]:
+def parse_vtt(vtt_content: str) -> list[Cue]:
     """Parses raw VTT text into clean Cue objects, stripping tags and duplicate lines."""
     lines = vtt_content.splitlines()
-    cues: List[Cue] = []
+    cues: list[Cue] = []
     
     time_pattern = re.compile(r'(\d+:\d{2}:\d{2}\.\d{3}|\d{2}:\d{2}\.\d{3}) -->')
     curr_time = "00:00:00"
@@ -108,10 +108,10 @@ def parse_vtt(vtt_content: str) -> List[Cue]:
                 
     return cues
 
-def chunk_cues(cues: List[Cue], interval_minutes: int = 15) -> List[Dict[str, Any]]:
+def chunk_cues(cues: list[Cue], interval_minutes: int = 15) -> list[dict[str, Any]]:
     """Groups cues into interval_minutes chunk blocks (e.g. 0-15m, 15-30m) for Map-Reduce processing."""
     interval_secs = interval_minutes * 60
-    buckets: Dict[int, List[Cue]] = {}
+    buckets: dict[int, list[Cue]] = {}
     
     for cue in cues:
         b_idx = cue.start_sec // interval_secs

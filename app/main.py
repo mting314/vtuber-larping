@@ -3,21 +3,28 @@ import json
 import logging
 import re
 from datetime import datetime
-from typing import Optional, List
-from fastapi import FastAPI, Depends, Request, Response, BackgroundTasks, HTTPException, Query
+
+from fastapi import (
+    BackgroundTasks,
+    Depends,
+    FastAPI,
+    HTTPException,
+    Request,
+    Response,
+)
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from sqlmodel import Session, select
 
-from app.database import init_db, get_session
-from app.models import VTuber, Stream, Summary, UserSettings, JobStatus
-from app.storage import storage_manager
-from app.transcriber import download_youtube_subtitles, parse_vtt, chunk_cues
-from app.summarizer import run_map_reduce_pipeline
-from app.ingestion import parse_youtube_atom_feed, poll_channel_rss
+from app.database import get_session, init_db
 from app.discord import send_discord_summary_embed
-from app.logger import ingestion_logger, manual_logger, pipeline_logger, discord_logger
+from app.ingestion import parse_youtube_atom_feed, poll_channel_rss
+from app.logger import ingestion_logger, manual_logger, pipeline_logger
+from app.models import JobStatus, Stream, Summary, UserSettings, VTuber
+from app.storage import storage_manager
+from app.summarizer import run_map_reduce_pipeline
+from app.transcriber import chunk_cues, download_youtube_subtitles, parse_vtt
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -318,9 +325,9 @@ def update_user_settings(payload: dict, session: Session = Depends(get_session))
 # --- Search & Retrieval Endpoints ---
 @app.get("/api/streams")
 def list_streams(
-    agency: Optional[str] = None,
-    vtuber_id: Optional[int] = None,
-    q: Optional[str] = None,
+    agency: str | None = None,
+    vtuber_id: int | None = None,
+    q: str | None = None,
     session: Session = Depends(get_session)
 ):
     query = select(Stream)

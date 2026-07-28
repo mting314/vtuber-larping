@@ -1,7 +1,6 @@
+import logging
 import os
 from pathlib import Path
-from typing import Optional
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +46,7 @@ class StorageManager:
         local_path.write_text(content, encoding="utf-8")
         return str(local_path.absolute())
 
-    def get_transcript(self, video_id: str) -> Optional[str]:
+    def get_transcript(self, video_id: str) -> str | None:
         """Retrieves transcript content from GCS or local storage."""
         filename = f"transcripts/{video_id}.vtt"
         

@@ -1,11 +1,15 @@
+import asyncio
+import json
+import logging
 import os
 import re
-import json
-import asyncio
-from typing import List, Dict, Any, Tuple
-import logging
+from typing import Any
+
 from dotenv import load_dotenv
 from google.genai import types
+from pydantic import BaseModel, Field
+
+from app.glossary import VTUBER_GLOSSARY_PROMPT, normalize_vtuber_transcript_text
 
 load_dotenv()
 
@@ -24,7 +28,6 @@ def get_genai_client():
         logger.info(f"Connecting to Vertex AI (Project: {GCP_PROJECT}, Location: {GCP_LOCATION})")
         return genai.Client(vertexai=True, project=GCP_PROJECT, location=GCP_LOCATION)
 
-from pydantic import BaseModel, Field
 
 class MapHighlightItem(BaseModel):
     timestamp: str = Field(description="Exact START timestamp in HH:MM:SS format")
@@ -34,7 +37,7 @@ class MapHighlightItem(BaseModel):
 class MapChunkResponse(BaseModel):
     time_range: str = Field(description="Start time - End time range")
     summary: str = Field(description="Detailed narrative summary of this segment")
-    highlights: List[MapHighlightItem] = Field(default_factory=list)
+    highlights: list[MapHighlightItem] = Field(default_factory=list)
 
 class StandoutHighlight(BaseModel):
     timestamp: str = Field(description="Exact START timestamp in HH:MM:SS format")
@@ -46,9 +49,9 @@ class TimelineEntry(BaseModel):
     summary: str = Field(description="Chronological segment topic summary")
 
 class MasterSummaryResponse(BaseModel):
-    quick_highlights_tldr: List[str] = Field(description="3-5 executive bullet points summarizing main takeaways (NO timestamps allowed here)")
-    standout_stories: List[StandoutHighlight] = Field(description="Standout stories with exact START timestamps")
-    timeline_breakdown: List[TimelineEntry] = Field(description="Chronological 15-minute topic breakdown")
+    quick_highlights_tldr: list[str] = Field(description="3-5 executive bullet points summarizing main takeaways (NO timestamps allowed here)")
+    standout_stories: list[StandoutHighlight] = Field(description="Standout stories with exact START timestamps")
+    timeline_breakdown: list[TimelineEntry] = Field(description="Chronological 15-minute topic breakdown")
 
 def build_standardized_markdown(vtuber_name: str, stream_title: str, data: MasterSummaryResponse) -> str:
     """Deterministically renders Pydantic response into guaranteed, standardized Markdown."""
@@ -84,9 +87,8 @@ def build_standardized_markdown(vtuber_name: str, stream_title: str, data: Maste
         
     return "\n".join(lines)
 
-from app.glossary import VTUBER_GLOSSARY_PROMPT, normalize_vtuber_transcript_text
 
-async def summarize_chunk_map(chunk: Dict[str, Any]) -> Dict[str, Any]:
+async def summarize_chunk_map(chunk: dict[str, Any]) -> dict[str, Any]:
     start_t = chunk["start_time"]
     end_t = chunk["end_time"]
     text = chunk["text"]
@@ -137,7 +139,7 @@ CRITICAL TIMESTAMP RULE:
             ]
         }
 
-async def summarize_reduce(vtuber_name: str, stream_title: str, chunk_summaries: List[Dict[str, Any]]) -> Tuple[str, List[Dict[str, Any]]]:
+async def summarize_reduce(vtuber_name: str, stream_title: str, chunk_summaries: list[dict[str, Any]]) -> tuple[str, list[dict[str, Any]]]:
     chunks_str = json.dumps(chunk_summaries, indent=2)
     
     prompt = f"""{VTUBER_GLOSSARY_PROMPT}
@@ -193,7 +195,7 @@ CRITICAL RULES:
                 })
         return "\n".join(lines), highlights
 
-async def run_map_reduce_pipeline(vtuber_name: str, stream_title: str, chunks: List[Dict[str, Any]]) -> Tuple[str, List[Dict[str, Any]], List[Dict[str, Any]]]:
+async def run_map_reduce_pipeline(vtuber_name: str, stream_title: str, chunks: list[dict[str, Any]]) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]]]:
     """Runs parallel chunk Map summaries followed by Reduce master synthesis."""
     logger.info(f"Running Map phase for {len(chunks)} chunks using Vertex AI (project: {GCP_PROJECT})...")
     map_tasks = [summarize_chunk_map(chunk) for chunk in chunks]

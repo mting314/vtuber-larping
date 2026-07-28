@@ -10,7 +10,6 @@ VTUBER_NAME_REPLACEMENTS = {
     r"\b[Ff]awa\b": "Fuwawa",
     r"\b[Mm]oco\b": "Mococo",
     r"\b[Ff]uwamoko\b": "FUWAMOCO",
-    r"\b[Ff]uwamoko\b": "FUWAMOCO",
     r"\b[Bb]ay\b": "Bae",
     r"\b[Bb]ae\b": "Baelz",
     r"\b[Mm]umey\b": "Mumei",
