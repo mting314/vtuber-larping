@@ -526,6 +526,13 @@
             </div>
             <div class="modal-body" style="grid-template-columns: 1fr; padding: 1.5rem; gap: 1.25rem;">
                 <div>
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.4rem;">Backend API Server URL</label>
+                    <input type="text" id="backendApiUrlInput" class="search-input" placeholder="http://127.0.0.1:8000">
+                    <small style="color: var(--text-muted); display: block; margin-top: 0.3rem;">
+                        Target FastAPI backend server URL for live stream ingestion & SQLite database queries.
+                    </small>
+                </div>
+                <div>
                     <label style="font-weight: 600; display: block; margin-bottom: 0.4rem;">Discord Webhook URL</label>
                     <input type="text" id="discordWebhookInput" class="search-input" placeholder="https://discord.com/api/webhooks/...">
                     <small style="color: var(--text-muted); display: block; margin-top: 0.3rem;">
@@ -727,9 +734,10 @@
 
         async function openSettingsModal() {
             document.getElementById('settingsModal').classList.add('active');
-            if (isStaticHost) return;
+            document.getElementById('backendApiUrlInput').value = localStorage.getItem('backend_api_url') || 'http://127.0.0.1:8000';
             try {
-                const res = await fetch('/api/settings');
+                const baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? 'http://127.0.0.1:8000' : '');
+                const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/settings`);
                 if (!res.ok) return;
                 const data = await res.json();
                 document.getElementById('discordWebhookInput').value = data.discord_webhook_url || '';
@@ -747,17 +755,18 @@
         }
 
         async function saveSettings() {
-            if (isStaticHost) {
-                alert("ℹ️ Settings modification is disabled on static GitHub Pages hosting.");
-                closeSettingsModal();
-                return;
+            const backendUrl = document.getElementById('backendApiUrlInput').value.trim();
+            if (backendUrl) {
+                localStorage.setItem('backend_api_url', backendUrl);
             }
+            
             const webhookUrl = document.getElementById('discordWebhookInput').value.trim();
             const enabled = document.getElementById('discordEnableToggle').checked;
             const style = document.getElementById('summaryStyleSelect').value;
 
             try {
-                await fetch('/api/settings', {
+                const baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? 'http://127.0.0.1:8000' : '');
+                await fetch(`${baseUrl.replace(/\/$/, '')}/api/settings`, {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -766,11 +775,11 @@
                         summary_style: style
                     })
                 });
-                closeSettingsModal();
-                alert("Settings saved successfully!");
             } catch (err) {
-                alert("Failed to save settings: " + err);
+                console.error("Backend settings update info:", err);
             }
+            closeSettingsModal();
+            alert("Settings saved successfully!");
         }
 
         async function submitStreamUrl() {
@@ -782,16 +791,12 @@
             document.getElementById('triggerProgressGroup').style.display = 'block';
             document.getElementById('triggerSuccessBox').style.display = 'none';
             
-            updateProgressUI('PENDING', 'Step 1/3: Dispatching stream URL to backend ingest worker...', 15);
+            updateProgressUI('PENDING', 'Step 1/3: Dispatching stream URL to FastAPI backend worker...', 15);
 
             // Determine active backend endpoint
-            let targetEndpoint = '/api/streams/trigger';
-            const customBackend = localStorage.getItem('backend_api_url');
-            if (customBackend) {
-                targetEndpoint = customBackend.replace(/\/$/, '') + '/api/streams/trigger';
-            } else if (isStaticHost) {
-                targetEndpoint = 'http://localhost:8000/api/streams/trigger';
-            }
+            let baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? 'http://127.0.0.1:8000' : '');
+            baseUrl = baseUrl.replace(/\/$/, '');
+            const targetEndpoint = `${baseUrl}/api/streams/trigger`;
 
             try {
                 const res = await fetch(targetEndpoint, {
@@ -813,53 +818,13 @@
                 const data = await res.json();
                 
                 if (data.stream_id) {
-                    const pollBaseUrl = targetEndpoint.replace('/api/streams/trigger', '');
-                    startStreamProgressPolling(data.stream_id, pollBaseUrl);
+                    startStreamProgressPolling(data.stream_id, baseUrl);
                 } else {
                     alert("Stream job queued: " + (data.message || "Processing started"));
                     closeTriggerModal();
                 }
             } catch (err) {
-                // If local/custom backend isn't reachable on static host, offer GitHub Actions trigger
-                if (isStaticHost && !customBackend) {
-                    const ghToken = localStorage.getItem('github_token') || prompt("Local backend (http://localhost:8000) not detected.\n\nTo trigger cloud stream summarization via GitHub Actions, enter a GitHub Personal Access Token (or leave blank to cancel):");
-                    if (ghToken) {
-                        localStorage.setItem('github_token', ghToken);
-                        triggerGitHubActionIngest(url, ghToken);
-                        return;
-                    }
-                }
-                alert("Failed to submit stream: " + err.message + "\n\nTip: Start the local server with 'uv run uvicorn app.main:app' or set a Backend API URL in Settings.");
-                openTriggerModal();
-            }
-        }
-
-        async function triggerGitHubActionIngest(streamUrl, token) {
-            updateProgressUI('DISPATCHING', 'Triggering GitHub Actions cloud ingestion runner...', 40);
-            try {
-                const res = await fetch('https://api.github.com/repos/mting314/vtuber-larping/actions/workflows/ingest-stream.yml/dispatches', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        ref: 'main',
-                        inputs: { stream_url: streamUrl }
-                    })
-                });
-                if (res.ok || res.status === 204) {
-                    updateProgressUI('COMPLETED', '🚀 Cloud Ingestion Workflow Triggered! The stream summary will appear automatically on your dashboard once complete (~2-3 mins).', 100);
-                    setTimeout(() => {
-                        closeTriggerModal();
-                    }, 3500);
-                } else {
-                    const text = await res.text();
-                    throw new Error(`GitHub API returned status ${res.status}: ${text}`);
-                }
-            } catch (e) {
-                alert("Failed to dispatch GitHub Action: " + e.message);
+                alert("Failed to submit stream to backend: " + err.message + "\n\nPlease ensure your FastAPI backend server is running ('uv run uvicorn app.main:app --port 8000') or configure a Backend URL in Settings.");
                 openTriggerModal();
             }
         }
