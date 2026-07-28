@@ -734,9 +734,10 @@
 
         async function openSettingsModal() {
             document.getElementById('settingsModal').classList.add('active');
-            document.getElementById('backendApiUrlInput').value = localStorage.getItem('backend_api_url') || 'http://127.0.0.1:8000';
+            const defaultBackend = 'https://vtuber-digest-backend-467039506910.us-central1.run.app';
+            document.getElementById('backendApiUrlInput').value = localStorage.getItem('backend_api_url') || defaultBackend;
             try {
-                const baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? 'http://127.0.0.1:8000' : '');
+                const baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? defaultBackend : '');
                 const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/settings`);
                 if (!res.ok) return;
                 const data = await res.json();
@@ -755,6 +756,7 @@
         }
 
         async function saveSettings() {
+            const defaultBackend = 'https://vtuber-digest-backend-467039506910.us-central1.run.app';
             const backendUrl = document.getElementById('backendApiUrlInput').value.trim();
             if (backendUrl) {
                 localStorage.setItem('backend_api_url', backendUrl);
@@ -765,7 +767,7 @@
             const style = document.getElementById('summaryStyleSelect').value;
 
             try {
-                const baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? 'http://127.0.0.1:8000' : '');
+                const baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? defaultBackend : '');
                 await fetch(`${baseUrl.replace(/\/$/, '')}/api/settings`, {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
@@ -794,7 +796,7 @@
             updateProgressUI('PENDING', 'Step 1/3: Dispatching stream URL to FastAPI backend worker...', 15);
 
             // Determine active backend endpoint
-            let baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? 'http://127.0.0.1:8000' : '');
+            let baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? 'https://vtuber-digest-backend-467039506910.us-central1.run.app' : '');
             baseUrl = baseUrl.replace(/\/$/, '');
             const targetEndpoint = `${baseUrl}/api/streams/trigger`;
 

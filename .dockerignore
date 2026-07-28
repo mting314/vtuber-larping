@@ -1,0 +1,11 @@
+.git
+.venv
+dist
+scratch
+.user_uploaded
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.ruff_cache
