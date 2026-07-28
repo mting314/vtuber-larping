@@ -824,26 +824,31 @@
                     body: JSON.stringify({url})
                 });
                 
-                if (!res.ok) {
-                    const text = await res.text();
-                    let errMsg = `HTTP Error ${res.status}`;
-                    try {
-                        const json = JSON.parse(text);
-                        if (json.detail) errMsg = json.detail;
-                    } catch (e) {}
-                    throw new Error(errMsg);
+                const rawText = await res.text();
+                let data = null;
+                try {
+                    data = JSON.parse(rawText);
+                } catch (e) {
+                    let snippet = rawText.slice(0, 120);
+                    if (snippet.includes('<html')) {
+                        snippet = "Static host 404 response received instead of backend endpoint.";
+                    }
+                    throw new Error(`Invalid response from server (${res.status}): ${snippet}`);
                 }
 
-                const data = await res.json();
+                if (!res.ok) {
+                    const errMsg = (data && data.detail) ? data.detail : `HTTP Error ${res.status}`;
+                    throw new Error(errMsg);
+                }
                 
-                if (data.stream_id) {
+                if (data && data.stream_id) {
                     startStreamProgressPolling(data.stream_id, baseUrl);
                 } else {
-                    alert("Stream job queued: " + (data.message || "Processing started"));
+                    alert("Stream job queued: " + (data ? data.message : "Processing started"));
                     closeTriggerModal();
                 }
             } catch (err) {
-                alert("Failed to submit stream to backend: " + err.message + "\n\nPlease ensure your FastAPI backend server is running or reachable.");
+                alert("Failed to submit stream: " + err.message + "\n\nTip: On GitHub Pages, ensure live Cloud Run backend is accessible, or test locally on localhost:8000.");
                 openTriggerModal();
             }
         }
@@ -862,15 +867,21 @@
                 try {
                     const endpoint = (baseUrl ? baseUrl.replace(/\/$/, '') : '') + `/api/streams/${streamId}`;
                     const res = await fetch(endpoint);
-                    const stream = await res.json();
+                    const rawText = await res.text();
+                    let stream = null;
+                    try {
+                        stream = JSON.parse(rawText);
+                    } catch (e) {
+                        return; // Retry next interval if transient response
+                    }
                     
-                    if (stream.status === 'PENDING') {
+                    if (stream && stream.status === 'PENDING') {
                         updateProgressUI('PENDING', 'Step 1/3: Queuing stream & fetching video info...', 25);
-                    } else if (stream.status === 'FETCHING_TRANSCRIPT') {
+                    } else if (stream && stream.status === 'FETCHING_TRANSCRIPT') {
                         updateProgressUI('FETCHING TRANSCRIPT', 'Step 2/3: Downloading auto-subtitles via yt-dlp & parsing VTT cues...', 55);
-                    } else if (stream.status === 'SUMMARIZING') {
+                    } else if (stream && stream.status === 'SUMMARIZING') {
                         updateProgressUI('SUMMARIZING', 'Step 3/3: Executing Map-Reduce LLM summarization via Gemini 2.5...', 85);
-                    } else if (stream.status === 'COMPLETED') {
+                    } else if (stream && stream.status === 'COMPLETED') {
                         clearInterval(pollInterval);
                         updateProgressUI('COMPLETED', '🎉 Summary generated successfully!', 100);
                         
@@ -884,7 +895,7 @@
                             };
                             fetchStreams();
                         }, 600);
-                    } else if (stream.status === 'FAILED') {
+                    } else if (stream && stream.status === 'FAILED') {
                         clearInterval(pollInterval);
                         alert("Summarization failed: " + (stream.error_message || "Could not process captions."));
                         closeTriggerModal();
