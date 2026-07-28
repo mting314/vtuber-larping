@@ -4,20 +4,24 @@ import json
 import asyncio
 from typing import List, Dict, Any, Tuple
 import logging
+from dotenv import load_dotenv
 from google.genai import types
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", os.getenv("GOOGLE_API_KEY"))
-GCP_PROJECT = os.getenv("GCP_PROJECT", os.getenv("GOOGLE_CLOUD_PROJECT", "future-name-201021"))
-GCP_LOCATION = os.getenv("GCP_LOCATION", "us-central1")
-
 def get_genai_client():
     from google import genai
-    if GEMINI_API_KEY:
-        return genai.Client(api_key=GEMINI_API_KEY)
+    gemini_api_key = os.getenv("GEMINI_API_KEY", os.getenv("GOOGLE_API_KEY"))
+    gcp_project = os.getenv("GCP_PROJECT", os.getenv("GOOGLE_CLOUD_PROJECT", "future-name-201021"))
+    gcp_location = os.getenv("GCP_LOCATION", "us-central1")
+    
+    if gemini_api_key:
+        return genai.Client(api_key=gemini_api_key)
     else:
-        return genai.Client(vertexai=True, project=GCP_PROJECT, location=GCP_LOCATION)
+        logger.info(f"Connecting to Vertex AI (Project: {gcp_project}, Location: {gcp_location})")
+        return genai.Client(vertexai=True, project=gcp_project, location=gcp_location)
 
 async def summarize_chunk_map(chunk: Dict[str, Any]) -> Dict[str, Any]:
     start_t = chunk["start_time"]
