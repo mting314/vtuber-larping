@@ -10,15 +10,13 @@ This guide covers local environment setup, GCP Vertex AI configuration, and GitH
 * Python 3.12+
 * Google Cloud SDK (`gcloud`)
 
-### 2. Virtual Environment Setup
+### 2. Environment Setup with `uv`
 ```bash
-python -m venv .venv
-# Windows PowerShell
-.venv\Scripts\Activate.ps1
-# Linux / macOS
-source .venv/bin/activate
+# Install uv package manager if needed
+pip install uv
 
-pip install -r requirements.txt
+# Install dependencies and sync environment
+uv sync
 ```
 
 ### 3. GCP Vertex AI Configuration

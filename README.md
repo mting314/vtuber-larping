@@ -65,16 +65,17 @@ flowchart TD
 
 ### 1. Prerequisites
 * Python 3.12+
+* [`uv`](https://github.com/astral-sh/uv) fast Python package manager (`pip install uv` or `winget install astral-sh.uv`)
 * Google Cloud SDK (`gcloud`) with a GCP Project ID
 
-### 2. Installation
+### 2. Installation & Sync
 ```bash
 # Clone the repository
 git clone https://github.com/mting314/vtuber-larping.git
 cd vtuber-larping
 
-# Install dependencies
-pip install -r requirements.txt
+# Sync dependencies and create virtual environment with uv
+uv sync
 ```
 
 ### 3. Environment Configuration
@@ -90,7 +91,7 @@ GCS_BUCKET_NAME=vtuber-summaries
 
 ### 4. Run Local Development Server
 ```bash
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+uv run python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 Open **`http://127.0.0.1:8000`** in your browser to view the interactive web dashboard!
 
@@ -98,13 +99,13 @@ Open **`http://127.0.0.1:8000`** in your browser to view the interactive web das
 
 ## 🧪 Testing & Verification
 
-Run the unit test suite and lint checks:
+Run the unit test suite and lint checks with `uv`:
 ```bash
 # Run Pytest unit tests
-python -m pytest tests/
+uv run pytest tests/
 
 # Run Ruff linting check
-python -m ruff check app/ tests/
+uv run ruff check app/ tests/
 ```
 
 ---
