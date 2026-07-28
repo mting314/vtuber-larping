@@ -34,7 +34,7 @@ jobs:
 
       - name: Export Static Site & Summaries
         run: |
-          python scratch/export_static_gh_pages.py
+          python -m scratch.export_static_gh_pages
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
