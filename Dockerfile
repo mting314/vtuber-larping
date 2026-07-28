@@ -24,9 +24,12 @@ COPY pyproject.toml uv.lock README.md ./
 # Install project dependencies into virtual environment /app/.venv
 RUN uv sync --frozen --no-cache
 
-# Copy application source code & pre-populated SQLite database
+# Copy application source code.
+# NOTE: the SQLite DB is intentionally NOT copied — it is gitignored/untracked,
+# so `COPY vtuber_digest.db` broke the build in CI. The app calls init_db() on
+# startup and seeds default VTubers, so the container boots with a fresh DB.
+# Curated summary data is persisted separately in GCS (see scratch/db_sync.py).
 COPY app/ ./app/
-COPY vtuber_digest.db ./vtuber_digest.db
 
 # Expose port 8080 for Cloud Run
 ENV PORT=8080

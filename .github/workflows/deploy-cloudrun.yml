@@ -1,0 +1,65 @@
+name: Deploy Backend to Cloud Run
+
+# Deploys the FastAPI backend (the dynamic API behind the "Summarize Stream"
+# POST flow) to Google Cloud Run. Previously this was only ever deployed by hand,
+# which is why the live backend drifted from main.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # Only redeploy when something that affects the image actually changes.
+      - "app/**"
+      - "Dockerfile"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/deploy-cloudrun.yml"
+  workflow_dispatch:
+
+env:
+  GCP_PROJECT: vtuber-digest-503801
+  GCP_REGION: us-central1
+  SERVICE_NAME: vtuber-digest-backend
+  GCS_BUCKET_NAME: vtuber-summaries
+
+concurrency:
+  group: cloudrun-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # The deploying service account (GCP_VERTEX_SA_KEY) needs:
+      #   roles/run.admin, roles/cloudbuild.builds.editor,
+      #   roles/artifactregistry.writer, roles/iam.serviceAccountUser
+      # plus roles/storage.objectAdmin on the bucket for the runtime SA.
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_VERTEX_SA_KEY }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT }}
+
+      - name: Deploy to Cloud Run (source build)
+        run: |
+          gcloud run deploy "$SERVICE_NAME" \
+            --source . \
+            --project "$GCP_PROJECT" \
+            --region "$GCP_REGION" \
+            --allow-unauthenticated \
+            --port 8080 \
+            --set-env-vars "GCP_PROJECT=$GCP_PROJECT,GCP_LOCATION=$GCP_REGION,GCS_BUCKET_NAME=$GCS_BUCKET_NAME"
+
+      - name: Show service URL
+        run: |
+          gcloud run services describe "$SERVICE_NAME" \
+            --project "$GCP_PROJECT" --region "$GCP_REGION" \
+            --format 'value(status.url)'
