@@ -114,38 +114,46 @@ def on_startup():
 
 # --- Background Task Pipeline ---
 async def process_stream_pipeline(stream_id: int):
-    logger.info(f"Starting pipeline execution for Stream ID: {stream_id}")
+    pipeline_logger.info(f"[Stream {stream_id}] Pipeline started.")
     with next(get_session()) as session:
         stream = session.get(Stream, stream_id)
         if not stream:
+            pipeline_logger.error(f"[Stream {stream_id}] Aborting: stream row not found.")
             return
-        
+
         stream.status = JobStatus.FETCHING_TRANSCRIPT
         video_id = stream.video_id
         session.add(stream)
         session.commit()
+    pipeline_logger.info(f"[Stream {stream_id}] Status -> FETCHING_TRANSCRIPT for video_id={video_id}.")
 
     try:
         # Step 1: Download Subtitles via yt-dlp
+        pipeline_logger.info(f"[Stream {stream_id}] Downloading subtitles via yt-dlp...")
         vtt_text, meta = download_youtube_subtitles(video_id)
-        
+
         if not vtt_text:
+            fail_msg = "No auto-captions or subtitles available yet."
+            pipeline_logger.warning(f"[Stream {stream_id}] Status -> FAILED: {fail_msg} (video_id={video_id})")
             with next(get_session()) as session:
                 stream = session.get(Stream, stream_id)
                 stream.status = JobStatus.FAILED
-                stream.error_message = "No auto-captions or subtitles available yet."
+                stream.error_message = fail_msg
                 session.add(stream)
                 session.commit()
             return
             
         # Save raw transcript to GCS (or local storage fallback)
         gcs_uri = storage_manager.save_transcript(video_id, vtt_text)
-        
+        pipeline_logger.info(f"[Stream {stream_id}] Transcript saved to {gcs_uri}.")
+
         # Step 2: Parse VTT and Chunk into 15-min intervals
         cues = parse_vtt(vtt_text)
         chunks = chunk_cues(cues, interval_minutes=15)
-        
+        pipeline_logger.info(f"[Stream {stream_id}] Parsed {len(cues)} cues into {len(chunks)} chunks.")
+
         # Step 3: Run Map-Reduce LLM Summarizer
+        pipeline_logger.info(f"[Stream {stream_id}] Status -> SUMMARIZING (Map-Reduce over {len(chunks)} chunks).")
         with next(get_session()) as session:
             stream = session.get(Stream, stream_id)
             stream.status = JobStatus.SUMMARIZING
