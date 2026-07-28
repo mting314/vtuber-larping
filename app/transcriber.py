@@ -37,7 +37,7 @@ def download_youtube_subtitles(video_id: str) -> Tuple[Optional[str], Dict[str, 
     except Exception as e:
         logger.warning(f"Could not fetch metadata for {video_id}: {e}")
 
-    # Step 2: Download VTT Subtitles
+    # Step 2: Download VTT Subtitles with automatic retry backoff
     with tempfile.TemporaryDirectory() as temp_dir:
         output_tmpl = str(Path(temp_dir) / "%(id)s.%(ext)s")
         cmd = [
@@ -52,25 +52,32 @@ def download_youtube_subtitles(video_id: str) -> Tuple[Optional[str], Dict[str, 
             video_url
         ]
         
-        try:
-            subprocess.run(cmd, capture_output=True, text=True, check=True)
-            vtt_files = list(Path(temp_dir).glob("*.vtt"))
-            if vtt_files:
-                # Prefer .en.vtt or .en-orig.vtt, or first available VTT
-                chosen_file = vtt_files[0]
-                for f in vtt_files:
-                    if ".en" in f.name:
-                        chosen_file = f
-                        break
-                vtt_content = chosen_file.read_text(encoding="utf-8")
-                logger.info(f"Successfully downloaded subtitle {chosen_file.name} for {video_id}")
-                return vtt_content, meta
-            else:
-                logger.warning(f"No VTT subtitle files found for {video_id}")
-                return None, meta
-        except subprocess.CalledProcessError as e:
-            logger.error(f"yt-dlp failed for {video_id}: {e.stderr}")
-            return None, meta
+        max_attempts = 3
+        for attempt in range(1, max_attempts + 1):
+            try:
+                subprocess.run(cmd, capture_output=True, text=True, check=True)
+                vtt_files = list(Path(temp_dir).glob("*.vtt"))
+                if vtt_files:
+                    chosen_file = vtt_files[0]
+                    for f in vtt_files:
+                        if ".en" in f.name:
+                            chosen_file = f
+                            break
+                    vtt_content = chosen_file.read_text(encoding="utf-8")
+                    logger.info(f"Successfully downloaded subtitle {chosen_file.name} for {video_id}")
+                    return vtt_content, meta
+                else:
+                    logger.warning(f"No VTT subtitle files found for {video_id}")
+                    return None, meta
+            except subprocess.CalledProcessError as e:
+                if attempt < max_attempts and "429" in e.stderr:
+                    logger.warning(f"Rate limited (HTTP 429) for {video_id}. Retrying in {attempt * 3} seconds... (Attempt {attempt}/{max_attempts})")
+                    import time
+                    time.sleep(attempt * 3)
+                else:
+                    logger.error(f"yt-dlp failed for {video_id}: {e.stderr}")
+                    return None, meta
+        return None, meta
 
 def parse_vtt(vtt_content: str) -> List[Cue]:
     """Parses raw VTT text into clean Cue objects, stripping tags and duplicate lines."""
