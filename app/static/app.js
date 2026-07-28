@@ -355,7 +355,16 @@
             }, 2000);
         }
 
+        // Read-only gallery: on the static site there is no backend to accept
+        // POSTs, so hide the live "Summarize Stream" / "Settings" actions.
+        if (isStaticHost) {
+            const actions = document.getElementById('headerActions');
+            if (actions) actions.style.display = 'none';
+        }
+
         // Initial fetch
         fetchStreams();
         // Auto-refresh main grid every 6 seconds to show active progress badges
-        setInterval(fetchStreams, 6000);
+        if (!isStaticHost) {
+            setInterval(fetchStreams, 6000);
+        }

@@ -4,17 +4,11 @@ name: Deploy Backend to Cloud Run
 # POST flow) to Google Cloud Run. Previously this was only ever deployed by hand,
 # which is why the live backend drifted from main.
 
+# Architecture A (read-only gallery) retired the Cloud Run backend from the data
+# path — the dashboard is now static JSON produced by the batch ingest job. This
+# workflow is kept for manual redeploys only (and is the base for follow-up B,
+# where a real hosted DB reintroduces a live backend). It no longer runs on push.
 on:
-  push:
-    branches:
-      - main
-    paths:
-      # Only redeploy when something that affects the image actually changes.
-      - "app/**"
-      - "Dockerfile"
-      - "pyproject.toml"
-      - "uv.lock"
-      - ".github/workflows/deploy-cloudrun.yml"
   workflow_dispatch:
 
 env:

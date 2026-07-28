@@ -416,7 +416,8 @@
                 <div class="logo-badge">V</div>
                 <div class="logo-text">VTuber Digest</div>
             </a>
-            <div class="header-actions">
+            <!-- Live actions require the backend; hidden on the static read-only gallery. -->
+            <div class="header-actions" id="headerActions">
                 <button class="btn" style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-color);" onclick="openSettingsModal()">⚙️ Settings</button>
                 <button class="btn" onclick="openTriggerModal()">+ Summarize Stream</button>
             </div>

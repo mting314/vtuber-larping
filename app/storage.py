@@ -85,15 +85,6 @@ class StorageManager:
             logger.error(f"DB download failed ({e}).")
         return False
 
-    def db_exists(self, blob_name: str = DB_BLOB_PATH) -> bool:
-        """Whether a persisted DB currently exists in GCS."""
-        if not self.bucket:
-            return False
-        try:
-            return self.bucket.blob(blob_name).exists()
-        except Exception:
-            return False
-
     def upload_db(self, local_path: str, blob_name: str = DB_BLOB_PATH) -> bool:
         """Push the local SQLite DB to GCS. Returns True on success."""
         if not self.bucket or not os.path.exists(local_path):
