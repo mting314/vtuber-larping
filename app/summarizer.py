@@ -11,17 +11,18 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
+GCP_PROJECT = os.getenv("GCP_PROJECT", os.getenv("GOOGLE_CLOUD_PROJECT", "vtuber-digest-503801"))
+GCP_LOCATION = os.getenv("GCP_LOCATION", "us-central1")
+
 def get_genai_client():
     from google import genai
     gemini_api_key = os.getenv("GEMINI_API_KEY", os.getenv("GOOGLE_API_KEY"))
-    gcp_project = os.getenv("GCP_PROJECT", os.getenv("GOOGLE_CLOUD_PROJECT", "future-name-201021"))
-    gcp_location = os.getenv("GCP_LOCATION", "us-central1")
     
     if gemini_api_key:
         return genai.Client(api_key=gemini_api_key)
     else:
-        logger.info(f"Connecting to Vertex AI (Project: {gcp_project}, Location: {gcp_location})")
-        return genai.Client(vertexai=True, project=gcp_project, location=gcp_location)
+        logger.info(f"Connecting to Vertex AI (Project: {GCP_PROJECT}, Location: {GCP_LOCATION})")
+        return genai.Client(vertexai=True, project=GCP_PROJECT, location=GCP_LOCATION)
 
 from pydantic import BaseModel, Field
 
