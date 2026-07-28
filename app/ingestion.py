@@ -10,6 +10,29 @@ NAMESPACES = {
     'yt': 'http://www.youtube.com/xml/schemas/2015'
 }
 
+STRICT_CHAT_KEYWORDS = [
+    "chat", "chatting", "zatsudan", "雑談", "free chat", "rambles", "rambling",
+    "talk", "talking", "q&a", "discussion", "tea time", "recap", "unboxing",
+    "schedule", "superchat", "jailbird", "catlord", "hrys", "tako time", "bau bau"
+]
+
+STRICT_NON_CHAT_KEYWORDS = [
+    "zelda", "wind waker", "mario", "pokemon", "minecraft", "valorant", "apex",
+    "elden ring", "dark souls", "resident evil", "palworld", "overcooked",
+    "phasmophobia", "lethal company", "vrchat", "pratfall", "poppucom",
+    "watchalong", "movie", "karaoke", "concert", "3d live", "mini live",
+    "gameplay", "playthrough", "cover", "original song", "#shorts"
+]
+
+def is_strict_chatting_stream(title: str) -> bool:
+    """Returns True if the title indicates a genuine chatting / zatsudan stream."""
+    t_lower = title.lower()
+    if any(k in t_lower for k in STRICT_NON_CHAT_KEYWORDS):
+        return False
+    if any(k in t_lower for k in STRICT_CHAT_KEYWORDS):
+        return True
+    return False
+
 def parse_youtube_atom_feed(xml_content: str) -> List[Dict[str, Any]]:
     """Parses YouTube Atom XML feed string and returns list of video objects."""
     entries = []
@@ -22,10 +45,12 @@ def parse_youtube_atom_feed(xml_content: str) -> List[Dict[str, Any]]:
             channel_id_elem = entry.find('yt:channelId', NAMESPACES)
             author_name_elem = entry.find('atom:author/atom:name', NAMESPACES)
             
-            if video_id_elem is not None and video_id_elem.text:
+            title_text = title_elem.text if title_elem is not None else ''
+            
+            if video_id_elem is not None and video_id_elem.text and is_strict_chatting_stream(title_text):
                 entries.append({
                     'video_id': video_id_elem.text,
-                    'title': title_elem.text if title_elem is not None else '',
+                    'title': title_text,
                     'published_at': published_elem.text if published_elem is not None else '',
                     'channel_id': channel_id_elem.text if channel_id_elem is not None else '',
                     'channel_name': author_name_elem.text if author_name_elem is not None else '',
