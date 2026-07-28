@@ -30,25 +30,37 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      # 'true' only when the GCP key secret is configured; otherwise the deploy
+      # steps are skipped (the run stays green) since Cloud Run can't deploy
+      # without credentials.
+      HAS_GCP: ${{ secrets.GCP_VERTEX_SA_KEY != '' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Skip notice
+        if: env.HAS_GCP != 'true'
+        run: echo "GCP_VERTEX_SA_KEY not set — skipping Cloud Run deploy. Add the secret to enable it."
 
       # The deploying service account (GCP_VERTEX_SA_KEY) needs:
       #   roles/run.admin, roles/cloudbuild.builds.editor,
       #   roles/artifactregistry.writer, roles/iam.serviceAccountUser
       # plus roles/storage.objectAdmin on the bucket for the runtime SA.
       - name: Authenticate to Google Cloud
+        if: env.HAS_GCP == 'true'
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_VERTEX_SA_KEY }}
 
       - name: Set up gcloud
+        if: env.HAS_GCP == 'true'
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ env.GCP_PROJECT }}
 
       - name: Deploy to Cloud Run (source build)
+        if: env.HAS_GCP == 'true'
         run: |
           gcloud run deploy "$SERVICE_NAME" \
             --source . \
@@ -59,6 +71,7 @@ jobs:
             --set-env-vars "GCP_PROJECT=$GCP_PROJECT,GCP_LOCATION=$GCP_REGION,GCS_BUCKET_NAME=$GCS_BUCKET_NAME"
 
       - name: Show service URL
+        if: env.HAS_GCP == 'true'
         run: |
           gcloud run services describe "$SERVICE_NAME" \
             --project "$GCP_PROJECT" --region "$GCP_REGION" \

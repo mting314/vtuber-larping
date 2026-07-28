@@ -27,6 +27,11 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    env:
+      # 'true' only when the GCP key secret is configured. When absent, the GCS
+      # steps are skipped so the site still deploys (empty grid) instead of
+      # hard-failing the whole workflow.
+      HAS_GCP: ${{ secrets.GCP_VERTEX_SA_KEY != '' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -46,13 +51,16 @@ jobs:
           uv sync
 
       - name: Authenticate to Google Cloud
+        if: env.HAS_GCP == 'true'
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_VERTEX_SA_KEY }}
 
       # Pull the persisted DB so we export real summaries instead of rebuilding
       # from an empty database (which is what was wiping the live dashboard).
+      # Skipped when no GCP key is configured (site deploys empty until then).
       - name: Restore summary DB from GCS
+        if: env.HAS_GCP == 'true'
         run: |
           uv run python -m scratch.db_sync pull
 
