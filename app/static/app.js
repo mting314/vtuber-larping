@@ -171,8 +171,19 @@
             document.getElementById('triggerInputGroup').style.display = 'block';
             document.getElementById('triggerProgressGroup').style.display = 'none';
             document.getElementById('triggerSuccessBox').style.display = 'none';
+            document.getElementById('triggerErrorBox').style.display = 'none';
             document.getElementById('streamUrlInput').value = '';
             document.getElementById('triggerModal').classList.add('active');
+        }
+
+        // Surface a failure inside the modal instead of a browser alert().
+        function showTriggerError(message) {
+            if (pollInterval) clearInterval(pollInterval);
+            document.getElementById('triggerInputGroup').style.display = 'none';
+            document.getElementById('triggerProgressGroup').style.display = 'none';
+            document.getElementById('triggerSuccessBox').style.display = 'none';
+            document.getElementById('triggerErrorText').textContent = message;
+            document.getElementById('triggerErrorBox').style.display = 'block';
         }
 
         function closeTriggerModal() {
@@ -288,8 +299,7 @@
                     closeTriggerModal();
                 }
             } catch (err) {
-                alert("Failed to submit stream: " + err.message + "\n\nTip: On GitHub Pages, ensure live Cloud Run backend is accessible, or test locally on localhost:8000.");
-                openTriggerModal();
+                showTriggerError(err.message + " — ensure the live backend is reachable (or run locally on :8000).");
             }
         }
 
@@ -337,8 +347,7 @@
                         }, 600);
                     } else if (stream && stream.status === 'FAILED') {
                         clearInterval(pollInterval);
-                        alert("Summarization failed: " + (stream.error_message || "Could not process captions."));
-                        closeTriggerModal();
+                        showTriggerError(stream.error_message || "Could not process captions.");
                     }
                 } catch (err) {
                     console.error("Polling error:", err);

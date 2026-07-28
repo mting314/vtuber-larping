@@ -513,6 +513,18 @@
                         📖 View Summary Now
                     </button>
                 </div>
+
+                <!-- Error / Failure Box -->
+                <div id="triggerErrorBox" style="display: none; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 1.25rem; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚠️</div>
+                    <h3 style="color: #f87171; margin-bottom: 0.4rem;">Summarization Failed</h3>
+                    <p id="triggerErrorText" style="color: #fca5a5; font-size: 0.9rem; margin-bottom: 1rem; word-break: break-word;">
+                        Something went wrong.
+                    </p>
+                    <button class="btn" onclick="openTriggerModal()" style="width: 100%; justify-content: center; background: #ef4444;">
+                        ↺ Try Another Stream
+                    </button>
+                </div>
             </div>
         </div>
     </div>
