@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import asyncio
 from typing import List, Dict, Any, Tuple
@@ -111,16 +112,21 @@ Output schema (JSON):
             contents=prompt,
             config=types.GenerateContentConfig(response_mime_type="application/json")
         )
-        parsed = json.loads(response.text)
+        text_content = response.text.strip()
+        match = re.search(r'\{.*\}', text_content, re.DOTALL)
+        if match:
+            text_content = match.group(0)
+            
+        parsed = json.loads(text_content, strict=False)
         return parsed.get("master_summary_markdown", ""), parsed.get("standout_highlights", [])
     except Exception as e:
         logger.error(f"Reduce LLM call failed: {e}")
-        lines = [f"# {stream_title}\n\nStream summary for **{vtuber_name}**.\n"]
+        lines = [f"# {stream_title}\n\n## ⚡ Quick Stream Highlights (TL;DR)\n"]
         highlights = []
         for c in chunk_summaries:
             tr = c.get("time_range", "")
             summ = c.get("summary", "")
-            lines.append(f"### {tr}\n{summ}\n")
+            lines.append(f"- **[{tr}]**: {summ[:180]}...")
             for h in c.get("highlights", []):
                 highlights.append({
                     "timestamp": h.get("timestamp", tr.split(" - ")[0]),
