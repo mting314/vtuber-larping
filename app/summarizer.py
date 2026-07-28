@@ -83,20 +83,31 @@ def build_standardized_markdown(vtuber_name: str, stream_title: str, data: Maste
         
     return "\n".join(lines)
 
+from app.glossary import VTUBER_GLOSSARY_PROMPT, normalize_vtuber_transcript_text
+
 async def summarize_chunk_map(chunk: Dict[str, Any]) -> Dict[str, Any]:
     start_t = chunk["start_time"]
     end_t = chunk["end_time"]
     text = chunk["text"]
     
-    prompt = f"""You are an expert VTuber stream analyst summarizing a 15-minute segment of a chatting stream (zatsudan).
+    # Pre-process transcript text with VTuber name dictionary
+    clean_text = normalize_vtuber_transcript_text(text)
+    
+    prompt = f"""{VTUBER_GLOSSARY_PROMPT}
+
+You are an expert VTuber stream analyst summarizing a 15-minute segment of a chatting stream (zatsudan).
 Time range: {start_t} - {end_t}
 
 Transcript segment:
-{text[:8000]}
+{clean_text[:8000]}
 
 Instructions:
 1. Summarize all main topics, stories, jokes, lore references, or member interactions in this segment in detail.
 2. Extract all hilarious, bizarre, or standout quotes with exact START timestamps (HH:MM:SS format).
+
+CRITICAL NOISE & INTRO SUPPRESSION RULE:
+- Completely IGNORE stream starting BGM, "stream starting soon" waiting screens, opening music, screams, or "Yippee" intro exclamations in the first segment.
+- DO NOT mention opening music or intro screens in the summary. Start the narrative directly when the VTuber begins their actual conversation.
 
 CRITICAL TIMESTAMP RULE:
 - Always use the exact START timestamp (HH:MM:SS) where a topic, anecdote, or story BEGINS in the transcript.
@@ -121,14 +132,16 @@ CRITICAL TIMESTAMP RULE:
             "time_range": f"{start_t} - {end_t}",
             "summary": f"Segment from {start_t} to {end_t} discussing stream topics.",
             "highlights": [
-                {"timestamp": start_t, "topic": "Stream segment discussion", "description": text[:200] + "..."}
+                {"timestamp": start_t, "topic": "Stream segment discussion", "description": clean_text[:200] + "..."}
             ]
         }
 
 async def summarize_reduce(vtuber_name: str, stream_title: str, chunk_summaries: List[Dict[str, Any]]) -> Tuple[str, List[Dict[str, Any]]]:
     chunks_str = json.dumps(chunk_summaries, indent=2)
     
-    prompt = f"""You are a master Hololive & VTuber content curator summarizing a complete zatsudan stream for "{vtuber_name}".
+    prompt = f"""{VTUBER_GLOSSARY_PROMPT}
+
+You are a master Hololive & VTuber content curator summarizing a complete zatsudan stream for "{vtuber_name}".
 Stream Title: "{stream_title}"
 
 Here are the 15-minute segment summaries extracted from the stream transcript:
@@ -138,9 +151,11 @@ Task:
 Extract executive quick highlights, standout stories, and chronological timeline entries.
 
 CRITICAL RULES:
-1. quick_highlights_tldr: Provide 3-5 high-level executive summary bullet points. DO NOT include timestamps here.
-2. standout_stories: List 4-8 standout stories with exact START timestamps (HH:MM:SS).
-3. timeline_breakdown: List chronological 15-minute segment summaries with START timestamps (HH:MM:SS).
+1. NO INTRO MUSIC: Completely IGNORE opening BGM, waiting screens, or intro screams/Yippees. Start directly with actual conversational topics.
+2. PROPER NOUN CORRECTION: Strictly verify all VTuber names against the dictionary above (e.g. "Ouro Kronii" / "Kronii", NOT "Crony").
+3. quick_highlights_tldr: Provide 3-5 high-level executive summary bullet points. DO NOT include timestamps here.
+4. standout_stories: List 4-8 standout stories with exact START timestamps (HH:MM:SS).
+5. timeline_breakdown: List chronological 15-minute segment summaries with START timestamps (HH:MM:SS).
 """
 
     try:
