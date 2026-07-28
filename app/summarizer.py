@@ -81,32 +81,41 @@ Here are the 15-minute segment summaries extracted from the stream transcript:
 {chunks_str}
 
 Task:
-Generate a concise, punchy stream breakdown formatted in Markdown.
+Generate a standardized, punchy stream breakdown formatted in Markdown.
 
-CRITICAL INSTRUCTIONS:
-- DO NOT start with long, wordy introductory paragraphs or essay-style preamble.
-- START IMMEDIATELY with bullet points (TL;DR Quick Summary).
-- Keep all bullet points direct, concise, and easy to scan.
-- TIMESTAMP ACCURACY: Ensure all story timestamps (HH:MM:SS) represent the exact STARTING moment when a story or topic begins.
+CRITICAL FORMATTING & STANDARDIZATION RULES:
+1. DO NOT start with long, wordy introductory paragraphs or preamble. START IMMEDIATELY with ## ⚡ Quick Stream Highlights (TL;DR).
+2. ## ⚡ Quick Stream Highlights (TL;DR) formatting:
+   - Provide 3-5 high-level executive bullet points summarizing key takeaways.
+   - DO NOT include timestamps in TL;DR bullet points. Keep them high-level and clean.
+   - Format each bullet point exactly as: - **Topic Title**: Brief explanation.
+3. ## ⭐ Standout Stories & Timestamps formatting:
+   - List 4-8 hilarious, bizarre, or standout stories discussed in the stream.
+   - ALWAYS start each line with exact START timestamp (HH:MM:SS format).
+   - Format each line strictly as: - **[HH:MM:SS] Story Title**: Detailed explanation of what was said.
+4. ## ⏱️ Timeline Breakdown formatting:
+   - Provide chronological 15-minute topic entries spanning the entire stream.
+   - Format each line strictly as: - **[HH:MM:SS]**: Segment summary.
 
-Structure:
+Structure Template:
 # {stream_title}
 
 ## ⚡ Quick Stream Highlights (TL;DR)
-- [Bullet point 1: Key topic/joke/story]
-- [Bullet point 2: Key topic/joke/story]
-- [Bullet point 3: Key topic/joke/story]
-- [Bullet point 4: Key topic/joke/story]
+- **[Topic 1]**: [Executive Summary]
+- **[Topic 2]**: [Executive Summary]
+- **[Topic 3]**: [Executive Summary]
 
 ## ⭐ Standout Stories & Timestamps
-- **[HH:MM:SS] Title**: Short description of standout story or moment.
+- **[00:15:30] Story Title**: Explanation of moment.
+- **[00:42:10] Story Title**: Explanation of moment.
 
 ## ⏱️ Timeline Breakdown
-- **[HH:MM:SS]**: Topic summary
+- **[00:00:00]**: Stream intro and greeting.
+- **[00:15:00]**: Discussing trip memories.
 
 Output schema (JSON):
 {{
-  "master_summary_markdown": "# Markdown text starting with bullet points...",
+  "master_summary_markdown": "# Markdown text matching the exact structure above...",
   "standout_highlights": [
     {{"timestamp": "HH:MM:SS", "title": "Headline", "description": "Short explanation"}}
   ]
@@ -127,7 +136,10 @@ Output schema (JSON):
             text_content = match.group(0)
             
         parsed = json.loads(text_content, strict=False)
-        return parsed.get("master_summary_markdown", ""), parsed.get("standout_highlights", [])
+        master_markdown = parsed.get("master_summary_markdown", "")
+        standout_highlights = parsed.get("standout_highlights", [])
+        
+        return master_markdown, standout_highlights
     except Exception as e:
         logger.error(f"Reduce LLM call failed: {e}")
         lines = [f"# {stream_title}\n\n## ⚡ Quick Stream Highlights (TL;DR)\n"]
@@ -138,7 +150,7 @@ Output schema (JSON):
             lines.append(f"- **[{tr}]**: {summ[:180]}...")
             for h in c.get("highlights", []):
                 highlights.append({
-                    "timestamp": h.get("timestamp", tr.split(" - ")[0]),
+                    "timestamp": h.get("timestamp", tr),
                     "title": h.get("topic", "Highlight"),
                     "description": h.get("description", "")
                 })
