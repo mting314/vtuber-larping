@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 import json
 import logging
 import re
@@ -41,10 +42,20 @@ app.add_middleware(
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
+def _cache_version() -> str:
+    """Content hash of app.js so a changed bundle busts the browser cache."""
+    try:
+        with open("app/static/app.js", "rb") as f:
+            return hashlib.sha256(f.read()).hexdigest()[:12]
+    except FileNotFoundError:
+        return "dev"
+
+
 @app.get("/", response_class=HTMLResponse)
 def read_root():
     with open("app/static/index.html", "r", encoding="utf-8") as f:
-        return f.read()
+        html = f.read()
+    return html.replace("__CACHE_VERSION__", _cache_version())
 
 # --- Periodic RSS Poller Loop ---
 async def background_rss_poller():

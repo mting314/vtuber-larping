@@ -70,14 +70,24 @@ def export_static_site():
         with open(f"{dist_dir}/api/streams.json", "w", encoding="utf-8") as f:
             json.dump(streams_list, f, indent=2, ensure_ascii=False)
 
-    # 3. Copy index.html & static assets to dist/
+    # 3. Copy static JS bundle and inject a content-hash cache buster.
+    # The bundle URL is what the browser keys its cache on, so hashing the
+    # file contents guarantees a changed bundle is always refetched while an
+    # unchanged one stays cached.
+    import hashlib
+
+    with open("app/static/app.js", "rb") as f:
+        app_js_bytes = f.read()
+    cache_version = hashlib.sha256(app_js_bytes).hexdigest()[:12]
+
+    with open(f"{dist_dir}/static/app.js", "wb") as f:
+        f.write(app_js_bytes)
+
+    # 4. Copy index.html to dist/ with the real bundle version substituted in.
     with open("app/static/index.html", "r", encoding="utf-8") as f:
         html_content = f.read()
-    
-    # Inject timestamp cache buster to force browser script refresh
-    import time
-    v_tag = f"?v={int(time.time())}"
-    html_content = html_content.replace('</head>', f'<script>console.log("VTuber Digest Build Version: {v_tag}");</script>\n</head>')
+
+    html_content = html_content.replace("__CACHE_VERSION__", cache_version)
 
     with open(f"{dist_dir}/index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
