@@ -20,6 +20,9 @@ STRICT_NON_CHAT_KEYWORDS = [
     "zelda", "wind waker", "mario", "pokemon", "minecraft", "valorant", "apex",
     "elden ring", "dark souls", "resident evil", "palworld", "overcooked",
     "phasmophobia", "lethal company", "vrchat", "pratfall", "poppucom",
+    "assassin", "creed", "black flag", "gta", "grand theft auto", "final fantasy",
+    "monster hunter", "genshin", "starrail", "honkai", "wuthering", "cyberpunk",
+    "hollow knight", "silksong", "donkey kong", "metroid", "sonic", "halo",
     "watchalong", "movie", "karaoke", "concert", "3d live", "mini live",
     "gameplay", "playthrough", "cover", "original song", "#shorts"
 ]

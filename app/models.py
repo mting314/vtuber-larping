@@ -30,6 +30,7 @@ class Stream(SQLModel, table=True):
     status: JobStatus = Field(default=JobStatus.PENDING, index=True)
     gcs_transcript_uri: Optional[str] = None
     error_message: Optional[str] = None
+    warning_message: Optional[str] = None
     
     vtuber_id: Optional[int] = Field(default=None, foreign_key="vtuber.id")
     vtuber: Optional[VTuber] = Relationship(back_populates="streams")

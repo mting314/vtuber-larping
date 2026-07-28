@@ -147,11 +147,18 @@ async def process_stream_pipeline(stream_id: int):
             chunks=chunks
         )
         
+        # Check for non-blocking issue if 0 highlights extracted
+        warning_msg = None
+        if not standout_highlights:
+            warning_msg = "No standout story highlights detected. Stream may be low-speech or extended gameplay."
+            pipeline_logger.warning(f"Non-blocking warning for Stream ID {stream_id} ({video_id}): {warning_msg}")
+
         # Step 4: Save Summary & Update Stream Status
         with next(get_session()) as session:
             stream = session.get(Stream, stream_id)
             stream.status = JobStatus.COMPLETED
             stream.gcs_transcript_uri = gcs_uri
+            stream.warning_message = warning_msg
             
             summary_obj = Summary(
                 stream_id=stream.id,
@@ -345,6 +352,7 @@ def list_streams(
             "thumbnail_url": s.thumbnail_url,
             "status": s.status,
             "error_message": s.error_message,
+            "warning_message": s.warning_message,
             "vtuber": {
                 "id": s.vtuber.id,
                 "name": s.vtuber.name,
@@ -371,6 +379,8 @@ def get_stream_detail(stream_id: int, session: Session = Depends(get_session)):
         "published_at": stream.published_at.isoformat() if stream.published_at else None,
         "thumbnail_url": stream.thumbnail_url,
         "status": stream.status,
+        "error_message": stream.error_message,
+        "warning_message": stream.warning_message,
         "gcs_transcript_uri": stream.gcs_transcript_uri,
         "vtuber": {
             "id": stream.vtuber.id,
