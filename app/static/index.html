@@ -637,15 +637,22 @@
                 document.getElementById('ytPlayer').src = `https://www.youtube.com/embed/${data.video_id}?enablejsapi=1`;
                 
                 if (data.summary && data.summary.master_summary) {
-                    let htmlContent = marked.parse(data.summary.master_summary);
+                    let rawMarkdown = data.summary.master_summary;
                     
-                    // Replace all HH:MM:SS or MM:SS timestamp matches (with or without brackets/bold tags)
-                    // into interactive clickable badge elements
-                    htmlContent = htmlContent.replace(/\[?(\b\d{1,2}:\d{2}(?::\d{2})?\b)\]?:?/g, (match, p1) => {
-                        return `<span class="timestamp-tag" style="cursor: pointer; display: inline-block; font-weight: 700; background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 2px 8px; font-size: 0.85rem; margin-right: 6px;" onclick="jumpToTime('${p1}', '${data.video_id}')">⏱️ ${p1}</span>`;
+                    // Transform [HH:MM:SS] or [MM:SS] tags in raw Markdown into markdown timestamp links
+                    rawMarkdown = rawMarkdown.replace(/\[(\d{1,2}:\d{2}(?::\d{2})?)\]/g, (match, p1) => {
+                        return `[⏱️ ${p1}](#t=${p1})`;
                     });
+
+                    let htmlContent = marked.parse(rawMarkdown);
                     
-                    document.getElementById('modalSummaryText').innerHTML = htmlContent;
+                    // Convert generated #t=HH:MM:SS links into interactive video seeking links
+                    htmlContent = htmlContent.replace(/href="#t=([^"]+)"/g, (match, p1) => {
+                        return `href="javascript:void(0)" class="timestamp-link" style="color: #38bdf8; font-weight: 700; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 2px 8px; text-decoration: none; cursor: pointer; display: inline-block; margin-right: 4px;" onclick="jumpToTime('${p1}', '${data.video_id}')"`;
+                    });
+
+                    const summaryContainer = document.getElementById('modalSummaryText');
+                    summaryContainer.innerHTML = htmlContent;
                 } else {
                     document.getElementById('modalSummaryText').innerHTML = `<p style="color: var(--text-muted);">Status: ${data.status}... Summary is being generated.</p>`;
                 }
