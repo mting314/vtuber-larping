@@ -21,7 +21,7 @@ ENV PATH="/uv/bin:$PATH"
 # Copy pyproject.toml, uv.lock, and README.md
 COPY pyproject.toml uv.lock README.md ./
 
-# Install project dependencies
+# Install project dependencies into virtual environment /app/.venv
 RUN uv sync --frozen --no-cache
 
 # Copy application source code & pre-populated SQLite database
@@ -32,4 +32,5 @@ COPY vtuber_digest.db ./vtuber_digest.db
 ENV PORT=8080
 EXPOSE 8080
 
-CMD ["uv", "run", "python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# Execute uvicorn directly from the virtual environment for instant sub-second boot time
+CMD ["/app/.venv/bin/python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
