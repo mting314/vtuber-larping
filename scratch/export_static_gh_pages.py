@@ -3,7 +3,7 @@ import json
 import shutil
 import sys
 from sqlmodel import Session, select
-from app.database import engine
+from app.database import engine, init_db
 from app.models import VTuber, Stream, Summary, JobStatus
 
 sys.stdout.reconfigure(encoding='utf-8')
@@ -17,6 +17,7 @@ def export_static_site():
     os.makedirs(f"{dist_dir}/static", exist_ok=True)
 
     print("=== Exporting VTuber Digest for GitHub Pages ===")
+    init_db()
 
     with Session(engine) as session:
         vtubers = session.exec(select(VTuber)).all()
