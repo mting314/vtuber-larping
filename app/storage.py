@@ -7,6 +7,12 @@ logger = logging.getLogger(__name__)
 GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "vtuber-summaries")
 LOCAL_DATA_DIR = Path("data")
 
+# GCS object paths for shared state (DB + yt-dlp cookies). Kept here (in the
+# app package) so both the Cloud Run runtime image and CI can use one code path;
+# scratch/ is excluded from the Docker image.
+DB_BLOB_PATH = os.getenv("DB_BLOB_PATH", "state/vtuber_digest.db")
+COOKIES_BLOB_PATH = os.getenv("YT_COOKIES_GCS_BLOB", "state/youtube_cookies.txt")
+
 class StorageManager:
     def __init__(self):
         self.gcs_client = None
@@ -61,7 +67,57 @@ class StorageManager:
         local_path = LOCAL_DATA_DIR / filename
         if local_path.exists():
             return local_path.read_text(encoding="utf-8")
-            
+
         return None
+
+    # --- Shared-state sync (SQLite DB + yt-dlp cookies) ---
+    def download_db(self, local_path: str, blob_name: str = DB_BLOB_PATH) -> bool:
+        """Pull the persisted SQLite DB from GCS. Returns True if downloaded."""
+        if not self.bucket:
+            return False
+        try:
+            blob = self.bucket.blob(blob_name)
+            if blob.exists():
+                blob.download_to_filename(local_path)
+                logger.info(f"Downloaded DB from gs://{GCS_BUCKET_NAME}/{blob_name}")
+                return True
+        except Exception as e:
+            logger.error(f"DB download failed ({e}).")
+        return False
+
+    def db_exists(self, blob_name: str = DB_BLOB_PATH) -> bool:
+        """Whether a persisted DB currently exists in GCS."""
+        if not self.bucket:
+            return False
+        try:
+            return self.bucket.blob(blob_name).exists()
+        except Exception:
+            return False
+
+    def upload_db(self, local_path: str, blob_name: str = DB_BLOB_PATH) -> bool:
+        """Push the local SQLite DB to GCS. Returns True on success."""
+        if not self.bucket or not os.path.exists(local_path):
+            return False
+        try:
+            self.bucket.blob(blob_name).upload_from_filename(local_path)
+            logger.info(f"Uploaded DB to gs://{GCS_BUCKET_NAME}/{blob_name}")
+            return True
+        except Exception as e:
+            logger.error(f"DB upload failed ({e}).")
+        return False
+
+    def download_cookies(self, local_path: str, blob_name: str = COOKIES_BLOB_PATH) -> bool:
+        """Pull yt-dlp cookies.txt from GCS if present. Returns True if downloaded."""
+        if not self.bucket:
+            return False
+        try:
+            blob = self.bucket.blob(blob_name)
+            if blob.exists():
+                blob.download_to_filename(local_path)
+                logger.info(f"Downloaded yt-dlp cookies to {local_path}")
+                return True
+        except Exception as e:
+            logger.warning(f"Cookies download failed ({e}).")
+        return False
 
 storage_manager = StorageManager()

@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 import subprocess
 import tempfile
@@ -6,6 +7,31 @@ from pathlib import Path
 from typing import Any
 
 logger = logging.getLogger(__name__)
+
+# YouTube blocks yt-dlp from datacenter IPs ("Sign in to confirm you're not a
+# bot") unless it gets authenticated cookies. We look for a local cookies.txt,
+# falling back to pulling one from GCS (state/youtube_cookies.txt).
+_COOKIES_PATH = os.getenv("YT_COOKIES_FILE", "/tmp/youtube_cookies.txt")
+_cookies_checked = False
+
+
+def get_cookies_path() -> str | None:
+    """Return a path to a usable cookies.txt, or None if unavailable."""
+    global _cookies_checked
+    if os.path.exists(_COOKIES_PATH):
+        return _COOKIES_PATH
+    if _cookies_checked:
+        return None
+    _cookies_checked = True  # only attempt the GCS pull once per process
+    try:
+        from app.storage import storage_manager
+        if storage_manager.download_cookies(_COOKIES_PATH):
+            return _COOKIES_PATH
+    except Exception as e:
+        logger.warning(f"Could not fetch YouTube cookies from GCS: {e}")
+    logger.warning("No YouTube cookies available — yt-dlp may be bot-blocked on datacenter IPs.")
+    return None
+
 
 class Cue:
     def __init__(self, start_sec: int, time_str: str, text: str):
@@ -20,11 +46,14 @@ def download_youtube_subtitles(video_id: str) -> tuple[str | None, dict[str, Any
     """
     video_url = f"https://www.youtube.com/watch?v={video_id}"
     meta = {}
-    
+    cookies_path = get_cookies_path()
+
     # Step 1: Extract metadata
     try:
         import yt_dlp
         ydl_opts = {'skip_download': True, 'quiet': True, 'no_warnings': True}
+        if cookies_path:
+            ydl_opts['cookiefile'] = cookies_path
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(video_url, download=False)
             if info:
@@ -51,8 +80,10 @@ def download_youtube_subtitles(video_id: str) -> tuple[str | None, dict[str, Any
             "--extractor-args", "youtube:player_client=android,web",
             "--no-warnings",
             "-o", output_tmpl,
-            video_url
         ]
+        if cookies_path:
+            cmd += ["--cookies", cookies_path]
+        cmd.append(video_url)
         
         max_attempts = 3
         for attempt in range(1, max_attempts + 1):

@@ -18,7 +18,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from sqlmodel import Session, select
 
-from app.database import get_session, init_db
+from app.database import DB_FILE, get_session, init_db
 from app.discord import send_discord_summary_embed
 from app.ingestion import parse_youtube_atom_feed, poll_channel_rss
 from app.logger import ingestion_logger, manual_logger, pipeline_logger
@@ -90,8 +90,40 @@ async def background_rss_poller():
             
         await asyncio.sleep(1800) # Poll every 30 minutes
 
+# Guards against clobbering the GCS DB: if a DB exists in GCS but we couldn't
+# load it at startup, pushing our fresh/empty DB would wipe real summaries.
+_gcs_persist_enabled = True
+
+
+def _persist_db():
+    """Push the local SQLite DB to GCS so live submissions survive restarts and
+    reach the static dashboard (picked up by the next Pages export)."""
+    if not _gcs_persist_enabled:
+        pipeline_logger.warning("DB persistence disabled (startup load failed) — skipping GCS push.")
+        return
+    try:
+        if storage_manager.upload_db(DB_FILE):
+            pipeline_logger.info("Persisted DB to GCS.")
+    except Exception as e:
+        pipeline_logger.warning(f"Could not persist DB to GCS: {e}")
+
+
 @app.on_event("startup")
 def on_startup():
+    # Load the persisted DB from GCS so the backend shares state with the export
+    # pipeline (instead of starting from an empty ephemeral DB on every restart).
+    global _gcs_persist_enabled
+    try:
+        if storage_manager.download_db(DB_FILE):
+            logger.info("Loaded persisted DB from GCS on startup.")
+        elif storage_manager.db_exists():
+            # A DB exists in GCS but we failed to download it — refuse to push
+            # so we don't overwrite real data with a fresh/empty DB.
+            _gcs_persist_enabled = False
+            logger.error("GCS DB exists but failed to load; DB persistence DISABLED to avoid clobbering it.")
+    except Exception as e:
+        _gcs_persist_enabled = False
+        logger.warning(f"DB load from GCS failed; DB persistence DISABLED: {e}")
     init_db()
     # Seed default VTubers if empty
     with next(get_session()) as session:
@@ -141,6 +173,7 @@ async def process_stream_pipeline(stream_id: int):
                 stream.error_message = fail_msg
                 session.add(stream)
                 session.commit()
+            _persist_db()
             return
             
         # Save raw transcript to GCS (or local storage fallback)
@@ -216,7 +249,8 @@ async def process_stream_pipeline(stream_id: int):
                     )
             
         pipeline_logger.info(f"Successfully processed summary for Stream ID: {stream_id} ({stream_title})")
-        
+        _persist_db()
+
     except Exception as e:
         pipeline_logger.error(f"Pipeline error for Stream ID {stream_id}: {e}", exc_info=True)
         with next(get_session()) as session:
@@ -225,6 +259,7 @@ async def process_stream_pipeline(stream_id: int):
             stream.error_message = str(e)
             session.add(stream)
             session.commit()
+        _persist_db()
 
 # --- WebSub & Trigger Endpoints ---
 @app.get("/api/webhooks/youtube")
