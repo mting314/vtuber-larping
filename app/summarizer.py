@@ -23,6 +23,66 @@ def get_genai_client():
         logger.info(f"Connecting to Vertex AI (Project: {gcp_project}, Location: {gcp_location})")
         return genai.Client(vertexai=True, project=gcp_project, location=gcp_location)
 
+from pydantic import BaseModel, Field
+
+class MapHighlightItem(BaseModel):
+    timestamp: str = Field(description="Exact START timestamp in HH:MM:SS format")
+    topic: str = Field(description="Short headline title")
+    description: str = Field(description="Details of the story or moment")
+
+class MapChunkResponse(BaseModel):
+    time_range: str = Field(description="Start time - End time range")
+    summary: str = Field(description="Detailed narrative summary of this segment")
+    highlights: List[MapHighlightItem] = Field(default_factory=list)
+
+class StandoutHighlight(BaseModel):
+    timestamp: str = Field(description="Exact START timestamp in HH:MM:SS format")
+    title: str = Field(description="Headline title of the story or moment")
+    description: str = Field(description="Explanation of what happened")
+
+class TimelineEntry(BaseModel):
+    timestamp: str = Field(description="START timestamp in HH:MM:SS format")
+    summary: str = Field(description="Chronological segment topic summary")
+
+class MasterSummaryResponse(BaseModel):
+    quick_highlights_tldr: List[str] = Field(description="3-5 executive bullet points summarizing main takeaways (NO timestamps allowed here)")
+    standout_stories: List[StandoutHighlight] = Field(description="Standout stories with exact START timestamps")
+    timeline_breakdown: List[TimelineEntry] = Field(description="Chronological 15-minute topic breakdown")
+
+def build_standardized_markdown(vtuber_name: str, stream_title: str, data: MasterSummaryResponse) -> str:
+    """Deterministically renders Pydantic response into guaranteed, standardized Markdown."""
+    lines = [f"# {stream_title}\n"]
+    
+    # 1. Quick Stream Highlights (TL;DR) - NO Timestamps
+    lines.append("## ⚡ Quick Stream Highlights (TL;DR)")
+    for item in data.quick_highlights_tldr:
+        # Strip any accidental leading timestamps or bullet markers
+        clean_item = re.sub(r'^\s*[\-\*•]?\s*(\[\d{1,2}:\d{2}(:\d{2})?\]\s*)?', '', item).strip()
+        if clean_item:
+            if not clean_item.startswith("**"):
+                lines.append(f"- {clean_item}")
+            else:
+                lines.append(f"- {clean_item}")
+    lines.append("")
+    
+    # 2. Standout Stories & Timestamps - Mandatory [HH:MM:SS] Title
+    lines.append("## ⭐ Standout Stories & Timestamps")
+    for story in data.standout_stories:
+        ts = story.timestamp.strip() if story.timestamp else "00:00:00"
+        title = story.title.strip()
+        desc = story.description.strip()
+        lines.append(f"- **[{ts}] {title}**: {desc}")
+    lines.append("")
+    
+    # 3. Timeline Breakdown - Mandatory [HH:MM:SS]
+    lines.append("## ⏱️ Timeline Breakdown")
+    for entry in data.timeline_breakdown:
+        ts = entry.timestamp.strip() if entry.timestamp else "00:00:00"
+        summ = entry.summary.strip()
+        lines.append(f"- **[{ts}]**: {summ}")
+        
+    return "\n".join(lines)
+
 async def summarize_chunk_map(chunk: Dict[str, Any]) -> Dict[str, Any]:
     start_t = chunk["start_time"]
     end_t = chunk["end_time"]
@@ -40,16 +100,6 @@ Instructions:
 
 CRITICAL TIMESTAMP RULE:
 - Always use the exact START timestamp (HH:MM:SS) where a topic, anecdote, or story BEGINS in the transcript.
-- NEVER use the middle or end timestamp of a story segment.
-
-Output schema (JSON):
-{{
-  "time_range": "{start_t} - {end_t}",
-  "summary": "Detailed narrative summary of key events and stories discussed",
-  "highlights": [
-    {{"timestamp": "HH:MM:SS", "topic": "Short title", "description": "Details of the story or funny moment"}}
-  ]
-}}
 """
     
     try:
@@ -58,9 +108,13 @@ Output schema (JSON):
             client.models.generate_content,
             model="gemini-2.5-flash",
             contents=prompt,
-            config=types.GenerateContentConfig(response_mime_type="application/json")
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=MapChunkResponse
+            )
         )
-        return json.loads(response.text)
+        parsed = MapChunkResponse.model_validate_json(response.text)
+        return parsed.model_dump()
     except Exception as e:
         logger.error(f"Gemini API call failed for chunk {start_t}: {e}")
         return {
@@ -81,45 +135,12 @@ Here are the 15-minute segment summaries extracted from the stream transcript:
 {chunks_str}
 
 Task:
-Generate a standardized, punchy stream breakdown formatted in Markdown.
+Extract executive quick highlights, standout stories, and chronological timeline entries.
 
-CRITICAL FORMATTING & STANDARDIZATION RULES:
-1. DO NOT start with long, wordy introductory paragraphs or preamble. START IMMEDIATELY with ## ⚡ Quick Stream Highlights (TL;DR).
-2. ## ⚡ Quick Stream Highlights (TL;DR) formatting:
-   - Provide 3-5 high-level executive bullet points summarizing key takeaways.
-   - DO NOT include timestamps in TL;DR bullet points. Keep them high-level and clean.
-   - Format each bullet point exactly as: - **Topic Title**: Brief explanation.
-3. ## ⭐ Standout Stories & Timestamps formatting:
-   - List 4-8 hilarious, bizarre, or standout stories discussed in the stream.
-   - ALWAYS start each line with exact START timestamp (HH:MM:SS format).
-   - Format each line strictly as: - **[HH:MM:SS] Story Title**: Detailed explanation of what was said.
-4. ## ⏱️ Timeline Breakdown formatting:
-   - Provide chronological 15-minute topic entries spanning the entire stream.
-   - Format each line strictly as: - **[HH:MM:SS]**: Segment summary.
-
-Structure Template:
-# {stream_title}
-
-## ⚡ Quick Stream Highlights (TL;DR)
-- **[Topic 1]**: [Executive Summary]
-- **[Topic 2]**: [Executive Summary]
-- **[Topic 3]**: [Executive Summary]
-
-## ⭐ Standout Stories & Timestamps
-- **[00:15:30] Story Title**: Explanation of moment.
-- **[00:42:10] Story Title**: Explanation of moment.
-
-## ⏱️ Timeline Breakdown
-- **[00:00:00]**: Stream intro and greeting.
-- **[00:15:00]**: Discussing trip memories.
-
-Output schema (JSON):
-{{
-  "master_summary_markdown": "# Markdown text matching the exact structure above...",
-  "standout_highlights": [
-    {{"timestamp": "HH:MM:SS", "title": "Headline", "description": "Short explanation"}}
-  ]
-}}
+CRITICAL RULES:
+1. quick_highlights_tldr: Provide 3-5 high-level executive summary bullet points. DO NOT include timestamps here.
+2. standout_stories: List 4-8 standout stories with exact START timestamps (HH:MM:SS).
+3. timeline_breakdown: List chronological 15-minute segment summaries with START timestamps (HH:MM:SS).
 """
 
     try:
@@ -128,16 +149,16 @@ Output schema (JSON):
             client.models.generate_content,
             model="gemini-2.5-flash",
             contents=prompt,
-            config=types.GenerateContentConfig(response_mime_type="application/json")
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=MasterSummaryResponse
+            )
         )
-        text_content = response.text.strip()
-        match = re.search(r'\{.*\}', text_content, re.DOTALL)
-        if match:
-            text_content = match.group(0)
-            
-        parsed = json.loads(text_content, strict=False)
-        master_markdown = parsed.get("master_summary_markdown", "")
-        standout_highlights = parsed.get("standout_highlights", [])
+        parsed = MasterSummaryResponse.model_validate_json(response.text)
+        
+        # Deterministically build standardized Markdown from validated Pydantic model
+        master_markdown = build_standardized_markdown(vtuber_name, stream_title, parsed)
+        standout_highlights = [h.model_dump() for h in parsed.standout_stories]
         
         return master_markdown, standout_highlights
     except Exception as e:
