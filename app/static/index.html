@@ -638,10 +638,13 @@
                 
                 if (data.summary && data.summary.master_summary) {
                     let htmlContent = marked.parse(data.summary.master_summary);
-                    // Transform all [HH:MM:SS] or [MM:SS] timestamp tags into interactive video seeking buttons
-                    htmlContent = htmlContent.replace(/\[(\d{1,2}:\d{2}(?::\d{2})?)\]/g, (match, p1) => {
-                        return `<span class="timestamp-tag" style="cursor: pointer; display: inline-block; margin-right: 4px;" onclick="jumpToTime('${p1}', '${data.video_id}')">⏱️ [${p1}]</span>`;
+                    
+                    // Replace all HH:MM:SS or MM:SS timestamp matches (with or without brackets/bold tags)
+                    // into interactive clickable badge elements
+                    htmlContent = htmlContent.replace(/\[?(\b\d{1,2}:\d{2}(?::\d{2})?\b)\]?:?/g, (match, p1) => {
+                        return `<span class="timestamp-tag" style="cursor: pointer; display: inline-block; font-weight: 700; background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 2px 8px; font-size: 0.85rem; margin-right: 6px;" onclick="jumpToTime('${p1}', '${data.video_id}')">⏱️ ${p1}</span>`;
                     });
+                    
                     document.getElementById('modalSummaryText').innerHTML = htmlContent;
                 } else {
                     document.getElementById('modalSummaryText').innerHTML = `<p style="color: var(--text-muted);">Status: ${data.status}... Summary is being generated.</p>`;
@@ -670,6 +673,7 @@
 
             document.getElementById('ytPlayer').src = `https://www.youtube.com/embed/${videoId}?start=${totalSecs}&autoplay=1`;
         }
+        window.jumpToTime = jumpToTime;
 
         function closeDetailModal() {
             document.getElementById('detailModal').classList.remove('active');
