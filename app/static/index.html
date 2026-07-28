@@ -727,8 +727,10 @@
 
         async function openSettingsModal() {
             document.getElementById('settingsModal').classList.add('active');
+            if (isStaticHost) return;
             try {
                 const res = await fetch('/api/settings');
+                if (!res.ok) return;
                 const data = await res.json();
                 document.getElementById('discordWebhookInput').value = data.discord_webhook_url || '';
                 document.getElementById('discordEnableToggle').checked = data.is_discord_enabled;
@@ -745,6 +747,11 @@
         }
 
         async function saveSettings() {
+            if (isStaticHost) {
+                alert("ℹ️ Settings modification is disabled on static GitHub Pages hosting.");
+                closeSettingsModal();
+                return;
+            }
             const webhookUrl = document.getElementById('discordWebhookInput').value.trim();
             const enabled = document.getElementById('discordEnableToggle').checked;
             const style = document.getElementById('summaryStyleSelect').value;
@@ -770,6 +777,11 @@
             const url = document.getElementById('streamUrlInput').value.trim();
             if (!url) return;
             
+            if (isStaticHost) {
+                alert("ℹ️ GitHub Pages Static Hosting Notice:\n\nGitHub Pages is serving the compiled static dashboard site. Direct POST triggers are disabled on static hosts.\n\nTo summarize new streams:\n1. Run the local backend: uv run uvicorn app.main:app\n2. Or ingest via CLI: uv run python -m app.ingestion --url " + url);
+                return;
+            }
+            
             // Show loading & progress UI
             document.getElementById('triggerInputGroup').style.display = 'none';
             document.getElementById('triggerProgressGroup').style.display = 'block';
@@ -783,6 +795,21 @@
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({url})
                 });
+                
+                if (!res.ok) {
+                    const text = await res.text();
+                    let errMsg = `HTTP Error ${res.status}`;
+                    try {
+                        const json = JSON.parse(text);
+                        if (json.detail) errMsg = json.detail;
+                    } catch (e) {
+                        errMsg = "Server returned non-JSON response (e.g. 404/500 HTML page).";
+                    }
+                    alert("Error queuing stream: " + errMsg);
+                    openTriggerModal();
+                    return;
+                }
+
                 const data = await res.json();
                 
                 if (data.stream_id) {
@@ -792,7 +819,7 @@
                     openTriggerModal();
                 }
             } catch (err) {
-                alert("Failed to submit stream: " + err);
+                alert("Failed to submit stream: " + err.message);
                 openTriggerModal();
             }
         }
