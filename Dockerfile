@@ -24,8 +24,9 @@ COPY pyproject.toml uv.lock README.md ./
 # Install project dependencies
 RUN uv sync --frozen --no-cache
 
-# Copy application source code
+# Copy application source code & pre-populated SQLite database
 COPY app/ ./app/
+COPY vtuber_digest.db ./vtuber_digest.db
 
 # Expose port 8080 for Cloud Run
 ENV PORT=8080
