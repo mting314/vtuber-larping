@@ -70,7 +70,16 @@ def export_static_site():
             json.dump(streams_list, f, indent=2, ensure_ascii=False)
 
     # 3. Copy index.html & static assets to dist/
-    shutil.copy("app/static/index.html", f"{dist_dir}/index.html")
+    with open("app/static/index.html", "r", encoding="utf-8") as f:
+        html_content = f.read()
+    
+    # Inject timestamp cache buster to force browser script refresh
+    import time
+    v_tag = f"?v={int(time.time())}"
+    html_content = html_content.replace('</head>', f'<script>console.log("VTuber Digest Build Version: {v_tag}");</script>\n</head>')
+
+    with open(f"{dist_dir}/index.html", "w", encoding="utf-8") as f:
+        f.write(html_content)
     
     # Add .nojekyll for GitHub Pages
     with open(f"{dist_dir}/.nojekyll", "w") as f:
