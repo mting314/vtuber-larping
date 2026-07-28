@@ -10,6 +10,7 @@ venv/
 *.vtt
 data/
 logs/
+dist/
 .env
 
 # Pytest / Coverage

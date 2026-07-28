@@ -551,14 +551,32 @@
         let currentAgency = '';
         let searchQuery = '';
 
+        const isStaticHost = window.location.hostname.includes('github.io') || window.location.protocol === 'file:';
+
         async function fetchStreams() {
-            let url = '/api/streams?';
-            if (currentAgency) url += `agency=${encodeURIComponent(currentAgency)}&`;
-            if (searchQuery) url += `q=${encodeURIComponent(searchQuery)}`;
+            let url = '/api/streams';
+            if (isStaticHost) {
+                url = './api/streams.json';
+            } else {
+                url = '/api/streams?';
+                if (currentAgency) url += `agency=${encodeURIComponent(currentAgency)}&`;
+                if (searchQuery) url += `q=${encodeURIComponent(searchQuery)}`;
+            }
 
             try {
                 const res = await fetch(url);
-                const streams = await res.json();
+                let streams = await res.json();
+
+                // Apply client-side filter in static mode
+                if (isStaticHost && Array.isArray(streams)) {
+                    if (currentAgency) {
+                        streams = streams.filter(s => s.vtuber && s.vtuber.agency === currentAgency);
+                    }
+                    if (searchQuery) {
+                        const qLower = searchQuery.toLowerCase();
+                        streams = streams.filter(s => s.title.toLowerCase().includes(qLower));
+                    }
+                }
                 renderStreams(streams);
             } catch (err) {
                 console.error("Failed to fetch streams:", err);
@@ -611,7 +629,8 @@
             modal.classList.add('active');
             
             try {
-                const res = await fetch(`/api/streams/${streamId}`);
+                const url = isStaticHost ? `./api/streams/${streamId}.json` : `/api/streams/${streamId}`;
+                const res = await fetch(url);
                 const data = await res.json();
                 
                 document.getElementById('modalStreamTitle').textContent = data.title;
