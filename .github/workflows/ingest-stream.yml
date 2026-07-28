@@ -1,0 +1,56 @@
+name: Ingest & Summarize Stream
+
+on:
+  workflow_dispatch:
+    inputs:
+      stream_url:
+        description: 'YouTube Video URL to ingest & summarize'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv & Setup Python
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Install yt-dlp
+        run: |
+          sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
+          sudo chmod a+rx /usr/local/bin/yt-dlp
+
+      - name: Run Stream Ingestion & Map-Reduce Pipeline
+        env:
+          GOOGLE_CLOUD_PROJECT: vtuber-digest-503801
+          GCP_VERTEX_SA_KEY: ${{ secrets.GCP_VERTEX_SA_KEY }}
+        run: |
+          uv run python -m scratch.ingest_single_stream --url "${{ inputs.stream_url }}"
+
+      - name: Re-export Static WebApp
+        run: |
+          uv run python -m scratch.export_static_gh_pages
+
+      - name: Deploy Updated WebApp to GitHub Pages
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan gh-pages
+          git reset
+          cp -r dist/* .
+          touch .nojekyll
+          git add -A
+          git commit -m "deploy: add manually ingested stream summary for ${{ inputs.stream_url }}"
+          git push origin gh-pages --force

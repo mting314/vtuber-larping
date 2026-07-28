@@ -777,20 +777,24 @@
             const url = document.getElementById('streamUrlInput').value.trim();
             if (!url) return;
             
-            if (isStaticHost) {
-                alert("ℹ️ GitHub Pages Static Hosting Notice:\n\nGitHub Pages is serving the compiled static dashboard site. Direct POST triggers are disabled on static hosts.\n\nTo summarize new streams:\n1. Run the local backend: uv run uvicorn app.main:app\n2. Or ingest via CLI: uv run python -m app.ingestion --url " + url);
-                return;
-            }
-            
             // Show loading & progress UI
             document.getElementById('triggerInputGroup').style.display = 'none';
             document.getElementById('triggerProgressGroup').style.display = 'block';
             document.getElementById('triggerSuccessBox').style.display = 'none';
             
-            updateProgressUI('PENDING', 'Step 1/3: Validating YouTube URL & queuing job...', 15);
+            updateProgressUI('PENDING', 'Step 1/3: Dispatching stream URL to backend ingest worker...', 15);
+
+            // Determine active backend endpoint
+            let targetEndpoint = '/api/streams/trigger';
+            const customBackend = localStorage.getItem('backend_api_url');
+            if (customBackend) {
+                targetEndpoint = customBackend.replace(/\/$/, '') + '/api/streams/trigger';
+            } else if (isStaticHost) {
+                targetEndpoint = 'http://localhost:8000/api/streams/trigger';
+            }
 
             try {
-                const res = await fetch('/api/streams/trigger', {
+                const res = await fetch(targetEndpoint, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({url})
@@ -802,24 +806,60 @@
                     try {
                         const json = JSON.parse(text);
                         if (json.detail) errMsg = json.detail;
-                    } catch (e) {
-                        errMsg = "Server returned non-JSON response (e.g. 404/500 HTML page).";
-                    }
-                    alert("Error queuing stream: " + errMsg);
-                    openTriggerModal();
-                    return;
+                    } catch (e) {}
+                    throw new Error(errMsg);
                 }
 
                 const data = await res.json();
                 
                 if (data.stream_id) {
-                    startStreamProgressPolling(data.stream_id);
+                    const pollBaseUrl = targetEndpoint.replace('/api/streams/trigger', '');
+                    startStreamProgressPolling(data.stream_id, pollBaseUrl);
                 } else {
-                    alert("Error queuing stream: " + (data.detail || "Unknown error"));
-                    openTriggerModal();
+                    alert("Stream job queued: " + (data.message || "Processing started"));
+                    closeTriggerModal();
                 }
             } catch (err) {
-                alert("Failed to submit stream: " + err.message);
+                // If local/custom backend isn't reachable on static host, offer GitHub Actions trigger
+                if (isStaticHost && !customBackend) {
+                    const ghToken = localStorage.getItem('github_token') || prompt("Local backend (http://localhost:8000) not detected.\n\nTo trigger cloud stream summarization via GitHub Actions, enter a GitHub Personal Access Token (or leave blank to cancel):");
+                    if (ghToken) {
+                        localStorage.setItem('github_token', ghToken);
+                        triggerGitHubActionIngest(url, ghToken);
+                        return;
+                    }
+                }
+                alert("Failed to submit stream: " + err.message + "\n\nTip: Start the local server with 'uv run uvicorn app.main:app' or set a Backend API URL in Settings.");
+                openTriggerModal();
+            }
+        }
+
+        async function triggerGitHubActionIngest(streamUrl, token) {
+            updateProgressUI('DISPATCHING', 'Triggering GitHub Actions cloud ingestion runner...', 40);
+            try {
+                const res = await fetch('https://api.github.com/repos/mting314/vtuber-larping/actions/workflows/ingest-stream.yml/dispatches', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ref: 'main',
+                        inputs: { stream_url: streamUrl }
+                    })
+                });
+                if (res.ok || res.status === 204) {
+                    updateProgressUI('COMPLETED', '🚀 Cloud Ingestion Workflow Triggered! The stream summary will appear automatically on your dashboard once complete (~2-3 mins).', 100);
+                    setTimeout(() => {
+                        closeTriggerModal();
+                    }, 3500);
+                } else {
+                    const text = await res.text();
+                    throw new Error(`GitHub API returned status ${res.status}: ${text}`);
+                }
+            } catch (e) {
+                alert("Failed to dispatch GitHub Action: " + e.message);
                 openTriggerModal();
             }
         }
@@ -831,12 +871,13 @@
             document.getElementById('progressBarFill').style.width = `${percent}%`;
         }
 
-        function startStreamProgressPolling(streamId) {
+        function startStreamProgressPolling(streamId, baseUrl = '') {
             if (pollInterval) clearInterval(pollInterval);
 
             pollInterval = setInterval(async () => {
                 try {
-                    const res = await fetch(`/api/streams/${streamId}`);
+                    const endpoint = (baseUrl ? baseUrl.replace(/\/$/, '') : '') + `/api/streams/${streamId}`;
+                    const res = await fetch(endpoint);
                     const stream = await res.json();
                     
                     if (stream.status === 'PENDING') {
