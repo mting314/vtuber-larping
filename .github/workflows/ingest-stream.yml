@@ -9,10 +9,25 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+# Share the "pages" concurrency group with deploy-pages.yml so the two never
+# publish on top of each other.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  GOOGLE_CLOUD_PROJECT: vtuber-digest-503801
+  GCS_BUCKET_NAME: vtuber-summaries
 
 jobs:
   ingest:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
 
     steps:
@@ -32,25 +47,37 @@ jobs:
           sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
           sudo chmod a+rx /usr/local/bin/yt-dlp
 
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_VERTEX_SA_KEY }}
+
+      # Pull the accumulated DB so this ingest ADDS to prior summaries instead of
+      # starting from an empty database.
+      - name: Restore summary DB from GCS
+        run: |
+          uv run python -m scratch.db_sync pull
+
       - name: Run Stream Ingestion & Map-Reduce Pipeline
-        env:
-          GOOGLE_CLOUD_PROJECT: vtuber-digest-503801
-          GCP_VERTEX_SA_KEY: ${{ secrets.GCP_VERTEX_SA_KEY }}
         run: |
           uv run python -m scratch.ingest_single_stream --url "${{ inputs.stream_url }}"
+
+      - name: Persist updated DB to GCS
+        run: |
+          uv run python -m scratch.db_sync push
 
       - name: Re-export Static WebApp
         run: |
           uv run python -m scratch.export_static_gh_pages
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist'
+
       - name: Deploy Updated WebApp to GitHub Pages
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout --orphan gh-pages
-          git reset
-          cp -r dist/* .
-          touch .nojekyll
-          git add -A
-          git commit -m "deploy: add manually ingested stream summary for ${{ inputs.stream_url }}"
-          git push origin gh-pages --force
+        id: deployment
+        uses: actions/deploy-pages@v4

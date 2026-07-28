@@ -7,13 +7,19 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
+# Single source of truth for Pages deploys. Both this workflow and
+# ingest-stream.yml publish via the GitHub Actions artifact flow (NOT a
+# gh-pages branch), so set repo Settings -> Pages -> Source = "GitHub Actions".
 concurrency:
   group: "pages"
   cancel-in-progress: true
+
+env:
+  GCS_BUCKET_NAME: vtuber-summaries
 
 jobs:
   build-and-deploy:
@@ -38,6 +44,17 @@ jobs:
       - name: Install Dependencies
         run: |
           uv sync
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_VERTEX_SA_KEY }}
+
+      # Pull the persisted DB so we export real summaries instead of rebuilding
+      # from an empty database (which is what was wiping the live dashboard).
+      - name: Restore summary DB from GCS
+        run: |
+          uv run python -m scratch.db_sync pull
 
       - name: Export Static Site & Summaries
         run: |
