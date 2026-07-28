@@ -525,11 +525,11 @@
                 <button class="close-btn" onclick="closeSettingsModal()">&times;</button>
             </div>
             <div class="modal-body" style="grid-template-columns: 1fr; padding: 1.5rem; gap: 1.25rem;">
-                <div>
-                    <label style="font-weight: 600; display: block; margin-bottom: 0.4rem;">Backend API Server URL</label>
+                <div id="devBackendSettingGroup" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 0.85rem; margin-bottom: 0.5rem;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.4rem; color: #f87171;">🛠️ Dev Only: Backend API Server URL</label>
                     <input type="text" id="backendApiUrlInput" class="search-input" placeholder="http://127.0.0.1:8000">
                     <small style="color: var(--text-muted); display: block; margin-top: 0.3rem;">
-                        Target FastAPI backend server URL for live stream ingestion & SQLite database queries.
+                        Target local FastAPI dev server URL. (Only configurable on localhost dev environments).
                     </small>
                 </div>
                 <div>
@@ -562,6 +562,15 @@
         let searchQuery = '';
 
         const isStaticHost = window.location.hostname.includes('github.io') || window.location.protocol === 'file:';
+        const isDevEnvironment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const PROD_BACKEND_URL = 'https://vtuber-digest-backend-emqtiq6urq-uc.a.run.app';
+
+        function getActiveBackendUrl() {
+            if (!isDevEnvironment) {
+                return PROD_BACKEND_URL;
+            }
+            return localStorage.getItem('backend_api_url') || 'http://127.0.0.1:8000';
+        }
 
         async function fetchStreams() {
             let url = '/api/streams';
@@ -734,11 +743,19 @@
 
         async function openSettingsModal() {
             document.getElementById('settingsModal').classList.add('active');
-            const defaultBackend = 'https://vtuber-digest-backend-emqtiq6urq-uc.a.run.app';
-            document.getElementById('backendApiUrlInput').value = localStorage.getItem('backend_api_url') || defaultBackend;
+            
+            // Only show backend URL override input on dev environment (localhost / 127.0.0.1)
+            const devGroup = document.getElementById('devBackendSettingGroup');
+            if (devGroup) {
+                devGroup.style.display = isDevEnvironment ? 'block' : 'none';
+                if (isDevEnvironment) {
+                    document.getElementById('backendApiUrlInput').value = localStorage.getItem('backend_api_url') || 'http://127.0.0.1:8000';
+                }
+            }
+
             try {
-                const baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? defaultBackend : '');
-                const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/settings`);
+                const baseUrl = getActiveBackendUrl().replace(/\/$/, '');
+                const res = await fetch(`${baseUrl}/api/settings`);
                 if (!res.ok) return;
                 const data = await res.json();
                 document.getElementById('discordWebhookInput').value = data.discord_webhook_url || '';
@@ -756,10 +773,11 @@
         }
 
         async function saveSettings() {
-            const defaultBackend = 'https://vtuber-digest-backend-emqtiq6urq-uc.a.run.app';
-            const backendUrl = document.getElementById('backendApiUrlInput').value.trim();
-            if (backendUrl) {
-                localStorage.setItem('backend_api_url', backendUrl);
+            if (isDevEnvironment) {
+                const backendUrl = document.getElementById('backendApiUrlInput').value.trim();
+                if (backendUrl) {
+                    localStorage.setItem('backend_api_url', backendUrl);
+                }
             }
             
             const webhookUrl = document.getElementById('discordWebhookInput').value.trim();
@@ -767,8 +785,8 @@
             const style = document.getElementById('summaryStyleSelect').value;
 
             try {
-                const baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? defaultBackend : '');
-                await fetch(`${baseUrl.replace(/\/$/, '')}/api/settings`, {
+                const baseUrl = getActiveBackendUrl().replace(/\/$/, '');
+                await fetch(`${baseUrl}/api/settings`, {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -796,8 +814,7 @@
             updateProgressUI('PENDING', 'Step 1/3: Dispatching stream URL to FastAPI backend worker...', 15);
 
             // Determine active backend endpoint
-            let baseUrl = localStorage.getItem('backend_api_url') || (isStaticHost ? 'https://vtuber-digest-backend-emqtiq6urq-uc.a.run.app' : '');
-            baseUrl = baseUrl.replace(/\/$/, '');
+            const baseUrl = getActiveBackendUrl().replace(/\/$/, '');
             const targetEndpoint = `${baseUrl}/api/streams/trigger`;
 
             try {
@@ -826,7 +843,7 @@
                     closeTriggerModal();
                 }
             } catch (err) {
-                alert("Failed to submit stream to backend: " + err.message + "\n\nPlease ensure your FastAPI backend server is running ('uv run uvicorn app.main:app --port 8000') or configure a Backend URL in Settings.");
+                alert("Failed to submit stream to backend: " + err.message + "\n\nPlease ensure your FastAPI backend server is running or reachable.");
                 openTriggerModal();
             }
         }
