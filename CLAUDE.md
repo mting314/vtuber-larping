@@ -10,13 +10,26 @@ An automated **Map-Reduce LLM summarization pipeline** for VTuber "just chatting
 synthesizes a master summary with exact `[HH:MM:SS]` timestamps (reduce), stores
 results in SQLite, and dispatches Discord webhook embeds.
 
-There are **two independent runtime surfaces** — this is the source of most deploy confusion:
+## Architecture (current = "A", read-only gallery)
 
-1. **FastAPI backend** (`app/main.py`) — the full dynamic app (POST triggers, background
-   pipeline, settings). Runs locally (`uvicorn`) and is deployed to **Google Cloud Run**.
-2. **Static GitHub Pages site** — a read-only export (`dist/`) built by
-   `scratch/export_static_gh_pages.py`. It serves the same `index.html` but only pre-baked
-   JSON (`api/streams.json`, `api/streams/<id>.json`). It **cannot** serve POST requests.
+The app is a **curated static gallery**. Summaries are created only by the **batch ingest
+job** (`scratch/ingest_single_stream.py`, run via the `ingest-stream` GitHub Action), which
+writes to a SQLite DB persisted in **GCS** (`gs://vtuber-summaries/state/vtuber_digest.db`)
+and exports static JSON to **GitHub Pages**. The public site is **read-only**: on the static
+host the live "Summarize Stream" / "Settings" actions are hidden (`app.js` hides
+`#headerActions` when `isStaticHost`).
+
+- **FastAPI backend** (`app/main.py`) — still the local dev server (`uvicorn`) and the code
+  the batch ingest imports. It is **retired from the data path**: `deploy-cloudrun.yml` is
+  now manual-dispatch only, and there is **no runtime GCS DB sync** (the on-startup pull /
+  push-after-run was removed). The old Cloud Run service may still be running but nothing
+  in the data path depends on it.
+- **Static GitHub Pages site** — read-only export (`dist/`) built by
+  `scratch/export_static_gh_pages.py`; serves `index.html` + pre-baked JSON
+  (`api/streams.json`, `api/streams/<id>.json`). Cannot serve POST.
+
+**Roadmap B** (tracked follow-up): replace SQLite + GCS-sync with a real hosted DB
+(Cloud SQL/Firestore) and re-enable a live backend + on-demand summarization.
 
 The single `app/static/index.html` runs in both places and switches behavior at runtime
 based on `window.location.hostname` (see "Frontend backend routing" below).
@@ -44,37 +57,33 @@ tests/             pytest (test_ingestion, test_transcriber)
 
 ## Frontend backend routing (critical)
 
-In `app/static/index.html`:
-- `PROD_BACKEND_URL` — hardcoded Cloud Run URL, currently
-  `https://vtuber-digest-backend-467039506910.us-central1.run.app`.
-- `getActiveBackendUrl()` — returns `PROD_BACKEND_URL` on any non-localhost host;
-  only on `localhost`/`127.0.0.1` does it read `localStorage['backend_api_url']`
-  (dev override, default `http://127.0.0.1:8000`).
-- `isStaticHost` (github.io / file:) — makes GET reads point at `./api/*.json` instead of
-  the live API. **POST actions (Summarize Stream, Settings save) always target
-  `getActiveBackendUrl()`**, i.e. Cloud Run.
+The frontend JS lives in **`app/static/app.js`** (extracted from `index.html`) and is loaded
+as `./static/app.js?v=<sha256>` — a real content-hash cache buster injected by both
+`read_root()` (backend) and the exporter (Pages). `index.html` carries the `__CACHE_VERSION__`
+placeholder that gets substituted at serve/export time.
 
-**If you POST to the GitHub Pages origin itself you get HTTP 405** (static host allows only
-GET/HEAD). Historically the URL-resolution logic fell back to a same-origin relative path,
-which is what produced the 405 on the Summarize flow. The JS is inline in `index.html`, so a
-stale browser cache of an old `index.html` reintroduces the old bug for returning users. The
-`?v=<timestamp>` "cache buster" injected by the exporter only prints to `console.log` — it
-does **not** actually bust the HTML cache.
+- `isStaticHost` (github.io / file:) — GET reads point at `./api/*.json`, and the live
+  actions (`#headerActions`: Summarize/Settings) are **hidden** (read-only gallery).
+- `getActiveBackendUrl()` / `PROD_BACKEND_URL` — only relevant for the (now-hidden) POST
+  actions and for local dev. POSTing to the static origin returns **405** (static host allows
+  only GET/HEAD) — the historical Summarize-flow 405 came from stale cached inline JS falling
+  back to a same-origin POST; the content-hash bundle + hidden actions fix that.
 
 ## Deploy model (know before touching deploys)
 
-- **Cloud Run backend has NO CI workflow** — it is deployed manually (`gcloud run deploy` /
-  `gcloud builds submit` from a dev machine). The `Dockerfile` does
-  `COPY vtuber_digest.db ./vtuber_digest.db`, but the `.db` is **gitignored and untracked**,
-  so the image only builds where that file exists locally. CI cannot build it.
-- **GitHub Pages has TWO competing deploy paths** — reconcile before editing:
-  - `deploy-pages.yml`: on push to `main`, exports `dist/` and deploys via the modern
-    `actions/deploy-pages@v4` artifact flow.
-  - `ingest-stream.yml`: on manual dispatch, force-pushes `dist/` to a `gh-pages` branch.
-  GitHub Pages can only have one source; whichever the repo Settings points at wins, and the
-  other silently does nothing.
-- The site DB is ephemeral: exports call `init_db()` and read whatever `vtuber_digest.db` is
-  present in the runner. Real summaries are seeded/ingested via `scratch/` scripts.
+- **GitHub Pages** (single source = "GitHub Actions" artifact flow):
+  - `deploy-pages.yml`: on push to `main` / manual — pulls the DB from GCS
+    (`scratch/db_sync.py pull`), exports `dist/`, deploys via `actions/deploy-pages@v4`.
+  - `ingest-stream.yml`: manual dispatch — pulls DB, ingests one stream, pushes DB back to
+    GCS, re-exports, deploys via the same artifact flow. (The old `gh-pages` branch was
+    deleted; do not reintroduce a branch-based Pages source.)
+- **GCS is the source of truth** for summary data: `gs://vtuber-summaries/state/vtuber_digest.db`.
+  Both Pages workflows need the `GCP_VERTEX_SA_KEY` secret (a JSON key for the compute SA
+  `467039506910-compute@…`); the GCS steps skip gracefully if it's unset.
+- **Cloud Run** (`deploy-cloudrun.yml`) is **manual-dispatch only** and retired from the data
+  path under Architecture A. The `Dockerfile` no longer copies the DB (the app inits its own).
+- Auth in CI uses `google-github-actions/auth` (ADC) — the summarizer's `vertexai=True` needs
+  ADC, so a bare env var is not enough.
 
 ## Common commands
 
