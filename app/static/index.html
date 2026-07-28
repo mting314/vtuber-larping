@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>VTuber Digest | Automated Stream Summaries</title>
     <!-- Google Fonts & Lucide Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -624,6 +627,8 @@
             fetchStreams();
         }
 
+        let currentModalVideoId = '';
+
         async function openStreamDetail(streamId) {
             const modal = document.getElementById('detailModal');
             modal.classList.add('active');
@@ -633,6 +638,7 @@
                 const res = await fetch(url);
                 const data = await res.json();
                 
+                currentModalVideoId = data.video_id;
                 document.getElementById('modalStreamTitle').textContent = data.title;
                 document.getElementById('ytPlayer').src = `https://www.youtube.com/embed/${data.video_id}?enablejsapi=1`;
                 
@@ -640,7 +646,7 @@
                     let rawMarkdown = data.summary.master_summary;
                     
                     // Transform [HH:MM:SS] or [MM:SS] tags in raw Markdown into markdown timestamp links
-                    rawMarkdown = rawMarkdown.replace(/\[(\d{1,2}:\d{2}(?::\d{2})?)\]/g, (match, p1) => {
+                    rawMarkdown = rawMarkdown.replace(/\[(?:⏱️\s*)?(\d{1,2}:\d{2}(?::\d{2})?)\]/g, (match, p1) => {
                         return `[⏱️ ${p1}](#t=${p1})`;
                     });
 
@@ -671,6 +677,22 @@
                 console.error("Error loading stream detail:", err);
             }
         }
+
+        // Global Event Delegation listener for any timestamp click inside modalSummaryText
+        document.getElementById('modalSummaryText').addEventListener('click', function(e) {
+            let target = e.target;
+            while (target && target !== this) {
+                const text = target.textContent || '';
+                const match = text.match(/\b\d{1,2}:\d{2}:\d{2}\b|\b\d{1,2}:\d{2}\b/);
+                if (match && currentModalVideoId) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    jumpToTime(match[0], currentModalVideoId);
+                    return;
+                }
+                target = target.parentElement;
+            }
+        });
 
         function jumpToTime(timeStr, videoId) {
             const parts = timeStr.split(':').map(Number);

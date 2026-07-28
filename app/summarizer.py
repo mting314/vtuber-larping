@@ -66,22 +66,22 @@ def build_standardized_markdown(vtuber_name: str, stream_title: str, data: Maste
             lines.append(f"- {clean_item}")
     lines.append("")
     
-    # 2. Standout Stories & Timestamps - Mandatory [HH:MM:SS] Title
+    # 2. Standout Stories & Timestamps
     lines.append("## ⭐ Standout Stories & Timestamps")
     for story in data.standout_stories:
         ts = story.timestamp.strip() if story.timestamp else "00:00:00"
         title = story.title.strip()
         desc = story.description.strip()
-        lines.append(f"- **[{ts}] {title}**: {desc}")
+        lines.append(f"- **[⏱️ {ts}](#t={ts}) {title}**: {desc}")
     lines.append("")
-    
-    # 3. Timeline Breakdown - Mandatory [HH:MM:SS] Bold Title: Details
+
+    # 3. Timeline Breakdown
     lines.append("## ⏱️ Timeline Breakdown")
     for entry in data.timeline_breakdown:
         ts = entry.timestamp.strip() if entry.timestamp else "00:00:00"
         title = entry.title.strip() if entry.title else "Stream Topic"
         details = entry.details.strip() if entry.details else ""
-        lines.append(f"- **[{ts}] {title}**: {details}")
+        lines.append(f"- **[⏱️ {ts}](#t={ts}) {title}**: {details}")
         
     raw_markdown = "\n".join(lines)
     if vtuber_name:
