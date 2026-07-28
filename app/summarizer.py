@@ -45,13 +45,14 @@ class StandoutHighlight(BaseModel):
     description: str = Field(description="Explanation of what happened")
 
 class TimelineEntry(BaseModel):
-    timestamp: str = Field(description="START timestamp in HH:MM:SS format")
-    summary: str = Field(description="Chronological segment topic summary")
+    timestamp: str = Field(description="Exact START timestamp in HH:MM:SS format")
+    title: str = Field(description="Short 2-5 word headline topic title in Title Case (e.g. Doraemon Bully Critique)")
+    details: str = Field(description="Detailed description of discussions, lore, or stories in this segment")
 
 class MasterSummaryResponse(BaseModel):
     quick_highlights_tldr: list[str] = Field(description="3-5 executive bullet points summarizing main takeaways (NO timestamps allowed here)")
     standout_stories: list[StandoutHighlight] = Field(description="Standout stories with exact START timestamps")
-    timeline_breakdown: list[TimelineEntry] = Field(description="Chronological 15-minute topic breakdown")
+    timeline_breakdown: list[TimelineEntry] = Field(description="Chronological 15-minute topic breakdown with bold titles")
 
 def build_standardized_markdown(vtuber_name: str, stream_title: str, data: MasterSummaryResponse) -> str:
     """Deterministically renders Pydantic response into guaranteed, standardized Markdown."""
@@ -60,13 +61,9 @@ def build_standardized_markdown(vtuber_name: str, stream_title: str, data: Maste
     # 1. Quick Stream Highlights (TL;DR) - NO Timestamps
     lines.append("## ⚡ Quick Stream Highlights (TL;DR)")
     for item in data.quick_highlights_tldr:
-        # Strip any accidental leading timestamps or bullet markers
         clean_item = re.sub(r'^\s*[\-\*•]?\s*(\[\d{1,2}:\d{2}(:\d{2})?\]\s*)?', '', item).strip()
         if clean_item:
-            if not clean_item.startswith("**"):
-                lines.append(f"- {clean_item}")
-            else:
-                lines.append(f"- {clean_item}")
+            lines.append(f"- {clean_item}")
     lines.append("")
     
     # 2. Standout Stories & Timestamps - Mandatory [HH:MM:SS] Title
@@ -78,14 +75,21 @@ def build_standardized_markdown(vtuber_name: str, stream_title: str, data: Maste
         lines.append(f"- **[{ts}] {title}**: {desc}")
     lines.append("")
     
-    # 3. Timeline Breakdown - Mandatory [HH:MM:SS]
+    # 3. Timeline Breakdown - Mandatory [HH:MM:SS] Bold Title: Details
     lines.append("## ⏱️ Timeline Breakdown")
     for entry in data.timeline_breakdown:
         ts = entry.timestamp.strip() if entry.timestamp else "00:00:00"
-        summ = entry.summary.strip()
-        lines.append(f"- **[{ts}]**: {summ}")
+        title = entry.title.strip() if entry.title else "Stream Topic"
+        details = entry.details.strip() if entry.details else ""
+        lines.append(f"- **[{ts}] {title}**: {details}")
         
-    return "\n".join(lines)
+    raw_markdown = "\n".join(lines)
+    if vtuber_name:
+        # Enforce VTuber name usage over generic pronouns / terms
+        raw_markdown = re.sub(r'\b[Tt]he [Vv][Tt]uber\b', vtuber_name, raw_markdown)
+        raw_markdown = re.sub(r'\b[Tt]he [Ss]treamer\b', vtuber_name, raw_markdown)
+        raw_markdown = re.sub(r'\b[Tt]he [Ss]peaker\b', vtuber_name, raw_markdown)
+    return raw_markdown
 
 
 async def summarize_chunk_map(chunk: dict[str, Any]) -> dict[str, Any]:
@@ -105,15 +109,15 @@ Transcript segment:
 {clean_text[:8000]}
 
 Instructions:
-1. Summarize all main topics, stories, jokes, lore references, or member interactions in this segment in detail.
-2. Extract all hilarious, bizarre, or standout quotes with exact START timestamps (HH:MM:SS format).
+1. Summarize all main topics, stories, jokes, lore references, or member interactions in this segment.
+2. Extract standout moments with exact START timestamps.
 
 CRITICAL NOISE & INTRO SUPPRESSION RULE:
-- Completely IGNORE stream starting BGM, "stream starting soon" waiting screens, opening music, screams, or "Yippee" intro exclamations in the first segment.
-- DO NOT mention opening music or intro screens in the summary. Start the narrative directly when the VTuber begins their actual conversation.
+- Completely IGNORE stream starting BGM, "stream starting soon" waiting screens, opening music, screams, or "Yippee" intro exclamations.
+- DO NOT mention opening music or intro screens.
 
 CRITICAL TIMESTAMP RULE:
-- Always use the exact START timestamp (HH:MM:SS) where a topic, anecdote, or story BEGINS in the transcript.
+- Always use the exact START timestamp ({start_t} or where a topic BEGINS at the start of that segment's transcript). DO NOT use the timestamp of the last line.
 """
     
     try:
@@ -154,11 +158,12 @@ Task:
 Extract executive quick highlights, standout stories, and chronological timeline entries.
 
 CRITICAL RULES:
-1. NO INTRO MUSIC: Completely IGNORE opening BGM, waiting screens, or intro screams/Yippees. Start directly with actual conversational topics.
-2. PROPER NOUN CORRECTION: Strictly verify all VTuber names against the dictionary above (e.g. "Ouro Kronii" / "Kronii", NOT "Crony").
-3. quick_highlights_tldr: Provide 3-5 high-level executive summary bullet points. DO NOT include timestamps here.
-4. standout_stories: List 4-8 standout stories with exact START timestamps (HH:MM:SS).
-5. timeline_breakdown: List chronological 15-minute segment summaries with START timestamps (HH:MM:SS).
+1. STRICT NAMING CONVENTION: NEVER refer to {vtuber_name} as "the streamer", "the VTuber", "she", or "they". ALWAYS refer to them explicitly by their actual name "{vtuber_name}" in all highlights, titles, and descriptions.
+2. NO INTRO MUSIC: Completely IGNORE opening BGM, waiting screens, or intro screams/Yippees. Start directly with actual conversational topics.
+3. PROPER NOUN CORRECTION: Strictly verify all VTuber names against the dictionary above (e.g. "Ouro Kronii" / "Kronii", NOT "Crony").
+4. quick_highlights_tldr: Provide 3-5 high-level executive summary bullet points. DO NOT include timestamps here.
+5. standout_stories: List 4-8 standout stories with exact START timestamps (HH:MM:SS) and catchy titles.
+6. timeline_breakdown: List chronological 15-minute segment entries with exact START timestamps (HH:MM:SS), a short 2-5 word bold headline title (e.g. "Doraemon Bully Critique"), and segment details.
 """
 
     try:

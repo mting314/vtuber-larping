@@ -637,7 +637,12 @@
                 document.getElementById('ytPlayer').src = `https://www.youtube.com/embed/${data.video_id}?enablejsapi=1`;
                 
                 if (data.summary && data.summary.master_summary) {
-                    document.getElementById('modalSummaryText').innerHTML = marked.parse(data.summary.master_summary);
+                    let htmlContent = marked.parse(data.summary.master_summary);
+                    // Transform all [HH:MM:SS] or [MM:SS] timestamp tags into interactive video seeking buttons
+                    htmlContent = htmlContent.replace(/\[(\d{1,2}:\d{2}(?::\d{2})?)\]/g, (match, p1) => {
+                        return `<span class="timestamp-tag" style="cursor: pointer; display: inline-block; margin-right: 4px;" onclick="jumpToTime('${p1}', '${data.video_id}')">⏱️ [${p1}]</span>`;
+                    });
+                    document.getElementById('modalSummaryText').innerHTML = htmlContent;
                 } else {
                     document.getElementById('modalSummaryText').innerHTML = `<p style="color: var(--text-muted);">Status: ${data.status}... Summary is being generated.</p>`;
                 }
