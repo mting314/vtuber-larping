@@ -34,12 +34,31 @@ def push() -> None:
         print(f"Nothing pushed ({DB_FILE} missing or GCS unavailable).")
 
 
+def push_cookies(file_path: str = "youtube_cookies.txt") -> None:
+    if storage_manager.upload_cookies(file_path):
+        print(f"Pushed cookies ({file_path}) -> GCS gs://{storage_manager.bucket.name}/state/youtube_cookies.txt")
+    else:
+        print(f"Failed to push cookies ({file_path} missing or GCS unavailable).")
+
+
+def pull_cookies(file_path: str = "youtube_cookies.txt") -> None:
+    if storage_manager.download_cookies(file_path):
+        print(f"Pulled cookies from GCS -> {file_path}")
+    else:
+        print("No cookies in GCS (or GCS unavailable).")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
+    target_file = sys.argv[2] if len(sys.argv) > 2 else "youtube_cookies.txt"
     if cmd == "pull":
         pull()
     elif cmd == "push":
         push()
+    elif cmd in ("push-cookies", "push_cookies"):
+        push_cookies(target_file)
+    elif cmd in ("pull-cookies", "pull_cookies"):
+        pull_cookies(target_file)
     else:
-        print("Usage: python -m scratch.db_sync [pull|push]")
+        print("Usage: python -m scratch.db_sync [pull|push|push-cookies|pull-cookies] [cookies_file_path]")
         sys.exit(1)

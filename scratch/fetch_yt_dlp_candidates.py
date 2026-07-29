@@ -1,6 +1,6 @@
 import json
-import sys
 import subprocess
+import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
 

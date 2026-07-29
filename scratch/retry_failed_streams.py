@@ -1,10 +1,12 @@
 import asyncio
-import sys
 import random
+import sys
+
 from sqlmodel import Session, select
+
 from app.database import engine, init_db
-from app.models import Stream, JobStatus
 from app.main import process_stream_pipeline
+from app.models import JobStatus, Stream
 
 sys.stdout.reconfigure(encoding='utf-8')
 

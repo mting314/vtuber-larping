@@ -1,6 +1,7 @@
 import asyncio
 import json
 import sys
+
 from app.ingestion import poll_channel_rss
 
 sys.stdout.reconfigure(encoding='utf-8')
