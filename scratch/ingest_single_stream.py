@@ -41,7 +41,7 @@ async def ingest_url(url: str):
         
     chunks = chunk_cues(cues, interval_minutes=15)
     
-    master_summary, standout_highlights, chunk_summaries = await run_map_reduce_pipeline(
+    master_summary, standout_highlights, chunk_summaries, stream_category = await run_map_reduce_pipeline(
         vtuber_name=uploader,
         stream_title=title,
         chunks=chunks
@@ -65,11 +65,17 @@ async def ingest_url(url: str):
                 published_at=datetime.utcnow(),
                 thumbnail_url=thumbnail,
                 status=JobStatus.COMPLETED,
+                stream_category=stream_category,
                 vtuber_id=vtuber.id
             )
             session.add(stream)
             session.commit()
             session.refresh(stream)
+        else:
+            stream.stream_category = stream_category
+            stream.status = JobStatus.COMPLETED
+            session.add(stream)
+            session.commit()
             
         summary = session.exec(select(Summary).where(Summary.stream_id == stream.id)).first()
         if summary:

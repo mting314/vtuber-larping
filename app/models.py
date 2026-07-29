@@ -26,7 +26,7 @@ class Stream(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     video_id: str = Field(unique=True, index=True)
     title: str = Field(index=True)
-    # TODO: Add stream_category field ("gaming" vs "chatting") derived from title analysis & LLM transcript content
+    stream_category: str = Field(default="chatting", index=True)  # "chatting" vs "gaming"
     duration_seconds: int = Field(default=0)
     published_at: datetime = Field(default_factory=datetime.utcnow, index=True)
     thumbnail_url: str | None = None

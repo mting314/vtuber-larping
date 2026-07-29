@@ -170,7 +170,7 @@ async def process_stream_pipeline(stream_id: int):
             vtuber_name = stream.vtuber.name if stream.vtuber else "VTuber"
             stream_title = stream.title
             
-        master_summary, standout_highlights, chunk_summaries = await run_map_reduce_pipeline(
+        master_summary, standout_highlights, chunk_summaries, stream_category = await run_map_reduce_pipeline(
             vtuber_name=vtuber_name,
             stream_title=stream_title,
             chunks=chunks
@@ -186,6 +186,7 @@ async def process_stream_pipeline(stream_id: int):
         with next(get_session()) as session:
             stream = session.get(Stream, stream_id)
             stream.status = JobStatus.COMPLETED
+            stream.stream_category = stream_category
             stream.gcs_transcript_uri = gcs_uri
             stream.warning_message = warning_msg
             
@@ -348,6 +349,7 @@ def update_user_settings(payload: dict, session: Session = Depends(get_session))
 @app.get("/api/streams")
 def list_streams(
     agency: str | None = None,
+    category: str | None = None,
     vtuber_id: int | None = None,
     q: str | None = None,
     session: Session = Depends(get_session)
@@ -359,6 +361,9 @@ def list_streams(
         
     if agency:
         query = query.join(VTuber).where(VTuber.agency == agency)
+
+    if category:
+        query = query.where(Stream.stream_category == category)
         
     streams = session.exec(query.order_by(Stream.published_at.desc())).all()
     
@@ -380,6 +385,7 @@ def list_streams(
             "published_at": s.published_at.isoformat() if s.published_at else None,
             "thumbnail_url": s.thumbnail_url,
             "status": s.status,
+            "stream_category": s.stream_category or "chatting",
             "error_message": s.error_message,
             "warning_message": s.warning_message,
             "vtuber": {
@@ -408,6 +414,7 @@ def get_stream_detail(stream_id: int, session: Session = Depends(get_session)):
         "published_at": stream.published_at.isoformat() if stream.published_at else None,
         "thumbnail_url": stream.thumbnail_url,
         "status": stream.status,
+        "stream_category": stream.stream_category or "chatting",
         "error_message": stream.error_message,
         "warning_message": stream.warning_message,
         "gcs_transcript_uri": stream.gcs_transcript_uri,
