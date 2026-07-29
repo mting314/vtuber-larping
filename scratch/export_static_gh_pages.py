@@ -47,6 +47,7 @@ def export_static_site():
                 "published_at": s.published_at.isoformat() if s.published_at else None,
                 "thumbnail_url": s.thumbnail_url,
                 "status": s.status,
+                "stream_category": getattr(s, "stream_category", None) or "chatting",
                 "error_message": s.error_message,
                 "warning_message": s.warning_message,
                 "vtuber": {

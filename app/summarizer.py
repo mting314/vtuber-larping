@@ -50,10 +50,38 @@ class TimelineEntry(BaseModel):
     details: str = Field(description="Detailed description of discussions, lore, or stories in this segment")
 
 class MasterSummaryResponse(BaseModel):
-    # TODO: Add stream_category: Literal["gaming", "chatting"] Field to enable LLM-driven classification based on title and transcript content
+    stream_category: str = Field(
+        description="Classify stream as 'gaming' if the VTuber is playing a video game, or 'chatting' if primarily talking, zatsudan, Q&A, or chatting."
+    )
     quick_highlights_tldr: list[str] = Field(description="3-5 executive bullet points summarizing main takeaways (NO timestamps allowed here)")
     standout_stories: list[StandoutHighlight] = Field(description="Standout stories with exact START timestamps")
     timeline_breakdown: list[TimelineEntry] = Field(description="Chronological 15-minute topic breakdown with bold titles")
+
+def infer_stream_category_from_title(title: str) -> str:
+    """Helper to detect stream category ('chatting' vs 'gaming') from title keywords."""
+    title_lower = title.lower()
+    chatting_keywords = [
+        "zatsudan", "free talk", "chatting", "aftertalk", "talking", "chatter",
+        "marshmallow", "q&a", "qa", "reading", "unarchived", "drinking", "asmr"
+    ]
+    if any(kw in title_lower for kw in chatting_keywords):
+        return "chatting"
+
+    gaming_keywords = [
+        "lethal company", "minecraft", "apex", "valorant", "overwatch", "palworld",
+        "elden ring", "pokemon", "pokémon", "genshin", "tetris", "rust", "gta",
+        "grand theft auto", "suika", "mahjong", "phasmophobia", "monopoly", "passpartout"
+    ]
+    if any(kw in title_lower for kw in gaming_keywords):
+        return "gaming"
+
+    m = re.search(r'【([^】]+)】|\[([^\]]+)\]', title)
+    if m:
+        bracket_content = (m.group(1) or m.group(2) or "").lower()
+        if not any(kw in bracket_content for kw in chatting_keywords):
+            return "gaming"
+
+    return "chatting"
 
 def build_standardized_markdown(vtuber_name: str, stream_title: str, data: MasterSummaryResponse) -> str:
     """Deterministically renders Pydantic response into guaranteed, standardized Markdown."""
@@ -144,28 +172,31 @@ CRITICAL TIMESTAMP RULE:
             ]
         }
 
-async def summarize_reduce(vtuber_name: str, stream_title: str, chunk_summaries: list[dict[str, Any]]) -> tuple[str, list[dict[str, Any]]]:
+async def summarize_reduce(vtuber_name: str, stream_title: str, chunk_summaries: list[dict[str, Any]]) -> tuple[str, list[dict[str, Any]], str]:
     chunks_str = json.dumps(chunk_summaries, indent=2)
     
     prompt = f"""{VTUBER_GLOSSARY_PROMPT}
 
-You are a master Hololive & VTuber content curator summarizing a complete zatsudan stream for "{vtuber_name}".
+You are a master Hololive & VTuber content curator summarizing a complete stream for "{vtuber_name}".
 Stream Title: "{stream_title}"
 
 Here are the 15-minute segment summaries extracted from the stream transcript:
 {chunks_str}
 
 Task:
-Extract executive quick highlights, standout stories, and chronological timeline entries.
+Categorize the stream ('gaming' or 'chatting'), and extract executive quick highlights, standout stories, and chronological timeline entries.
 
 CRITICAL RULES:
-1. STRICT NAMING CONVENTION: NEVER refer to {vtuber_name} as "the streamer", "the VTuber", "she", or "they". ALWAYS refer to them explicitly by their actual name "{vtuber_name}" in all highlights, titles, and descriptions.
-2. NO INTRO MUSIC: Completely IGNORE opening BGM, waiting screens, or intro screams/Yippees. Start directly with actual conversational topics.
-3. PROPER NOUN CORRECTION: Strictly verify all VTuber names against the dictionary above (e.g. "Ouro Kronii" / "Kronii", NOT "Crony").
-4. quick_highlights_tldr: Provide 3-5 high-level executive summary bullet points. DO NOT include timestamps here.
-5. standout_stories: List 4-8 standout stories with exact START timestamps (HH:MM:SS) and catchy titles.
-6. timeline_breakdown: List chronological 15-minute segment entries with exact START timestamps (HH:MM:SS), a short 2-5 word bold headline title (e.g. "Doraemon Bully Critique"), and segment details.
+1. STREAM CATEGORY: Set stream_category to 'gaming' if the stream is primarily playing a video game (e.g. Lethal Company, Minecraft, Apex, Elden Ring, Suika Game, etc.). Set to 'chatting' if primarily talking, zatsudan, Q&A, free talk, or unarchived chatting.
+2. STRICT NAMING CONVENTION: NEVER refer to {vtuber_name} as "the streamer", "the VTuber", "she", or "they". ALWAYS refer to them explicitly by their actual name "{vtuber_name}" in all highlights, titles, and descriptions.
+3. NO INTRO MUSIC: Completely IGNORE opening BGM, waiting screens, or intro screams/Yippees. Start directly with actual conversational topics.
+4. PROPER NOUN CORRECTION: Strictly verify all VTuber names against the dictionary above (e.g. "Ouro Kronii" / "Kronii", NOT "Crony").
+5. quick_highlights_tldr: Provide 3-5 high-level executive summary bullet points. DO NOT include timestamps here.
+6. standout_stories: List 4-8 standout stories with exact START timestamps (HH:MM:SS) and catchy titles.
+7. timeline_breakdown: List chronological 15-minute segment entries with exact START timestamps (HH:MM:SS), a short 2-5 word bold headline title (e.g. "Doraemon Bully Critique"), and segment details.
 """
+
+    category_fallback = infer_stream_category_from_title(stream_title)
 
     try:
         client = get_genai_client()
@@ -180,11 +211,15 @@ CRITICAL RULES:
         )
         parsed = MasterSummaryResponse.model_validate_json(response.text)
         
+        category = parsed.stream_category.strip().lower() if parsed.stream_category else category_fallback
+        if category not in ("gaming", "chatting"):
+            category = category_fallback
+        
         # Deterministically build standardized Markdown from validated Pydantic model
         master_markdown = build_standardized_markdown(vtuber_name, stream_title, parsed)
         standout_highlights = [h.model_dump() for h in parsed.standout_stories]
         
-        return master_markdown, standout_highlights
+        return master_markdown, standout_highlights, category
     except Exception as e:
         logger.error(f"Reduce LLM call failed: {e}")
         lines = [f"# {stream_title}\n\n## ⚡ Quick Stream Highlights (TL;DR)\n"]
@@ -199,15 +234,15 @@ CRITICAL RULES:
                     "title": h.get("topic", "Highlight"),
                     "description": h.get("description", "")
                 })
-        return "\n".join(lines), highlights
+        return "\n".join(lines), highlights, category_fallback
 
-async def run_map_reduce_pipeline(vtuber_name: str, stream_title: str, chunks: list[dict[str, Any]]) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]]]:
+async def run_map_reduce_pipeline(vtuber_name: str, stream_title: str, chunks: list[dict[str, Any]]) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]], str]:
     """Runs parallel chunk Map summaries followed by Reduce master synthesis."""
     logger.info(f"Running Map phase for {len(chunks)} chunks using Vertex AI (project: {GCP_PROJECT})...")
     map_tasks = [summarize_chunk_map(chunk) for chunk in chunks]
     chunk_summaries = await asyncio.gather(*map_tasks)
     
     logger.info("Running Reduce phase for master synthesis...")
-    master_summary, standout_highlights = await summarize_reduce(vtuber_name, stream_title, chunk_summaries)
+    master_summary, standout_highlights, stream_category = await summarize_reduce(vtuber_name, stream_title, chunk_summaries)
     
-    return master_summary, standout_highlights, chunk_summaries
+    return master_summary, standout_highlights, chunk_summaries, stream_category

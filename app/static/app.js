@@ -1,4 +1,5 @@
         let currentAgency = '';
+        let currentCategory = '';
         let searchQuery = '';
 
         const isStaticHost = window.location.hostname.includes('github.io') || window.location.protocol === 'file:';
@@ -18,6 +19,7 @@
                 url = './api/streams.json';
             } else {
                 url = '/api/streams?';
+                if (currentCategory) url += `category=${encodeURIComponent(currentCategory)}&`;
                 if (currentAgency) url += `agency=${encodeURIComponent(currentAgency)}&`;
                 if (searchQuery) url += `q=${encodeURIComponent(searchQuery)}`;
             }
@@ -28,6 +30,9 @@
 
                 // Apply client-side filter in static mode
                 if (isStaticHost && Array.isArray(streams)) {
+                    if (currentCategory) {
+                        streams = streams.filter(s => (s.stream_category || 'chatting') === currentCategory);
+                    }
                     if (currentAgency) {
                         streams = streams.filter(s => s.vtuber && s.vtuber.agency === currentAgency);
                     }
@@ -56,9 +61,10 @@
                         <span class="status-badge status-${s.status}">${s.status}</span>
                     </div>
                     <div class="card-content">
-                        <div class="vtuber-meta">
+                        <div class="vtuber-meta" style="flex-wrap: wrap; gap: 4px;">
                             <span class="vtuber-agency-pill">${s.vtuber ? s.vtuber.agency : 'VTuber'}</span>
-                            <span class="vtuber-name">${s.vtuber ? s.vtuber.name : ''}</span>
+                            <span class="vtuber-agency-pill" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8;">${s.stream_category === 'gaming' ? '🎮 Gaming' : '💬 Chatting'}</span>
+                            <span class="vtuber-name" style="margin-left: auto;">${s.vtuber ? s.vtuber.name : ''}</span>
                         </div>
                         <div class="stream-title">${s.title}</div>
                         <div class="stream-footer">
@@ -68,6 +74,18 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function setCategoryFilter(category) {
+            currentCategory = category;
+            document.querySelectorAll('#categoryFilters .pill').forEach(btn => {
+                btn.classList.toggle('active', 
+                    (category === 'chatting' && btn.textContent.includes('Just Chatting')) ||
+                    (category === 'gaming' && btn.textContent.includes('Gaming')) ||
+                    (!category && btn.textContent.includes('All'))
+                );
+            });
+            fetchStreams();
         }
 
         function setAgencyFilter(agency) {
