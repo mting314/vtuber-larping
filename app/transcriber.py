@@ -11,7 +11,8 @@ logger = logging.getLogger(__name__)
 # YouTube blocks yt-dlp from datacenter IPs ("Sign in to confirm you're not a
 # bot") unless it gets authenticated cookies. We look for a local cookies.txt,
 # falling back to pulling one from GCS (state/youtube_cookies.txt).
-_COOKIES_PATH = os.getenv("YT_COOKIES_FILE", "/tmp/youtube_cookies.txt")
+_DEFAULT_COOKIES_PATH = str(Path(tempfile.gettempdir()) / "youtube_cookies.txt")
+_COOKIES_PATH = os.getenv("YT_COOKIES_FILE", _DEFAULT_COOKIES_PATH)
 _cookies_checked = False
 
 
@@ -20,6 +21,10 @@ def get_cookies_path() -> str | None:
     global _cookies_checked
     if os.path.exists(_COOKIES_PATH):
         return _COOKIES_PATH
+    if os.path.exists("youtube_cookies.txt"):
+        return "youtube_cookies.txt"
+    if os.path.exists("www.youtube.com_cookies.txt"):
+        return "www.youtube.com_cookies.txt"
     if _cookies_checked:
         return None
     _cookies_checked = True  # only attempt the GCS pull once per process

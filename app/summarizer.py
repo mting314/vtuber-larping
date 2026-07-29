@@ -50,6 +50,7 @@ class TimelineEntry(BaseModel):
     details: str = Field(description="Detailed description of discussions, lore, or stories in this segment")
 
 class MasterSummaryResponse(BaseModel):
+    # TODO: Add stream_category: Literal["gaming", "chatting"] Field to enable LLM-driven classification based on title and transcript content
     quick_highlights_tldr: list[str] = Field(description="3-5 executive bullet points summarizing main takeaways (NO timestamps allowed here)")
     standout_stories: list[StandoutHighlight] = Field(description="Standout stories with exact START timestamps")
     timeline_breakdown: list[TimelineEntry] = Field(description="Chronological 15-minute topic breakdown with bold titles")

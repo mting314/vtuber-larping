@@ -28,8 +28,10 @@ host the live "Summarize Stream" / "Settings" actions are hidden (`app.js` hides
   `scratch/export_static_gh_pages.py`; serves `index.html` + pre-baked JSON
   (`api/streams.json`, `api/streams/<id>.json`). Cannot serve POST.
 
-**Roadmap B** (tracked follow-up): replace SQLite + GCS-sync with a real hosted DB
-(Cloud SQL/Firestore) and re-enable a live backend + on-demand summarization.
+## Roadmap & Tracked TODOs
+
+- **Games vs. Chatting Stream Separation:** Separate streams into "Gaming" vs. "Just Chatting (*Zatsudan*)" categories. Classification should combine YouTube title analysis (e.g. game title brackets `【Lethal Company】`, `【Minecraft】`) with LLM categorization of the summarized transcript content.
+- **Roadmap B:** Replace SQLite + GCS-sync with a real hosted DB (Cloud SQL/Firestore) and re-enable a live backend + on-demand summarization.
 
 The single `app/static/index.html` runs in both places and switches behavior at runtime
 based on `window.location.hostname` (see "Frontend backend routing" below).
