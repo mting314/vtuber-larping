@@ -104,6 +104,7 @@ class StorageManager:
         try:
             blob = self.bucket.blob(blob_name)
             if blob.exists():
+                Path(local_path).parent.mkdir(parents=True, exist_ok=True)
                 blob.download_to_filename(local_path)
                 logger.info(f"Downloaded yt-dlp cookies to {local_path}")
                 return True
