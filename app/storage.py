@@ -111,4 +111,16 @@ class StorageManager:
             logger.warning(f"Cookies download failed ({e}).")
         return False
 
+    def upload_cookies(self, local_path: str, blob_name: str = COOKIES_BLOB_PATH) -> bool:
+        """Push local cookies.txt to GCS. Returns True on success."""
+        if not self.bucket or not os.path.exists(local_path):
+            return False
+        try:
+            self.bucket.blob(blob_name).upload_from_filename(local_path)
+            logger.info(f"Uploaded cookies to gs://{GCS_BUCKET_NAME}/{blob_name}")
+            return True
+        except Exception as e:
+            logger.error(f"Cookies upload failed ({e}).")
+        return False
+
 storage_manager = StorageManager()

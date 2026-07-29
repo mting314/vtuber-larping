@@ -2,11 +2,13 @@ import asyncio
 import json
 import sys
 from datetime import datetime
+
 from sqlmodel import Session, select
+
 from app.database import engine, init_db
-from app.models import VTuber, Stream, JobStatus
-from app.main import process_stream_pipeline
 from app.logger import ingestion_logger
+from app.main import process_stream_pipeline
+from app.models import JobStatus, Stream, VTuber
 
 sys.stdout.reconfigure(encoding='utf-8')
 
