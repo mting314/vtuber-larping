@@ -24,7 +24,7 @@
         async function fetchStreams() {
             let url = '/api/streams';
             if (isStaticHost) {
-                url = getStaticPath('api/streams.json');
+                url = `${PROD_BACKEND_URL}/api/streams`;
             } else {
                 url = '/api/streams?';
                 if (currentCategory) url += `category=${encodeURIComponent(currentCategory)}&`;
@@ -39,8 +39,8 @@
                 }
                 let streams = await res.json();
 
-                // Apply client-side filter in static mode
-                if (isStaticHost && Array.isArray(streams)) {
+                // Apply client-side filter
+                if (Array.isArray(streams)) {
                     if (currentCategory) {
                         streams = streams.filter(s => (s.stream_category || 'chatting') === currentCategory);
                     }
@@ -54,8 +54,14 @@
                 }
                 renderStreams(streams);
             } catch (err) {
-                console.error("Failed to fetch streams:", err);
-                renderStreams([]);
+                console.warn("Live Cloud Run query fallback to static streams.json:", err);
+                try {
+                    const fallbackRes = await fetch(getStaticPath('api/streams.json'));
+                    let streams = await fallbackRes.json();
+                    renderStreams(streams);
+                } catch (e) {
+                    renderStreams([]);
+                }
             }
         }
 
@@ -73,10 +79,9 @@
                         <span class="status-badge status-${s.status}">${s.status}</span>
                     </div>
                     <div class="card-content">
-                        <div class="vtuber-meta" style="flex-wrap: wrap; gap: 4px;">
+                        <div class="vtuber-meta">
                             <span class="vtuber-agency-pill">${s.vtuber ? s.vtuber.agency : 'VTuber'}</span>
-                            <span class="vtuber-agency-pill" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8;">${s.stream_category === 'gaming' ? '🎮 Gaming' : '💬 Chatting'}</span>
-                            <span class="vtuber-name" style="margin-left: auto;">${s.vtuber ? s.vtuber.name : ''}</span>
+                            <span class="vtuber-name">${s.vtuber ? s.vtuber.name : ''}</span>
                         </div>
                         <div class="stream-title">${s.title}</div>
                         <div class="stream-footer">
@@ -120,8 +125,11 @@
             modal.classList.add('active');
             
             try {
-                const url = isStaticHost ? getStaticPath(`api/streams/${streamId}.json`) : `/api/streams/${streamId}`;
-                const res = await fetch(url);
+                let url = isStaticHost ? `${PROD_BACKEND_URL}/api/streams/${streamId}` : `/api/streams/${streamId}`;
+                let res = await fetch(url);
+                if (!res.ok && isStaticHost) {
+                    res = await fetch(getStaticPath(`api/streams/${streamId}.json`));
+                }
                 const data = await res.json();
                 
                 currentModalVideoId = data.video_id;
