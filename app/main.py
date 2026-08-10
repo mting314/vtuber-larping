@@ -20,7 +20,11 @@ from sqlmodel import Session, select
 
 from app.database import get_session, init_db
 from app.discord import send_discord_summary_embed
-from app.ingestion import parse_youtube_atom_feed, poll_channel_rss
+from app.ingestion import (
+    parse_youtube_atom_feed,
+    poll_channel_rss,
+    subscribe_websub_topic,
+)
 from app.logger import ingestion_logger, manual_logger, pipeline_logger
 from app.models import JobStatus, Stream, Summary, UserSettings, VTuber
 from app.storage import storage_manager
@@ -130,7 +134,16 @@ def on_startup():
                     session.add(v)
             session.commit()
             
-    # Start background RSS poller loop
+    async def register_websub_subscriptions():
+        callback_url = "https://vtuber-digest-backend-467039506910.us-central1.run.app/api/webhooks/youtube"
+        with next(get_session()) as session:
+            vtubers = session.exec(select(VTuber)).all()
+            for v in vtubers:
+                if v.channel_id and not v.channel_id.startswith("auto_"):
+                    await subscribe_websub_topic(v.channel_id, callback_url)
+
+    asyncio.create_task(register_websub_subscriptions())
+    # Start background RSS poller loop as a secondary fallback safety net
     asyncio.create_task(background_rss_poller())
 
 # --- Background Task Pipeline ---

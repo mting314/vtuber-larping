@@ -77,3 +77,24 @@ async def poll_channel_rss(channel_id: str) -> list[dict[str, Any]]:
             logger.error(f"Failed to fetch RSS for channel {channel_id}: {e}")
             
     return []
+
+async def subscribe_websub_topic(channel_id: str, callback_url: str) -> bool:
+    """Subscribes server webhook endpoint to YouTube's WebSub (PubSubHubbub) hub for zero-polling instant push notifications."""
+    hub_url = "https://pubsubhubbub.appspot.com/subscribe"
+    data = {
+        "hub.callback": callback_url,
+        "hub.mode": "subscribe",
+        "hub.topic": f"https://www.youtube.com/xml/feeds/videos.xml?channel_id={channel_id}",
+        "hub.verify": "async"
+    }
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        try:
+            res = await client.post(hub_url, data=data)
+            if res.status_code in [202, 204]:
+                logger.info(f"Successfully registered WebSub push subscription for channel: {channel_id}")
+                return True
+            else:
+                logger.warning(f"WebSub hub subscription returned HTTP {res.status_code} for {channel_id}")
+        except Exception as e:
+            logger.error(f"Error subscribing to WebSub hub for channel {channel_id}: {e}")
+    return False
