@@ -47,11 +47,17 @@ async def ingest_url(url: str):
         chunks=chunks
     )
     
+    uploader_cid = meta.get('channel_id') or meta.get('uploader_id') or ""
     with Session(engine) as session:
-        # Check or create VTuber
-        vtuber = session.exec(select(VTuber).where(VTuber.name == uploader)).first()
+        # Check or create VTuber by channel_id or name
+        vtuber = None
+        if uploader_cid:
+            vtuber = session.exec(select(VTuber).where(VTuber.channel_id == uploader_cid)).first()
         if not vtuber:
-            vtuber = VTuber(name=uploader, channel_id="", agency="Hololive English")
+            vtuber = session.exec(select(VTuber).where(VTuber.name == uploader)).first()
+        if not vtuber:
+            cid_val = uploader_cid if uploader_cid else f"auto_{int(datetime.utcnow().timestamp())}"
+            vtuber = VTuber(name=uploader, channel_id=cid_val, agency="Hololive English")
             session.add(vtuber)
             session.commit()
             session.refresh(vtuber)
