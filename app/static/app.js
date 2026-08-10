@@ -21,37 +21,51 @@
             return basePath + path;
         }
 
-        async function fetchStreams() {
-            let streams = [];
+        let cachedStreams = [];
 
+        async function fetchStreams() {
             if (isStaticHost) {
-                // Primary: load pre-exported 54+ streams from static JSON
+                // Step 1: Render static streams INSTANTLY (<50ms)
                 try {
                     const res = await fetch(getStaticPath('api/streams.json'));
                     if (res.ok) {
-                        streams = await res.json();
+                        cachedStreams = await res.json();
+                        applyFiltersAndRender();
                     }
                 } catch (e) {
                     console.warn("Failed to load static streams.json:", e);
                 }
 
-                // Secondary: attempt to merge any newly processed streams from live backend
-                try {
-                    const liveRes = await fetch(`${PROD_BACKEND_URL}/api/streams`);
-                    if (liveRes.ok) {
-                        const liveStreams = await liveRes.json();
-                        if (Array.isArray(liveStreams)) {
-                            const existingIds = new Set(streams.map(s => s.video_id || s.id));
-                            for (const ls of liveStreams) {
-                                if (!existingIds.has(ls.video_id || ls.id)) {
-                                    streams.unshift(ls);
+                // Step 2: Non-blocking background fetch for live Cloud Run streams
+                (async () => {
+                    try {
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 3000);
+                        const liveRes = await fetch(`${PROD_BACKEND_URL}/api/streams`, { signal: controller.signal });
+                        clearTimeout(timeoutId);
+                        
+                        if (liveRes.ok) {
+                            const liveStreams = await liveRes.json();
+                            if (Array.isArray(liveStreams) && liveStreams.length > 0) {
+                                const existingIds = new Set(cachedStreams.map(s => s.video_id || String(s.id)));
+                                let merged = false;
+                                for (const ls of liveStreams) {
+                                    const key = ls.video_id || String(ls.id);
+                                    if (!existingIds.has(key)) {
+                                        cachedStreams.unshift(ls);
+                                        existingIds.add(key);
+                                        merged = true;
+                                    }
+                                }
+                                if (merged) {
+                                    applyFiltersAndRender();
                                 }
                             }
                         }
+                    } catch (e) {
+                        // Background merge failed or timed out; static feed is already rendered cleanly
                     }
-                } catch (e) {
-                    // Ignore background live merge error if offline
-                }
+                })();
             } else {
                 let url = '/api/streams?';
                 if (currentCategory) url += `category=${encodeURIComponent(currentCategory)}&`;
@@ -61,27 +75,29 @@
                 try {
                     const res = await fetch(url);
                     if (res.ok) {
-                        streams = await res.json();
+                        cachedStreams = await res.json();
+                        applyFiltersAndRender();
                     }
                 } catch (err) {
                     console.error("Failed to fetch streams:", err);
+                    applyFiltersAndRender();
                 }
             }
+        }
 
-            // Apply client-side filters
-            if (Array.isArray(streams)) {
-                if (currentCategory) {
-                    streams = streams.filter(s => (s.stream_category || 'chatting') === currentCategory);
-                }
-                if (currentAgency) {
-                    streams = streams.filter(s => s.vtuber && s.vtuber.agency === currentAgency);
-                }
-                if (searchQuery) {
-                    const qLower = searchQuery.toLowerCase();
-                    streams = streams.filter(s => s.title.toLowerCase().includes(qLower));
-                }
+        function applyFiltersAndRender() {
+            let filtered = Array.isArray(cachedStreams) ? [...cachedStreams] : [];
+            if (currentCategory) {
+                filtered = filtered.filter(s => (s.stream_category || 'chatting') === currentCategory);
             }
-            renderStreams(streams);
+            if (currentAgency) {
+                filtered = filtered.filter(s => s.vtuber && s.vtuber.agency === currentAgency);
+            }
+            if (searchQuery) {
+                const qLower = searchQuery.toLowerCase();
+                filtered = filtered.filter(s => s.title && s.title.toLowerCase().includes(qLower));
+            }
+            renderStreams(filtered);
         }
 
         function renderStreams(streams) {
