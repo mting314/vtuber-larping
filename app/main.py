@@ -96,21 +96,39 @@ def on_startup():
     # ingest job (scratch/ingest_single_stream.py) and served as static JSON.
     # This local DB is a transient build/dev store only — no runtime GCS sync.
     init_db()
-    # Seed default VTubers if empty
+    # Seed default VTubers if empty or fix invalid legacy channel IDs
+    valid_channel_ids = {
+        "Shiori Novella": "UCgnfPPb9JI3e9A4cXHnWbyg",
+        "Kobo Kanaeru": "UCjLEmnpCNeisMxy134KPwWw",
+        "Nerissa Ravencroft": "UC_sFNM0z0MWm9A6WlKPuMMg",
+        "Vestia Zeta": "UCTvHWSfBZgtxE4sILOaurIQ",
+        "Zeta Vestia": "UCTvHWSfBZgtxE4sILOaurIQ",
+        "Ironmouse": "UCj_TYZ60NDQYY5QpUvOge9g",
+        "Gawr Gura": "UCoSrY_IQQVpmIRZ9Xf-y93g",
+        "FUWAMOCO": "UCt9H_RpQzhxzlyBxFqrdHqA",
+    }
     with next(get_session()) as session:
         existing = session.exec(select(VTuber)).all()
         if not existing:
             default_vtubers = [
-                VTuber(name="Shiori Novella", channel_id="UC1uv2Oq6kNxgATlCiez59zQ", agency="Hololive English"),
-                VTuber(name="Kobo Kanaeru", channel_id="UCjLEmnpCNeisMxy114VwW4g", agency="Hololive ID"),
-                VTuber(name="Nerissa Ravencroft", channel_id="UC_vMYWcD54522570CPwP03w", agency="Hololive English"),
-                VTuber(name="Zeta Vestia", channel_id="UChN5BnyA1DAuXM29a6bUjEw", agency="Hololive ID"),
-                VTuber(name="Ironmouse", channel_id="UCvN5U9x6bU161N1-105-01g", agency="VShojo"),
+                VTuber(name="Shiori Novella", channel_id="UCgnfPPb9JI3e9A4cXHnWbyg", agency="Hololive English"),
+                VTuber(name="Kobo Kanaeru", channel_id="UCjLEmnpCNeisMxy134KPwWw", agency="Hololive ID"),
+                VTuber(name="Nerissa Ravencroft", channel_id="UC_sFNM0z0MWm9A6WlKPuMMg", agency="Hololive English"),
+                VTuber(name="Vestia Zeta", channel_id="UCTvHWSfBZgtxE4sILOaurIQ", agency="Hololive ID"),
+                VTuber(name="Ironmouse", channel_id="UCj_TYZ60NDQYY5QpUvOge9g", agency="VShojo"),
+                VTuber(name="Gawr Gura", channel_id="UCoSrY_IQQVpmIRZ9Xf-y93g", agency="Hololive English"),
+                VTuber(name="FUWAMOCO", channel_id="UCt9H_RpQzhxzlyBxFqrdHqA", agency="Hololive English"),
             ]
             for v in default_vtubers:
                 session.add(v)
             session.commit()
             logger.info("Seeded initial VTubers into database.")
+        else:
+            for v in existing:
+                if v.name in valid_channel_ids and v.channel_id != valid_channel_ids[v.name]:
+                    v.channel_id = valid_channel_ids[v.name]
+                    session.add(v)
+            session.commit()
             
     # Start background RSS poller loop
     asyncio.create_task(background_rss_poller())
