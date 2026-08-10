@@ -13,10 +13,18 @@
             return localStorage.getItem('backend_api_url') || 'http://127.0.0.1:8000';
         }
 
+        function getStaticPath(path) {
+            let basePath = window.location.pathname;
+            if (!basePath.endsWith('/')) {
+                basePath += '/';
+            }
+            return basePath + path;
+        }
+
         async function fetchStreams() {
             let url = '/api/streams';
             if (isStaticHost) {
-                url = './api/streams.json';
+                url = getStaticPath('api/streams.json');
             } else {
                 url = '/api/streams?';
                 if (currentCategory) url += `category=${encodeURIComponent(currentCategory)}&`;
@@ -26,6 +34,9 @@
 
             try {
                 const res = await fetch(url);
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}`);
+                }
                 let streams = await res.json();
 
                 // Apply client-side filter in static mode
@@ -44,6 +55,7 @@
                 renderStreams(streams);
             } catch (err) {
                 console.error("Failed to fetch streams:", err);
+                renderStreams([]);
             }
         }
 
@@ -108,7 +120,7 @@
             modal.classList.add('active');
             
             try {
-                const url = isStaticHost ? `./api/streams/${streamId}.json` : `/api/streams/${streamId}`;
+                const url = isStaticHost ? getStaticPath(`api/streams/${streamId}.json`) : `/api/streams/${streamId}`;
                 const res = await fetch(url);
                 const data = await res.json();
                 
