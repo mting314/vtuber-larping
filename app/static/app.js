@@ -22,47 +22,66 @@
         }
 
         async function fetchStreams() {
-            let url = '/api/streams';
+            let streams = [];
+
             if (isStaticHost) {
-                url = `${PROD_BACKEND_URL}/api/streams`;
+                // Primary: load pre-exported 54+ streams from static JSON
+                try {
+                    const res = await fetch(getStaticPath('api/streams.json'));
+                    if (res.ok) {
+                        streams = await res.json();
+                    }
+                } catch (e) {
+                    console.warn("Failed to load static streams.json:", e);
+                }
+
+                // Secondary: attempt to merge any newly processed streams from live backend
+                try {
+                    const liveRes = await fetch(`${PROD_BACKEND_URL}/api/streams`);
+                    if (liveRes.ok) {
+                        const liveStreams = await liveRes.json();
+                        if (Array.isArray(liveStreams)) {
+                            const existingIds = new Set(streams.map(s => s.video_id || s.id));
+                            for (const ls of liveStreams) {
+                                if (!existingIds.has(ls.video_id || ls.id)) {
+                                    streams.unshift(ls);
+                                }
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // Ignore background live merge error if offline
+                }
             } else {
-                url = '/api/streams?';
+                let url = '/api/streams?';
                 if (currentCategory) url += `category=${encodeURIComponent(currentCategory)}&`;
                 if (currentAgency) url += `agency=${encodeURIComponent(currentAgency)}&`;
                 if (searchQuery) url += `q=${encodeURIComponent(searchQuery)}`;
-            }
-
-            try {
-                const res = await fetch(url);
-                if (!res.ok) {
-                    throw new Error(`HTTP ${res.status}`);
-                }
-                let streams = await res.json();
-
-                // Apply client-side filter
-                if (Array.isArray(streams)) {
-                    if (currentCategory) {
-                        streams = streams.filter(s => (s.stream_category || 'chatting') === currentCategory);
-                    }
-                    if (currentAgency) {
-                        streams = streams.filter(s => s.vtuber && s.vtuber.agency === currentAgency);
-                    }
-                    if (searchQuery) {
-                        const qLower = searchQuery.toLowerCase();
-                        streams = streams.filter(s => s.title.toLowerCase().includes(qLower));
-                    }
-                }
-                renderStreams(streams);
-            } catch (err) {
-                console.warn("Live Cloud Run query fallback to static streams.json:", err);
+                
                 try {
-                    const fallbackRes = await fetch(getStaticPath('api/streams.json'));
-                    let streams = await fallbackRes.json();
-                    renderStreams(streams);
-                } catch (e) {
-                    renderStreams([]);
+                    const res = await fetch(url);
+                    if (res.ok) {
+                        streams = await res.json();
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch streams:", err);
                 }
             }
+
+            // Apply client-side filters
+            if (Array.isArray(streams)) {
+                if (currentCategory) {
+                    streams = streams.filter(s => (s.stream_category || 'chatting') === currentCategory);
+                }
+                if (currentAgency) {
+                    streams = streams.filter(s => s.vtuber && s.vtuber.agency === currentAgency);
+                }
+                if (searchQuery) {
+                    const qLower = searchQuery.toLowerCase();
+                    streams = streams.filter(s => s.title.toLowerCase().includes(qLower));
+                }
+            }
+            renderStreams(streams);
         }
 
         function renderStreams(streams) {
