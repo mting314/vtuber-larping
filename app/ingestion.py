@@ -68,11 +68,17 @@ def parse_youtube_atom_feed(xml_content: str) -> list[dict[str, Any]]:
 async def poll_channel_rss(channel_id: str) -> list[dict[str, Any]]:
     """Fetches public RSS XML feed for a YouTube channel without consuming API quota."""
     url = f"https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    }
     async with httpx.AsyncClient(timeout=10.0) as client:
         try:
-            res = await client.get(url)
+            res = await client.get(url, headers=headers)
             if res.status_code == 200:
                 return parse_youtube_atom_feed(res.text)
+            else:
+                logger.warning(f"RSS fetch status {res.status_code} for channel {channel_id}")
         except Exception as e:
             logger.error(f"Failed to fetch RSS for channel {channel_id}: {e}")
             
