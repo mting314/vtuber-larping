@@ -329,8 +329,11 @@
                 if (data.summary && data.summary.master_summary) {
                     let rawMarkdown = data.summary.master_summary;
                     
+                    // Strip literal (#t=...) or #t=... text artifacts from raw markdown
+                    rawMarkdown = rawMarkdown.replace(/\s*\(\#t=[^)]+\)/gi, '');
+
                     // Transform [HH:MM:SS] or [MM:SS] tags in raw Markdown into markdown timestamp links
-                    rawMarkdown = rawMarkdown.replace(/\[(?:⏱️\s*)?(\d{1,2}:\d{2}(?::\d{2})?)\]/g, (match, p1) => {
+                    rawMarkdown = rawMarkdown.replace(/\[(?:⏱️\s*)?(\d{1,2}:\d{2}(?::\d{2})?)\](?:\(#t=[^)]+\))?/g, (match, p1) => {
                         return `[⏱️ ${p1}](#t=${p1})`;
                     });
 
@@ -340,6 +343,9 @@
                     htmlContent = htmlContent.replace(/href="#t=([^"]+)"/g, (match, p1) => {
                         return `href="javascript:void(0)" class="timestamp-link" style="color: #38bdf8; font-weight: 700; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 2px 8px; text-decoration: none; cursor: pointer; display: inline-block; margin-right: 4px;" onclick="jumpToTime('${p1}', '${data.video_id}')"`;
                     });
+
+                    // Strip any leftover (#t=...) text from rendered HTML output
+                    htmlContent = htmlContent.replace(/\s*\(\#t=[^)]+\)/gi, '');
 
                     const summaryContainer = document.getElementById('modalSummaryText');
                     summaryContainer.innerHTML = htmlContent;
