@@ -425,7 +425,30 @@
     </header>
 
     <div class="container">
-        <div class="controls-bar">
+        <!-- Main View Mode Tabs (Completed vs Failed) -->
+        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; gap: 0.5rem;" id="viewTabs">
+                <button class="btn" id="tabCompleted" onclick="setViewTab('completed')" style="background: rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.5);">
+                    📺 Completed Digests (<span id="countCompleted">0</span>)
+                </button>
+                <button class="btn" id="tabFailed" onclick="setViewTab('failed')" style="background: rgba(255, 255, 255, 0.05); border-color: var(--border-color); color: var(--text-muted);">
+                    ⚠️ Failed Ingestions (<span id="countFailed">0</span>)
+                </button>
+            </div>
+            
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 0.5rem;">
+                <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Sort By:</label>
+                <select id="sortSelect" class="search-input" style="max-width: 220px; padding: 0.4rem 0.8rem; font-size: 0.85rem;" onchange="handleSortChange()">
+                    <option value="date_desc">📅 Date (Newest First)</option>
+                    <option value="date_asc">📅 Date (Oldest First)</option>
+                    <option value="vtuber_asc">👤 VTuber Channel (A - Z)</option>
+                    <option value="duration_desc">⏱️ Duration (Longest First)</option>
+                    <option value="duration_asc">⏱️ Duration (Shortest First)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="controls-bar" id="filterControlsBar">
             <div class="search-box">
                 <span class="search-icon">🔍</span>
                 <input type="text" id="searchInput" class="search-input" placeholder="Search streams, lore moments, or story topics..." oninput="handleSearch()">

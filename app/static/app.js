@@ -1,6 +1,8 @@
         let currentAgency = '';
         let currentCategory = '';
         let searchQuery = '';
+        let currentViewTab = 'completed'; // 'completed' | 'failed'
+        let currentSort = 'date_desc';    // 'date_desc' | 'date_asc' | 'vtuber_asc' | 'duration_desc' | 'duration_asc'
 
         const isStaticHost = window.location.hostname.includes('github.io') || window.location.protocol === 'file:';
         const isDevEnvironment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -63,7 +65,7 @@
                             }
                         }
                     } catch (e) {
-                        // Background merge failed or timed out; static feed is already rendered cleanly
+                        // Background merge failed or timed out
                     }
                 })();
             } else {
@@ -83,6 +85,33 @@
                     applyFiltersAndRender();
                 }
             }
+        }
+
+        function setViewTab(tab) {
+            currentViewTab = tab;
+            const tabComp = document.getElementById('tabCompleted');
+            const tabFail = document.getElementById('tabFailed');
+            
+            if (tabComp && tabFail) {
+                tabComp.style.background = tab === 'completed' ? 'rgba(139, 92, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)';
+                tabComp.style.borderColor = tab === 'completed' ? 'rgba(139, 92, 246, 0.5)' : 'var(--border-color)';
+                tabComp.style.color = tab === 'completed' ? '#fff' : 'var(--text-muted)';
+                
+                tabFail.style.background = tab === 'failed' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.05)';
+                tabFail.style.borderColor = tab === 'failed' ? 'rgba(239, 68, 68, 0.5)' : 'var(--border-color)';
+                tabFail.style.color = tab === 'failed' ? '#fff' : 'var(--text-muted)';
+            }
+            
+            const filterBar = document.getElementById('filterControlsBar');
+            if (filterBar) {
+                filterBar.style.display = tab === 'failed' ? 'none' : 'grid';
+            }
+            applyFiltersAndRender();
+        }
+
+        function handleSortChange() {
+            currentSort = document.getElementById('sortSelect').value;
+            applyFiltersAndRender();
         }
 
         function getCategoryTagBadge(s) {
@@ -110,40 +139,112 @@
         }
 
         function applyFiltersAndRender() {
-            let filtered = Array.isArray(cachedStreams) ? [...cachedStreams] : [];
-            if (currentCategory) {
-                filtered = filtered.filter(s => {
-                    const titleLower = (s.title || '').toLowerCase();
-                    const cat = (s.stream_category || '').toLowerCase();
-                    
-                    if (currentCategory === 'gaming') {
-                        return cat === 'gaming' || titleLower.includes('game') || titleLower.includes('zelda') || titleLower.includes('minecraft') || titleLower.includes('uno') || titleLower.includes('phogs') || titleLower.includes('home sweet home') || titleLower.includes('elsword') || titleLower.includes('oblivion') || titleLower.includes('splatoon') || titleLower.includes('frontline') || titleLower.includes('eronoctosis') || titleLower.includes('berlin apartment') || titleLower.includes('hololive dreams') || titleLower.includes('kamen rider');
-                    } else if (currentCategory === 'chatting') {
-                        return (cat === 'chatting' || !cat) && !titleLower.includes('collab') && !titleLower.includes('anniversary') && !titleLower.includes('mini live') && !titleLower.includes('concert') && !titleLower.includes('karaoke') && !titleLower.includes('singing');
-                    } else if (currentCategory === 'collab') {
-                        return titleLower.includes('collab') || titleLower.includes('with @') || titleLower.includes('with shiori');
-                    } else if (currentCategory === 'anniversary') {
-                        return titleLower.includes('anniversary') || titleLower.includes('mini live') || titleLower.includes('graduation') || titleLower.includes('concert') || titleLower.includes('3rd');
-                    } else if (currentCategory === 'karaoke') {
-                        return titleLower.includes('karaoke') || titleLower.includes('singing') || titleLower.includes('cover') || titleLower.includes('song');
-                    }
-                    return cat === currentCategory;
-                });
+            if (!Array.isArray(cachedStreams)) return;
+            
+            const completedStreams = cachedStreams.filter(s => s.status === 'COMPLETED' || !s.status);
+            const failedStreams = cachedStreams.filter(s => s.status === 'FAILED');
+            
+            const elComp = document.getElementById('countCompleted');
+            const elFail = document.getElementById('countFailed');
+            if (elComp) elComp.textContent = completedStreams.length;
+            if (elFail) elFail.textContent = failedStreams.length;
+            
+            let targetList = currentViewTab === 'failed' ? [...failedStreams] : [...completedStreams];
+            
+            if (currentViewTab === 'completed') {
+                if (currentCategory) {
+                    targetList = targetList.filter(s => {
+                        const titleLower = (s.title || '').toLowerCase();
+                        const cat = (s.stream_category || '').toLowerCase();
+                        
+                        if (currentCategory === 'gaming') {
+                            return cat === 'gaming' || titleLower.includes('game') || titleLower.includes('zelda') || titleLower.includes('minecraft') || titleLower.includes('uno') || titleLower.includes('phogs') || titleLower.includes('home sweet home') || titleLower.includes('elsword') || titleLower.includes('oblivion') || titleLower.includes('splatoon') || titleLower.includes('frontline') || titleLower.includes('eronoctosis') || titleLower.includes('berlin apartment') || titleLower.includes('hololive dreams') || titleLower.includes('kamen rider');
+                        } else if (currentCategory === 'chatting') {
+                            return (cat === 'chatting' || !cat) && !titleLower.includes('collab') && !titleLower.includes('anniversary') && !titleLower.includes('mini live') && !titleLower.includes('concert') && !titleLower.includes('karaoke') && !titleLower.includes('singing');
+                        } else if (currentCategory === 'collab') {
+                            return titleLower.includes('collab') || titleLower.includes('with @') || titleLower.includes('with shiori');
+                        } else if (currentCategory === 'anniversary') {
+                            return titleLower.includes('anniversary') || titleLower.includes('mini live') || titleLower.includes('graduation') || titleLower.includes('concert') || titleLower.includes('3rd');
+                        } else if (currentCategory === 'karaoke') {
+                            return titleLower.includes('karaoke') || titleLower.includes('singing') || titleLower.includes('cover') || titleLower.includes('song');
+                        }
+                        return cat === currentCategory;
+                    });
+                }
+                if (currentAgency) {
+                    targetList = targetList.filter(s => s.vtuber && s.vtuber.agency === currentAgency);
+                }
+                if (searchQuery) {
+                    const qLower = searchQuery.toLowerCase();
+                    targetList = targetList.filter(s => s.title && s.title.toLowerCase().includes(qLower));
+                }
             }
-            if (currentAgency) {
-                filtered = filtered.filter(s => s.vtuber && s.vtuber.agency === currentAgency);
+
+            // Apply Sorting
+            targetList.sort((a, b) => {
+                if (currentSort === 'date_desc') {
+                    return new Date(b.published_at || 0) - new Date(a.published_at || 0);
+                } else if (currentSort === 'date_asc') {
+                    return new Date(a.published_at || 0) - new Date(b.published_at || 0);
+                } else if (currentSort === 'vtuber_asc') {
+                    const nameA = (a.vtuber ? a.vtuber.name : '').toLowerCase();
+                    const nameB = (b.vtuber ? b.vtuber.name : '').toLowerCase();
+                    return nameA.localeCompare(nameB);
+                } else if (currentSort === 'duration_desc') {
+                    return (b.duration_seconds || 0) - (a.duration_seconds || 0);
+                } else if (currentSort === 'duration_asc') {
+                    return (a.duration_seconds || 0) - (b.duration_seconds || 0);
+                }
+                return 0;
+            });
+
+            renderStreams(targetList);
+        }
+
+        function formatDateDisplay(publishedAt) {
+            if (!publishedAt) return 'Recent Stream';
+            try {
+                const d = new Date(publishedAt);
+                if (isNaN(d.getTime())) return 'Recent Stream';
+                return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            } catch (e) {
+                return 'Recent Stream';
             }
-            if (searchQuery) {
-                const qLower = searchQuery.toLowerCase();
-                filtered = filtered.filter(s => s.title && s.title.toLowerCase().includes(qLower));
-            }
-            renderStreams(filtered);
         }
 
         function renderStreams(streams) {
             const grid = document.getElementById('streamGrid');
             if (!streams.length) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">No VTuber stream summaries found for this tag filter.</div>';
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">
+                    ${currentViewTab === 'failed' ? '🎉 No failed ingestion logs! All streams processed cleanly.' : 'No VTuber stream summaries found for these filter settings.'}
+                </div>`;
+                return;
+            }
+
+            if (currentViewTab === 'failed') {
+                grid.innerHTML = streams.map(s => `
+                    <div class="stream-card" style="border-color: rgba(239, 68, 68, 0.3);">
+                        <div class="thumbnail-container">
+                            <img src="${s.thumbnail_url || 'https://via.placeholder.com/640x360'}" class="thumbnail-img" alt="${s.title}">
+                            <span class="status-badge status-FAILED">FAILED</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="vtuber-meta">
+                                <span class="vtuber-agency-pill" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #f87171;">⚠️ ${s.vtuber ? s.vtuber.name : 'VTuber'}</span>
+                            </div>
+                            <div class="stream-title">${s.title}</div>
+                            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px; padding: 0.6rem; font-size: 0.8rem; color: #fca5a5;">
+                                <strong>Failure Cause:</strong> ${s.error_message || 'Could not fetch auto-captions or subtitles from YouTube.'}
+                            </div>
+                            <div class="stream-footer" style="margin-top: 0.5rem; justify-content: space-between;">
+                                <span>📅 ${formatDateDisplay(s.published_at)}</span>
+                                <button class="btn" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; background: rgba(139, 92, 246, 0.2);" onclick="event.stopPropagation(); retryFailedStream('${s.video_id}')">
+                                    🔄 Retry Summarizing
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
                 return;
             }
 
@@ -161,12 +262,21 @@
                         </div>
                         <div class="stream-title">${s.title}</div>
                         <div class="stream-footer">
-                            <span>📅 ${s.published_at ? new Date(s.published_at).toLocaleDateString() : 'Recent'}</span>
+                            <span>📅 ${formatDateDisplay(s.published_at)}</span>
                             <span>⏱️ ${s.duration_seconds ? Math.round(s.duration_seconds/60) + ' mins' : ''}</span>
                         </div>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function retryFailedStream(videoId) {
+            const url = `https://www.youtube.com/watch?v=${videoId}`;
+            openTriggerModal();
+            const input = document.getElementById('triggerUrlInput');
+            if (input) {
+                input.value = url;
+            }
         }
 
         function setCategoryFilter(category) {

@@ -23,7 +23,7 @@ def export_static_site():
 
     with Session(engine) as session:
         vtubers = session.exec(select(VTuber)).all()
-        streams = session.exec(select(Stream).where(Stream.status == JobStatus.COMPLETED)).all()
+        streams = session.exec(select(Stream)).all()
 
         # 1. Export VTubers JSON
         vtubers_data = [
