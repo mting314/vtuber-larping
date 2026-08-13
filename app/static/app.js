@@ -85,10 +85,50 @@
             }
         }
 
+        function getCategoryTagBadge(s) {
+            const titleLower = (s.title || '').toLowerCase();
+            const cat = (s.stream_category || '').toLowerCase();
+            
+            let tagLabel = '💬 Chatting';
+            let tagStyle = 'background: rgba(56, 189, 248, 0.18); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8;';
+            
+            if (titleLower.includes('collab') || titleLower.includes('with @') || titleLower.includes('with shiori')) {
+                tagLabel = '🤝 Collab';
+                tagStyle = 'background: rgba(236, 72, 153, 0.18); border: 1px solid rgba(236, 72, 153, 0.35); color: #f472b6;';
+            } else if (titleLower.includes('anniversary') || titleLower.includes('mini live') || titleLower.includes('graduation') || titleLower.includes('concert') || titleLower.includes('3rd')) {
+                tagLabel = '🎂 Event / Milestone';
+                tagStyle = 'background: rgba(251, 191, 36, 0.18); border: 1px solid rgba(251, 191, 36, 0.35); color: #fbbf24;';
+            } else if (titleLower.includes('karaoke') || titleLower.includes('singing') || titleLower.includes('cover') || titleLower.includes('song')) {
+                tagLabel = '🎤 Music / Karaoke';
+                tagStyle = 'background: rgba(239, 68, 68, 0.18); border: 1px solid rgba(239, 68, 68, 0.35); color: #f87171;';
+            } else if (cat === 'gaming' || titleLower.includes('game') || titleLower.includes('zelda') || titleLower.includes('minecraft') || titleLower.includes('uno') || titleLower.includes('phogs') || titleLower.includes('home sweet home') || titleLower.includes('elsword') || titleLower.includes('oblivion') || titleLower.includes('splatoon') || titleLower.includes('frontline') || titleLower.includes('eronoctosis') || titleLower.includes('berlin apartment') || titleLower.includes('hololive dreams') || titleLower.includes('kamen rider')) {
+                tagLabel = '🎮 Gaming';
+                tagStyle = 'background: rgba(168, 85, 247, 0.18); border: 1px solid rgba(168, 85, 247, 0.35); color: #c084fc;';
+            }
+            
+            return `<span class="vtuber-agency-pill" style="${tagStyle}">${tagLabel}</span>`;
+        }
+
         function applyFiltersAndRender() {
             let filtered = Array.isArray(cachedStreams) ? [...cachedStreams] : [];
             if (currentCategory) {
-                filtered = filtered.filter(s => (s.stream_category || 'chatting') === currentCategory);
+                filtered = filtered.filter(s => {
+                    const titleLower = (s.title || '').toLowerCase();
+                    const cat = (s.stream_category || '').toLowerCase();
+                    
+                    if (currentCategory === 'gaming') {
+                        return cat === 'gaming' || titleLower.includes('game') || titleLower.includes('zelda') || titleLower.includes('minecraft') || titleLower.includes('uno') || titleLower.includes('phogs') || titleLower.includes('home sweet home') || titleLower.includes('elsword') || titleLower.includes('oblivion') || titleLower.includes('splatoon') || titleLower.includes('frontline') || titleLower.includes('eronoctosis') || titleLower.includes('berlin apartment') || titleLower.includes('hololive dreams') || titleLower.includes('kamen rider');
+                    } else if (currentCategory === 'chatting') {
+                        return (cat === 'chatting' || !cat) && !titleLower.includes('collab') && !titleLower.includes('anniversary') && !titleLower.includes('mini live') && !titleLower.includes('concert') && !titleLower.includes('karaoke') && !titleLower.includes('singing');
+                    } else if (currentCategory === 'collab') {
+                        return titleLower.includes('collab') || titleLower.includes('with @') || titleLower.includes('with shiori');
+                    } else if (currentCategory === 'anniversary') {
+                        return titleLower.includes('anniversary') || titleLower.includes('mini live') || titleLower.includes('graduation') || titleLower.includes('concert') || titleLower.includes('3rd');
+                    } else if (currentCategory === 'karaoke') {
+                        return titleLower.includes('karaoke') || titleLower.includes('singing') || titleLower.includes('cover') || titleLower.includes('song');
+                    }
+                    return cat === currentCategory;
+                });
             }
             if (currentAgency) {
                 filtered = filtered.filter(s => s.vtuber && s.vtuber.agency === currentAgency);
@@ -103,7 +143,7 @@
         function renderStreams(streams) {
             const grid = document.getElementById('streamGrid');
             if (!streams.length) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">No VTuber stream summaries found.</div>';
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">No VTuber stream summaries found for this tag filter.</div>';
                 return;
             }
 
@@ -114,9 +154,10 @@
                         <span class="status-badge status-${s.status}">${s.status}</span>
                     </div>
                     <div class="card-content">
-                        <div class="vtuber-meta">
+                        <div class="vtuber-meta" style="flex-wrap: wrap; gap: 6px;">
                             <span class="vtuber-agency-pill">${s.vtuber ? s.vtuber.agency : 'VTuber'}</span>
-                            <span class="vtuber-name">${s.vtuber ? s.vtuber.name : ''}</span>
+                            ${getCategoryTagBadge(s)}
+                            <span class="vtuber-name" style="margin-left: auto;">${s.vtuber ? s.vtuber.name : ''}</span>
                         </div>
                         <div class="stream-title">${s.title}</div>
                         <div class="stream-footer">
@@ -131,13 +172,17 @@
         function setCategoryFilter(category) {
             currentCategory = category;
             document.querySelectorAll('#categoryFilters .pill').forEach(btn => {
+                const text = btn.textContent.toLowerCase();
                 btn.classList.toggle('active', 
-                    (category === 'chatting' && btn.textContent.includes('Just Chatting')) ||
-                    (category === 'gaming' && btn.textContent.includes('Gaming')) ||
-                    (!category && btn.textContent.includes('All'))
+                    (category === 'chatting' && text.includes('chatting')) ||
+                    (category === 'gaming' && text.includes('gaming')) ||
+                    (category === 'collab' && text.includes('collab')) ||
+                    (category === 'anniversary' && text.includes('event')) ||
+                    (category === 'karaoke' && text.includes('music')) ||
+                    (!category && text.includes('all'))
                 );
             });
-            fetchStreams();
+            applyFiltersAndRender();
         }
 
         function setAgencyFilter(agency) {

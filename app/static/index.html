@@ -430,10 +430,13 @@
                 <span class="search-icon">🔍</span>
                 <input type="text" id="searchInput" class="search-input" placeholder="Search streams, lore moments, or story topics..." oninput="handleSearch()">
             </div>
-            <div class="filter-pills" id="categoryFilters">
-                <button class="pill active" onclick="setCategoryFilter('')">All Stream Types</button>
+            <div class="filter-pills" id="categoryFilters" style="flex-wrap: wrap;">
+                <button class="pill active" onclick="setCategoryFilter('')">All Stream Tags</button>
                 <button class="pill" onclick="setCategoryFilter('chatting')">💬 Just Chatting</button>
                 <button class="pill" onclick="setCategoryFilter('gaming')">🎮 Gaming</button>
+                <button class="pill" onclick="setCategoryFilter('collab')">🤝 Collab</button>
+                <button class="pill" onclick="setCategoryFilter('anniversary')">🎂 Event & Milestone</button>
+                <button class="pill" onclick="setCategoryFilter('karaoke')">🎤 Music & Karaoke</button>
             </div>
             <div class="filter-pills" id="agencyFilters">
                 <button class="pill active" onclick="setAgencyFilter('')">All Agencies</button>
