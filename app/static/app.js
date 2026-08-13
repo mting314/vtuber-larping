@@ -29,7 +29,7 @@
             if (isStaticHost) {
                 // Step 1: Render static streams INSTANTLY (<50ms)
                 try {
-                    const res = await fetch(getStaticPath('api/streams.json'));
+                    const res = await fetch(getStaticPath(`api/streams.json?t=${Date.now()}`), { cache: 'no-cache' });
                     if (res.ok) {
                         cachedStreams = await res.json();
                         applyFiltersAndRender();
