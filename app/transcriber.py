@@ -62,11 +62,23 @@ def download_youtube_subtitles(video_id: str) -> tuple[str | None, dict[str, Any
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(video_url, download=False)
             if info:
+                from datetime import datetime, timezone
+                ts = info.get('release_timestamp') or info.get('timestamp')
+                pub_dt = None
+                if ts:
+                    pub_dt = datetime.fromtimestamp(ts, tz=timezone.utc)
+                elif info.get('upload_date'):
+                    try:
+                        pub_dt = datetime.strptime(info['upload_date'], '%Y%m%d')
+                    except Exception:
+                        pub_dt = None
+
                 meta = {
                     'title': info.get('title', f'YouTube Stream ({video_id})'),
                     'duration': info.get('duration', 0),
                     'channel': info.get('uploader', ''),
-                    'thumbnail_url': info.get('thumbnail', f'https://i.ytimg.com/vi/{video_id}/hqdefault.jpg')
+                    'thumbnail_url': info.get('thumbnail', f'https://i.ytimg.com/vi/{video_id}/hqdefault.jpg'),
+                    'published_at': pub_dt
                 }
     except Exception as e:
         logger.warning(f"Could not fetch metadata for {video_id}: {e}")

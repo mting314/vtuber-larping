@@ -68,7 +68,7 @@ async def ingest_url(url: str):
                 video_id=video_id,
                 title=title,
                 duration_seconds=duration,
-                published_at=datetime.utcnow(),
+                published_at=meta.get('published_at') or datetime.utcnow(),
                 thumbnail_url=thumbnail,
                 status=JobStatus.COMPLETED,
                 stream_category=stream_category,
