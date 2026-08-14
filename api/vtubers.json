@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "name": "Shiori Novella",
+    "agency": "Hololive English",
+    "channel_id": "UC1uv2Oq6kNxgATlCiez59zQ"
+  },
+  {
+    "id": 2,
+    "name": "Kobo Kanaeru",
+    "agency": "Hololive ID",
+    "channel_id": "UC_RxY1ovTm5bY"
+  },
+  {
+    "id": 3,
+    "name": "Nerissa Ravencroft",
+    "agency": "Hololive English",
+    "channel_id": "UC_Criw5zhE0bI"
+  },
+  {
+    "id": 4,
+    "name": "Zeta Vestia",
+    "agency": "Hololive ID",
+    "channel_id": "UC_38fJIy2FoDg"
+  },
+  {
+    "id": 5,
+    "name": "Ironmouse",
+    "agency": "VShojo",
+    "channel_id": "UC_JVg3dBYeySo"
+  },
+  {
+    "id": 6,
+    "name": "Gawr Gura",
+    "agency": "Hololive English",
+    "channel_id": "UC_D5XrQD2RkUw"
+  },
+  {
+    "id": 7,
+    "name": "Hakos Baelz",
+    "agency": "Hololive English",
+    "channel_id": "UC_197OEpjj8RI"
+  },
+  {
+    "id": 8,
+    "name": "FUWAMOCO",
+    "agency": "Hololive English",
+    "channel_id": "UC_Ws9IXS3PMWY"
+  },
+  {
+    "id": 9,
+    "name": "Ninomae Ina'nis",
+    "agency": "Hololive English",
+    "channel_id": "UC_c7K6RInG3Dw"
+  },
+  {
+    "id": 10,
+    "name": "IRyS",
+    "agency": "Hololive English",
+    "channel_id": "UC_YgRGMmcfHO8"
+  },
+  {
+    "id": 11,
+    "name": "Vestia Zeta Ch. hololive-ID",
+    "agency": "Hololive English",
+    "channel_id": ""
+  },
+  {
+    "id": 12,
+    "name": "FUWAMOCO Ch. hololive-EN",
+    "agency": "Hololive English",
+    "channel_id": "auto_1786420882"
+  },
+  {
+    "id": 13,
+    "name": "Vestia Zeta",
+    "agency": "Hololive ID",
+    "channel_id": "UCTvHWSfBZgtxE4sILOaurIQ"
+  },
+  {
+    "id": 14,
+    "name": "Shiori Novella Ch. hololive-EN",
+    "agency": "Hololive English",
+    "channel_id": "auto_1786521317"
+  }
+]

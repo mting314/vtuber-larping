@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>VTuber Digest | Automated Stream Summaries</title>
+    <!-- Google Fonts & Lucide Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --bg-card: rgba(18, 24, 38, 0.75);
+            --bg-card-hover: rgba(26, 35, 56, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-cyan: #06b6d4;
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #06b6d4 100%);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+            line-height: 1.6;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(16px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+        }
+
+        .header-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: white;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .logo-text {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .controls-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.85rem 1.25rem 0.85rem 2.8rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            backdrop-filter: blur(12px);
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            padding: 0.4rem 1rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pill.active, .pill:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--accent-purple);
+            color: white;
+        }
+
+        .stream-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stream-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stream-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            background: var(--bg-card-hover);
+        }
+
+        .thumbnail-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #111;
+        }
+
+        .thumbnail-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(8px);
+        }
+
+        .status-COMPLETED { background: rgba(16, 185, 129, 0.85); color: white; }
+        .status-SUMMARIZING { background: rgba(245, 158, 11, 0.85); color: white; }
+        .status-PENDING { background: rgba(59, 130, 246, 0.85); color: white; }
+        .status-FAILED { background: rgba(239, 68, 68, 0.85); color: white; }
+
+        .card-content {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex-grow: 1;
+        }
+
+        .vtuber-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .vtuber-agency-pill {
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            font-weight: 600;
+        }
+
+        .vtuber-name {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .stream-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .stream-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.75rem;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 1100px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-header {
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            padding: 1.75rem;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 850px) {
+            .modal-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .player-container {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .player-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .summary-content {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: 65vh;
+            font-size: 0.95rem;
+        }
+
+        .timestamp-tag {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.25);
+            color: #c4b5fd;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 0.4rem;
+            margin-bottom: 0.4rem;
+            transition: all 0.15s ease;
+        }
+
+        .timestamp-tag:hover {
+            background: var(--accent-purple);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <div class="logo-badge">V</div>
+                <div class="logo-text">VTuber Digest</div>
+            </a>
+            <!-- Live actions require the backend; hidden on the static read-only gallery. -->
+            <div class="header-actions" id="headerActions">
+                <button class="btn" style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-color);" onclick="openSettingsModal()">⚙️ Settings</button>
+                <button class="btn" onclick="openTriggerModal()">+ Summarize Stream</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Main View Mode Tabs (Completed vs Failed) -->
+        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; gap: 0.5rem;" id="viewTabs">
+                <button class="btn" id="tabCompleted" onclick="setViewTab('completed')" style="background: rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.5);">
+                    📺 Completed Digests (<span id="countCompleted">0</span>)
+                </button>
+                <button class="btn" id="tabFailed" onclick="setViewTab('failed')" style="background: rgba(255, 255, 255, 0.05); border-color: var(--border-color); color: var(--text-muted);">
+                    ⚠️ Failed Ingestions (<span id="countFailed">0</span>)
+                </button>
+            </div>
+            
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 0.5rem;">
+                <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Sort By:</label>
+                <select id="sortSelect" class="search-input" style="max-width: 220px; padding: 0.4rem 0.8rem; font-size: 0.85rem;" onchange="handleSortChange()">
+                    <option value="date_desc">📅 Date (Newest First)</option>
+                    <option value="date_asc">📅 Date (Oldest First)</option>
+                    <option value="vtuber_asc">👤 VTuber Channel (A - Z)</option>
+                    <option value="duration_desc">⏱️ Duration (Longest First)</option>
+                    <option value="duration_asc">⏱️ Duration (Shortest First)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="controls-bar" id="filterControlsBar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search streams, lore moments, or story topics..." oninput="handleSearch()">
+            </div>
+            <div class="filter-pills" id="categoryFilters" style="flex-wrap: wrap;">
+                <button class="pill active" onclick="setCategoryFilter('')">All Stream Tags</button>
+                <button class="pill" onclick="setCategoryFilter('chatting')">💬 Just Chatting</button>
+                <button class="pill" onclick="setCategoryFilter('gaming')">🎮 Gaming</button>
+                <button class="pill" onclick="setCategoryFilter('collab')">🤝 Collab</button>
+                <button class="pill" onclick="setCategoryFilter('anniversary')">🎂 Event & Milestone</button>
+                <button class="pill" onclick="setCategoryFilter('karaoke')">🎤 Music & Karaoke</button>
+            </div>
+            <div class="filter-pills" id="agencyFilters">
+                <button class="pill active" onclick="setAgencyFilter('')">All Agencies</button>
+                <button class="pill" onclick="setAgencyFilter('Hololive English')">Hololive English</button>
+                <button class="pill" onclick="setAgencyFilter('Hololive ID')">Hololive ID</button>
+                <button class="pill" onclick="setAgencyFilter('VShojo')">VShojo</button>
+                <button class="pill" onclick="setAgencyFilter('Indies')">Indies</button>
+            </div>
+        </div>
+
+        <div class="stream-grid" id="streamGrid">
+            <!-- Dynamically populated stream cards -->
+        </div>
+    </div>
+
+    <!-- Stream Detail Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalStreamTitle">Stream Summary</div>
+                <button class="close-btn" onclick="closeDetailModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="player-container">
+                        <iframe id="ytPlayer" allowfullscreen></iframe>
+                    </div>
+                    <div id="modalHighlights" style="margin-top: 1rem;">
+                        <h4 style="margin-bottom: 0.5rem;">Standout Stories & Timestamps</h4>
+                        <div id="highlightChips"></div>
+                    </div>
+                </div>
+                <div class="summary-content" id="modalSummaryText">
+                    Loading summary...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trigger Stream Modal -->
+    <div class="modal-overlay" id="triggerModal">
+        <div class="modal-content" style="max-width: 540px;">
+            <div class="modal-header">
+                <div class="modal-title">Summarize a VTuber Stream</div>
+                <button class="close-btn" onclick="closeTriggerModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="grid-template-columns: 1fr; padding: 1.5rem; gap: 1rem;">
+                <div id="triggerInputGroup">
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem;">
+                        Paste any YouTube stream/VOD link below to queue automatic transcript extraction and Map-Reduce LLM summarization.
+                    </p>
+                    <input type="text" id="streamUrlInput" class="search-input" placeholder="https://www.youtube.com/watch?v=...">
+                    <button class="btn" id="submitBtn" onclick="submitStreamUrl()" style="margin-top: 1rem; width: 100%; justify-content: center;">
+                        🚀 Submit Stream & Summarize
+                    </button>
+                </div>
+
+                <!-- Live Progress & Tracker Container -->
+                <div id="triggerProgressGroup" style="display: none; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span id="triggerStatusBadge" style="font-weight: 700; font-size: 0.85rem; color: #38bdf8;">⏳ PROCESSING</span>
+                        <span id="triggerProgressPercent" style="font-size: 0.85rem; color: var(--text-muted);">15%</span>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div style="width: 100%; background: rgba(255,255,255,0.08); height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 0.75rem;">
+                        <div id="progressBarFill" style="width: 15%; height: 100%; background: linear-gradient(90deg, #8b5cf6, #06b6d4); transition: width 0.4s ease;"></div>
+                    </div>
+
+                    <div id="triggerStatusText" style="font-size: 0.9rem; color: #e2e8f0; font-weight: 500;">
+                        Step 1/3: Validating YouTube URL & initializing pipeline...
+                    </div>
+                </div>
+
+                <!-- Success Confirmation Box -->
+                <div id="triggerSuccessBox" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 12px; padding: 1.25rem; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎉</div>
+                    <h3 style="color: #10b981; margin-bottom: 0.4rem;">Stream Summary Complete!</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                        The Map-Reduce LLM summarization pipeline has finished generating timestamps and highlights.
+                    </p>
+                    <button class="btn" id="viewSummaryBtn" onclick="" style="width: 100%; justify-content: center; background: #10b981;">
+                        📖 View Summary Now
+                    </button>
+                </div>
+
+                <!-- Error / Failure Box -->
+                <div id="triggerErrorBox" style="display: none; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 1.25rem; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚠️</div>
+                    <h3 style="color: #f87171; margin-bottom: 0.4rem;">Summarization Failed</h3>
+                    <p id="triggerErrorText" style="color: #fca5a5; font-size: 0.9rem; margin-bottom: 1rem; word-break: break-word;">
+                        Something went wrong.
+                    </p>
+                    <button class="btn" onclick="openTriggerModal()" style="width: 100%; justify-content: center; background: #ef4444;">
+                        ↺ Try Another Stream
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-content" style="max-width: 550px;">
+            <div class="modal-header">
+                <div class="modal-title">⚙️ User Preference Settings</div>
+                <button class="close-btn" onclick="closeSettingsModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="grid-template-columns: 1fr; padding: 1.5rem; gap: 1.25rem;">
+                <div id="devBackendSettingGroup" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 0.85rem; margin-bottom: 0.5rem;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.4rem; color: #f87171;">🛠️ Dev Only: Backend API Server URL</label>
+                    <input type="text" id="backendApiUrlInput" class="search-input" placeholder="http://127.0.0.1:8000">
+                    <small style="color: var(--text-muted); display: block; margin-top: 0.3rem;">
+                        Target local FastAPI dev server URL. (Only configurable on localhost dev environments).
+                    </small>
+                </div>
+                <div>
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.4rem;">Discord Webhook URL</label>
+                    <input type="text" id="discordWebhookInput" class="search-input" placeholder="https://discord.com/api/webhooks/...">
+                    <small style="color: var(--text-muted); display: block; margin-top: 0.3rem;">
+                        Automated stream summary embeds will be dispatched to this channel.
+                    </small>
+                </div>
+                <div>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; cursor: pointer;">
+                        <input type="checkbox" id="discordEnableToggle" checked style="width: 18px; height: 18px;">
+                        Enable Discord Webhook Alerts
+                    </label>
+                </div>
+                <div>
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.4rem;">Summary Detail Level</label>
+                    <select id="summaryStyleSelect" class="search-input">
+                        <option value="bullet_first">Bullet-First Highlights (TL;DR)</option>
+                        <option value="detailed">Detailed Story Breakdown & Lore</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="saveSettings()" style="justify-content: center;">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./static/app.js?v=a6d2db133b40"></script>
+</body>
+</html>

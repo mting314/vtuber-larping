@@ -1,0 +1,19 @@
+{
+  "id": 127,
+  "video_id": "Criw5zhE0bI",
+  "title": "🐦‍⬛ JAILBIRD FREE CHAT🎼",
+  "duration_seconds": 0,
+  "published_at": "2026-08-13T04:45:21.751405",
+  "thumbnail_url": "https://i.ytimg.com/vi/Criw5zhE0bI/hqdefault.jpg",
+  "status": "FAILED",
+  "stream_category": "chatting",
+  "error_message": "Scheduled Free Chat (Captions pending stream broadcast)",
+  "warning_message": null,
+  "vtuber": {
+    "id": 3,
+    "name": "Nerissa Ravencroft",
+    "agency": "Hololive English"
+  },
+  "has_summary": false,
+  "summary": null
+}

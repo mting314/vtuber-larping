@@ -1,0 +1,19 @@
+{
+  "id": 126,
+  "video_id": "WnBExtoUM5o",
+  "title": "Making My Ideal Husbando with Random Body Parts 【Eronoctosis】",
+  "duration_seconds": 0,
+  "published_at": "2026-08-11T00:55:38",
+  "thumbnail_url": "https://i.ytimg.com/vi/WnBExtoUM5o/hqdefault.jpg",
+  "status": "FAILED",
+  "stream_category": "chatting",
+  "error_message": "Scheduled Live Stream (Upcoming broadcast)",
+  "warning_message": null,
+  "vtuber": {
+    "id": 1,
+    "name": "Shiori Novella",
+    "agency": "Hololive English"
+  },
+  "has_summary": false,
+  "summary": null
+}

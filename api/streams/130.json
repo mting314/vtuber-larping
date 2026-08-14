@@ -1,0 +1,19 @@
+{
+  "id": 130,
+  "video_id": "W2cPwFpX8DE",
+  "title": "【Road to Empress II】ABSOLUTE CINEMA? ※Spoilers",
+  "duration_seconds": 0,
+  "published_at": "2026-07-31T09:58:38",
+  "thumbnail_url": "https://i.ytimg.com/vi/W2cPwFpX8DE/hqdefault.jpg",
+  "status": "FAILED",
+  "stream_category": "chatting",
+  "error_message": "Pending YouTube Auto-Caption Processing (3.3-hour VOD captions currently processing)",
+  "warning_message": null,
+  "vtuber": {
+    "id": 13,
+    "name": "Vestia Zeta",
+    "agency": "Hololive ID"
+  },
+  "has_summary": false,
+  "summary": null
+}

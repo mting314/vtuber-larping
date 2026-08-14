@@ -1,0 +1,19 @@
+{
+  "id": 125,
+  "video_id": "UkqwIcO3YN8",
+  "title": "Weekly Tentative Schedule",
+  "duration_seconds": 0,
+  "published_at": "2026-08-13T04:45:21.746578",
+  "thumbnail_url": "https://i.ytimg.com/vi/UkqwIcO3YN8/hqdefault.jpg",
+  "status": "FAILED",
+  "stream_category": "chatting",
+  "error_message": "Scheduled Live Stream (Upcoming event in 265 days)",
+  "warning_message": null,
+  "vtuber": {
+    "id": 1,
+    "name": "Shiori Novella",
+    "agency": "Hololive English"
+  },
+  "has_summary": false,
+  "summary": null
+}

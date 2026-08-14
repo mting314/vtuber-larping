@@ -1,0 +1,81 @@
+{
+  "id": 57,
+  "video_id": "7WFg2wq10rw",
+  "title": "important announcement - gawr gura",
+  "duration_seconds": 528,
+  "published_at": "2025-04-16T02:29:53",
+  "thumbnail_url": "https://i.ytimg.com/vi/7WFg2wq10rw/hqdefault.jpg",
+  "status": "COMPLETED",
+  "stream_category": "chatting",
+  "error_message": null,
+  "warning_message": null,
+  "vtuber": {
+    "id": 6,
+    "name": "Gawr Gura",
+    "agency": "Hololive English"
+  },
+  "has_summary": true,
+  "summary": {
+    "master_summary": "# important announcement - gawr gura\n\n## ⚡ Quick Stream Highlights (TL;DR)\n- Gawr Gura announced her graduation from Hololive, effective May 1st, 2025 JST, due to disagreements with management and company direction.\n- She reflected on her initial struggles with the sudden fame and expectations, crediting her community's continuous support for helping her overcome challenges.\n- Gura expressed deep gratitude for her nearly five years with fans, cherishing the personal growth that transformed her from timid to performing live for thousands.\n- She highlighted the joy of connecting with her community through their creativity and promised to keep all fan letters.\n- Gura mentioned a final project to share and conveyed optimism for her future, requesting kindness and patience from her fans.\n\n## ⭐ Standout Stories & Timestamps\n- **[⏱️ 00:02:44](#t=00:02:44) Graduation Announcement**: Gawr Gura announces her graduation from Hololive on May 1st, 2025 JST, citing disagreements with management and company direction as the reasons.\n- **[⏱️ 00:03:39](#t=00:03:39) Early Struggles and Community Support**: Gura recounts experiencing overwhelming stress after debut, to the point of not being able to eat, and credits her community's support for helping her persevere.\n- **[⏱️ 00:04:47](#t=00:04:47) Personal Growth Through VTubing**: Gura shares how she evolved from being too scared to sing alone in her shower to performing live for thousands, thanks to her VTuber journey and community.\n- **[⏱️ 00:05:43](#t=00:05:43) Cherishing Fan Letters**: Gura humorously promises to keep all fan letters, sealing them away for archaeologists to discover and decipher centuries later.\n- **[⏱️ 00:07:35](#t=00:07:35) Final Project and Optimism**: Gura mentions having one final project to share and expresses optimism for her future, hoping her fans feel the same.\n\n## ⏱️ Timeline Breakdown\n- **[⏱️ 00:01:57](#t=00:01:57)**: Gawr Gura from Hololive English Myth delivered an emotional announcement regarding her graduation from Hololive on May 1st, 2025 JST. She attributed her departure to disagreements with management and company direction. Gura reflected on her debut in September 2020 with four other talented VTubers, acknowledging her initial lack of streaming, singing, and dancing experience. She shared that the sudden fame and expectations caused immense stress, making it difficult to eat, but credited her community's continuous support and patience for helping her overcome these challenges and achieve things she never thought possible. Gura expressed profound gratitude for the nearly five years spent with her fans, cherishing the opportunities and the personal growth that transformed her from being too scared to sing in the shower to performing live for thousands. She highlighted the joy of connecting with her community, acknowledging their creativity through clips, fan art, and letters, which she promised to keep forever. Gura looked forward to sharing one final project and expressed optimism for the future, asking fans to share kindness and patience with everyone during her remaining time.",
+    "standout_highlights": [
+      {
+        "timestamp": "00:02:44",
+        "title": "Graduation Announcement",
+        "description": "Gawr Gura announces her graduation from Hololive on May 1st, 2025 JST, citing disagreements with management and company direction as the reasons."
+      },
+      {
+        "timestamp": "00:03:39",
+        "title": "Early Struggles and Community Support",
+        "description": "Gura recounts experiencing overwhelming stress after debut, to the point of not being able to eat, and credits her community's support for helping her persevere."
+      },
+      {
+        "timestamp": "00:04:47",
+        "title": "Personal Growth Through VTubing",
+        "description": "Gura shares how she evolved from being too scared to sing alone in her shower to performing live for thousands, thanks to her VTuber journey and community."
+      },
+      {
+        "timestamp": "00:05:43",
+        "title": "Cherishing Fan Letters",
+        "description": "Gura humorously promises to keep all fan letters, sealing them away for archaeologists to discover and decipher centuries later."
+      },
+      {
+        "timestamp": "00:07:35",
+        "title": "Final Project and Optimism",
+        "description": "Gura mentions having one final project to share and expresses optimism for her future, hoping her fans feel the same."
+      }
+    ],
+    "chunks": [
+      {
+        "time_range": "00:01:57 - 00:07:57",
+        "summary": "Gawr Gura from Hololive English Myth delivered an emotional announcement regarding her graduation from Hololive on May 1st, 2025 JST. She attributed her departure to disagreements with management and company direction. Gura reflected on her debut in September 2020 with four other talented VTubers, acknowledging her initial lack of streaming, singing, and dancing experience. She shared that the sudden fame and expectations caused immense stress, making it difficult to eat, but credited her community's continuous support and patience for helping her overcome these challenges and achieve things she never thought possible. Gura expressed profound gratitude for the nearly five years spent with her fans, cherishing the opportunities and the personal growth that transformed her from being too scared to sing in the shower to performing live for thousands. She highlighted the joy of connecting with her community, acknowledging their creativity through clips, fan art, and letters, which she promised to keep forever. Gura looked forward to sharing one final project and expressed optimism for the future, asking fans to share kindness and patience with everyone during her remaining time.",
+        "highlights": [
+          {
+            "timestamp": "00:02:44",
+            "topic": "Graduation Announcement",
+            "description": "Gawr Gura announces her graduation from Hololive on May 1st, 2025 JST, citing disagreements with management and company direction as the reasons."
+          },
+          {
+            "timestamp": "00:03:39",
+            "topic": "Early Struggles and Community Support",
+            "description": "Gura recounts experiencing overwhelming stress after debut, to the point of not being able to eat, and credits her community's support for helping her persevere."
+          },
+          {
+            "timestamp": "00:04:47",
+            "topic": "Personal Growth Through VTubing",
+            "description": "Gura shares how she evolved from being too scared to sing alone in her shower to performing live for thousands, thanks to her VTuber journey and community."
+          },
+          {
+            "timestamp": "00:05:43",
+            "topic": "Cherishing Fan Letters",
+            "description": "Gura humorously promises to keep all fan letters, sealing them away for archaeologists to discover and decipher centuries later."
+          },
+          {
+            "timestamp": "00:07:35",
+            "topic": "Final Project and Optimism",
+            "description": "Gura mentions having one final project to share and expresses optimism for her future, hoping her fans feel the same."
+          }
+        ]
+      }
+    ]
+  }
+}
