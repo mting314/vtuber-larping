@@ -34,6 +34,14 @@ class Stream(SQLModel, table=True):
     gcs_transcript_uri: str | None = None
     error_message: str | None = None
     warning_message: str | None = None
+
+    # Bounded-retry bookkeeping. A FAILED row is re-attempted on an exponential
+    # backoff until retry_count hits the cap, then left alone until a human
+    # re-triggers it. Without this, transient failures (bot checks, 429s) either
+    # never recover or get retried on every cold start — the latter is what got
+    # the Cloud Run egress IP flagged by YouTube.
+    retry_count: int = Field(default=0)
+    last_attempted_at: datetime | None = None
     
     vtuber_id: int | None = Field(default=None, foreign_key="vtuber.id")
     vtuber: VTuber | None = Relationship(back_populates="streams")

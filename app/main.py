@@ -3,7 +3,7 @@ import hashlib
 import json
 import logging
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from fastapi import (
     BackgroundTasks,
@@ -27,6 +27,7 @@ from app.ingestion import (
 )
 from app.logger import ingestion_logger, manual_logger, pipeline_logger
 from app.models import JobStatus, Stream, Summary, UserSettings, VTuber
+from app.persistence import persist_stream_to_gcs, restore_db_from_gcs
 from app.storage import storage_manager
 from app.summarizer import run_map_reduce_pipeline
 from app.transcriber import chunk_cues, download_youtube_subtitles, parse_vtt
@@ -61,6 +62,55 @@ def read_root():
         html = f.read()
     return html.replace("__CACHE_VERSION__", _cache_version())
 
+# --- Bounded retry of failed ingestions ---
+# Backoff is 1h, 2h, 4h, 8h, then the row is left for a human. Deliberately slow:
+# the failure this most often sees is a YouTube bot check, and retrying it hard is
+# what earns the block in the first place.
+MAX_INGEST_RETRIES = 4
+RETRY_BASE_MINUTES = 60
+
+
+def _retry_is_due(stream: Stream, now: datetime) -> bool:
+    if stream.retry_count >= MAX_INGEST_RETRIES:
+        return False
+    if stream.last_attempted_at is None:
+        return True
+    delay = timedelta(minutes=RETRY_BASE_MINUTES * (2 ** stream.retry_count))
+    return now >= stream.last_attempted_at + delay
+
+
+async def sweep_failed_retries(session: Session) -> list[int]:
+    """Re-queue FAILED streams whose backoff has elapsed.
+
+    The claim (retry_count bump + timestamp) is pushed to GCS *before* the
+    pipeline runs, so a second instance sweeping concurrently sees the updated
+    backoff window and skips the row instead of duplicating a map-reduce run.
+    """
+    now = datetime.utcnow()
+    failed = session.exec(select(Stream).where(Stream.status == JobStatus.FAILED)).all()
+    retried = []
+
+    for stream in failed:
+        if not _retry_is_due(stream, now):
+            continue
+        stream.retry_count += 1
+        stream.last_attempted_at = now
+        stream.status = JobStatus.PENDING
+        stream.error_message = None
+        session.add(stream)
+        session.commit()
+        session.refresh(stream)
+
+        await _persist(stream.id)  # claim the attempt before doing the work
+        pipeline_logger.info(
+            f"[Stream {stream.id}] Retry {stream.retry_count}/{MAX_INGEST_RETRIES} for {stream.video_id}."
+        )
+        asyncio.create_task(process_stream_pipeline(stream.id))
+        retried.append(stream.id)
+
+    return retried
+
+
 # --- Periodic RSS Poller Loop ---
 async def background_rss_poller():
     """Periodic background task that polls RSS feeds for all tracked VTubers every 30 minutes."""
@@ -89,6 +139,8 @@ async def background_rss_poller():
                             
                             logger.info(f"Background RSS poller discovered new VOD: {video_id} for {vtuber.name}")
                             asyncio.create_task(process_stream_pipeline(stream.id))
+
+                await sweep_failed_retries(session)
         except Exception as e:
             logger.error(f"Error in background RSS poller loop: {e}")
             
@@ -96,9 +148,10 @@ async def background_rss_poller():
 
 @app.on_event("startup")
 def on_startup():
-    # Architecture A (read-only gallery): summaries are produced by the batch
-    # ingest job (scratch/ingest_single_stream.py) and served as static JSON.
-    # This local DB is a transient build/dev store only — no runtime GCS sync.
+    # The container's SQLite file is ephemeral, so seed it from the
+    # authoritative copy in GCS before anything reads or writes it. Results
+    # produced here are written back per-stream (see process_stream_pipeline).
+    restore_db_from_gcs()
     init_db()
     # Seed default VTubers if empty or fix invalid legacy channel IDs
     valid_channel_ids = {
@@ -147,6 +200,15 @@ def on_startup():
     asyncio.create_task(background_rss_poller())
 
 # --- Background Task Pipeline ---
+async def _persist(stream_id: int) -> None:
+    """Write a terminal pipeline result back to the shared GCS DB.
+
+    Runs off the event loop: the merge does blocking network + SQLite I/O and
+    would otherwise stall the webhook handler and the RSS poller.
+    """
+    await asyncio.to_thread(persist_stream_to_gcs, stream_id)
+
+
 async def process_stream_pipeline(stream_id: int):
     pipeline_logger.info(f"[Stream {stream_id}] Pipeline started.")
     with next(get_session()) as session:
@@ -156,6 +218,9 @@ async def process_stream_pipeline(stream_id: int):
             return
 
         stream.status = JobStatus.FETCHING_TRANSCRIPT
+        # Stamp the attempt so the retry sweep's backoff is measured from when
+        # work actually started, not from when the row was created.
+        stream.last_attempted_at = datetime.utcnow()
         video_id = stream.video_id
         session.add(stream)
         session.commit()
@@ -175,6 +240,7 @@ async def process_stream_pipeline(stream_id: int):
                 stream.error_message = fail_msg
                 session.add(stream)
                 session.commit()
+            await _persist(stream_id)
             return
             
         # Save raw transcript to GCS (or local storage fallback)
@@ -195,6 +261,10 @@ async def process_stream_pipeline(stream_id: int):
                 stream.title = meta['title']
             if meta.get('duration'):
                 stream.duration_seconds = int(meta['duration'])
+            # Prefer YouTube's real broadcast date over the row's creation
+            # timestamp — matches scratch/ingest_single_stream.py.
+            if meta.get('published_at'):
+                stream.published_at = meta['published_at'].replace(tzinfo=None)
             session.add(stream)
             session.commit()
             
@@ -250,6 +320,7 @@ async def process_stream_pipeline(stream_id: int):
                         master_summary_snippet=master_summary
                     )
             
+        await _persist(stream_id)
         pipeline_logger.info(f"Successfully processed summary for Stream ID: {stream_id} ({stream_title})")
 
     except Exception as e:
@@ -260,6 +331,7 @@ async def process_stream_pipeline(stream_id: int):
             stream.error_message = str(e)
             session.add(stream)
             session.commit()
+        await _persist(stream_id)
 
 # --- WebSub & Trigger Endpoints ---
 @app.get("/api/webhooks/youtube")
@@ -318,6 +390,11 @@ async def manual_trigger_stream(payload: dict, bg_tasks: BackgroundTasks, sessio
         if existing.status == JobStatus.FAILED:
             existing.status = JobStatus.PENDING
             existing.error_message = None
+            # A human asking for this again resets the automatic retry budget —
+            # e.g. after refreshing cookies, a row that exhausted its retries
+            # should get a fresh set rather than failing once and stopping.
+            existing.retry_count = 0
+            existing.last_attempted_at = None
             session.add(existing)
             session.commit()
             manual_logger.info(f"Re-triggered failed stream summary for {video_id}")

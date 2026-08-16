@@ -86,7 +86,12 @@ class StorageManager:
         return False
 
     def upload_db(self, local_path: str, blob_name: str = DB_BLOB_PATH) -> bool:
-        """Push the local SQLite DB to GCS. Returns True on success."""
+        """Push the local SQLite DB to GCS, unconditionally. Returns True on success.
+
+        This is a last-writer-wins overwrite — safe for the single-writer CI/batch
+        path, NOT for the multi-instance runtime. Runtime writers should use
+        download_db_with_generation() + upload_db_if_unchanged() instead.
+        """
         if not self.bucket or not os.path.exists(local_path):
             return False
         try:
@@ -96,6 +101,45 @@ class StorageManager:
         except Exception as e:
             logger.error(f"DB upload failed ({e}).")
         return False
+
+    def download_db_with_generation(self, local_path: str, blob_name: str = DB_BLOB_PATH) -> int | None:
+        """Pull the persisted DB and return the GCS generation it was read at.
+
+        The generation is what makes a later upload safe: passing it back to
+        upload_db_if_unchanged() turns the read-modify-write into an atomic
+        compare-and-swap, so a concurrent writer can never be silently clobbered.
+
+        Returns None when no remote DB exists yet (nothing is written to
+        local_path in that case). Raises on transport/credential failure, so
+        callers don't mistake a broken pull for an empty bucket.
+        """
+        if not self.bucket:
+            raise RuntimeError("GCS bucket unavailable — cannot read DB generation.")
+        blob = self.bucket.get_blob(blob_name)  # get_blob (not blob) populates .generation
+        if blob is None:
+            return None
+        blob.download_to_filename(local_path)
+        return blob.generation
+
+    def upload_db_if_unchanged(self, local_path: str, generation: int | None, blob_name: str = DB_BLOB_PATH) -> bool:
+        """Upload the DB only if the remote object is still at `generation`.
+
+        Pass generation=None to mean "create only if still absent". Returns False
+        (without raising) when another writer got there first, so the caller can
+        re-read and retry the merge.
+        """
+        from google.api_core.exceptions import PreconditionFailed
+
+        if not self.bucket or not os.path.exists(local_path):
+            return False
+        precondition = 0 if generation is None else generation
+        try:
+            self.bucket.blob(blob_name).upload_from_filename(local_path, if_generation_match=precondition)
+            logger.info(f"Uploaded DB to gs://{GCS_BUCKET_NAME}/{blob_name} (was generation {precondition})")
+            return True
+        except PreconditionFailed:
+            logger.warning(f"DB upload rejected: remote moved past generation {precondition}; will re-merge.")
+            return False
 
     def download_cookies(self, local_path: str, blob_name: str = COOKIES_BLOB_PATH) -> bool:
         """Pull yt-dlp cookies.txt from GCS if present. Returns True if downloaded."""
