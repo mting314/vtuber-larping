@@ -23,37 +23,38 @@ useful prompt. The system solves this with **map-reduce over 15-minute transcrip
 
 Two planes that meet at one file in GCS.
 
-```
-                    ┌─────────────────── WRITE PLANE ───────────────────┐
+```mermaid
+flowchart TB
+    YT["YouTube channel feeds"]
+    HUB["WebSub hub<br/>pubsubhubbub.appspot.com"]
+    OP["operator"]
+    GHA["ingest-stream.yml<br/>manual dispatch"]
 
-  YouTube channel                 ┌──────────────────────────────┐
-   feed updates ───► WebSub hub ──► Cloud Run (app/main.py)      │
-                    (pubsubhubbub) │  POST /api/webhooks/youtube  │
-                                   │  + RSS poller (300s loop)    │
-                                   │            │                 │
-                                   │            ▼                 │
-                                   │   process_stream_pipeline()  │
-                                   │   yt-dlp ─► chunk ─► Gemini  │
-                                   │            │                 │
-                                   │            ▼                 │
-                                   │   persist_stream_to_gcs()    │
-                                   └────────────┬─────────────────┘
-                                                │ compare-and-swap
-  operator ──► ingest-stream.yml ───────────────┤ (if_generation_match)
-               (manual dispatch)                │
-                                                ▼
-                            ┌───────────────────────────────────────┐
-                            │  gs://vtuber-summaries/state/         │
-                            │    vtuber_digest.db   ◄── source of   │
-                            │    youtube_cookies.txt     truth      │
-                            │  gs://vtuber-summaries/transcripts/   │
-                            └───────────────────┬───────────────────┘
-                                                │ pull
-                    ┌────────────── READ PLANE ─┼──────────────────┐
-                                                ▼
-                            deploy-pages.yml ─► export_static_gh_pages.py
-                                                ─► dist/ ─► GitHub Pages
-                                                            (static JSON + app.js)
+    subgraph CR["Cloud Run — app/main.py"]
+        WH["POST /api/webhooks/youtube"]
+        POLL["RSS poller<br/>300s loop"]
+        SWEEP["sweep_failed_retries<br/>1h/2h/4h/8h, cap 4"]
+        PIPE["process_stream_pipeline<br/>yt-dlp → chunk → Gemini map-reduce"]
+        PERSIST["persist_stream_to_gcs"]
+    end
+
+    GCS[("gs://vtuber-summaries<br/>state/vtuber_digest.db — source of truth<br/>state/youtube_cookies.txt<br/>transcripts/*.vtt")]
+
+    subgraph RP["Read plane"]
+        EXP["export_static_gh_pages.py"]
+        PAGES["GitHub Pages<br/>static JSON + app.js"]
+    end
+
+    YT --> HUB --> WH
+    YT -.->|fallback| POLL
+    WH --> PIPE
+    POLL --> PIPE
+    SWEEP --> PIPE
+    PIPE --> PERSIST
+    PERSIST -->|"compare-and-swap<br/>if_generation_match"| GCS
+    OP --> GHA --> GCS
+    GCS -.->|"pull on startup"| PIPE
+    GCS --> EXP --> PAGES
 ```
 
 **Everything durable lives in GCS.** Cloud Run's local SQLite file is scratch space that
@@ -174,6 +175,27 @@ serialized writer.
 `process_stream_pipeline(stream_id)` in `main.py:161`. Five steps, with the stream's
 `status` advanced at each boundary so the UI can show progress.
 
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING: WebSub push / RSS discovery / manual trigger
+    PENDING --> FETCHING_TRANSCRIPT: pipeline starts, stamps last_attempted_at
+    FETCHING_TRANSCRIPT --> SUMMARIZING: VTT parsed and chunked
+    FETCHING_TRANSCRIPT --> FAILED: no captions, or YouTube bot check
+    SUMMARIZING --> COMPLETED: map-reduce done, Summary row written
+    SUMMARIZING --> FAILED: unhandled pipeline error
+    FAILED --> PENDING: sweep_failed_retries, backoff elapsed, retry_count < 4
+    FAILED --> [*]: retry budget spent, awaits manual re-trigger
+    COMPLETED --> [*]
+    note right of FAILED
+        Persisted to GCS, so the poller
+        skips it instead of re-queueing
+        on every cold start.
+    end note
+```
+
+Only `COMPLETED` and `FAILED` are written back to GCS (§6) — the intermediate states live
+and die with the container, which is what lets an orphaned `PENDING` be rediscovered.
+
 **1. Fetch transcript** — `download_youtube_subtitles()` shells out to `yt-dlp` twice: once
 for metadata (title, duration, `release_timestamp`), once for VTT auto-captions. Both calls
 attach a browser User-Agent and, if available, a cookies file. Missing captions is a
@@ -240,6 +262,39 @@ persist_stream_to_gcs(stream_id):
         if upload_db_if_unchanged(tmp, generation):       # if_generation_match
             return True
         # 412 → someone else committed; loop re-reads and re-merges on top
+```
+
+The race it defends against, and what the precondition buys:
+
+```mermaid
+sequenceDiagram
+    participant A as Instance A
+    participant G as GCS vtuber_digest.db
+    participant B as Instance B
+
+    Note over A,B: both finish a summary at roughly the same moment
+
+    A->>G: download_db_with_generation
+    G-->>A: db at generation 100
+    B->>G: download_db_with_generation
+    G-->>B: db at generation 100
+
+    A->>A: _apply_to, upsert stream by video_id
+    B->>B: _apply_to, upsert stream by video_id
+
+    A->>G: upload if_generation_match=100
+    G-->>A: OK, now generation 101
+
+    B->>G: upload if_generation_match=100
+    G-->>B: 412 Precondition Failed
+
+    Note over B: a plain upload_db would have<br/>silently overwritten A here
+
+    B->>G: download_db_with_generation
+    G-->>B: db at generation 101, contains A's stream
+    B->>B: _apply_to, re-merge on top of A
+    B->>G: upload if_generation_match=101
+    G-->>B: OK, now generation 102
 ```
 
 Three invariants:
