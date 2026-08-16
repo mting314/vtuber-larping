@@ -2,6 +2,9 @@
 
 Context for Claude Code working in this repo.
 
+> Full architecture writeup: [`docs/design.md`](docs/design.md) — ingest paths, the
+> map-reduce pipeline, the GCS compare-and-swap persistence model, and current known breaks.
+
 ## What this is
 
 An automated **Map-Reduce LLM summarization pipeline** for VTuber "just chatting"
@@ -19,11 +22,18 @@ and exports static JSON to **GitHub Pages**. The public site is **read-only**: o
 host the live "Summarize Stream" / "Settings" actions are hidden (`app.js` hides
 `#headerActions` when `isStaticHost`).
 
-- **FastAPI backend** (`app/main.py`) — still the local dev server (`uvicorn`) and the code
-  the batch ingest imports. It is **retired from the data path**: `deploy-cloudrun.yml` is
-  now manual-dispatch only, and there is **no runtime GCS DB sync** (the on-startup pull /
-  push-after-run was removed). The old Cloud Run service may still be running but nothing
-  in the data path depends on it.
+- **FastAPI backend** (`app/main.py`) — the local dev server (`uvicorn`), the code the batch
+  ingest imports, and the **WebSub push receiver** on Cloud Run. `deploy-cloudrun.yml` is
+  manual-dispatch only, but the service is live and YouTube pushes to
+  `/api/webhooks/youtube` on every tracked-channel feed update.
+- **Runtime GCS persistence** (`app/persistence.py`) — the container's SQLite file is
+  ephemeral (scale-to-zero wipes it), so the backend pulls the DB from GCS on startup and
+  writes each finished stream back via `persist_stream_to_gcs()`. That write is a
+  **compare-and-swap**, not a file overwrite: it merges the one stream into a fresh copy of
+  the remote DB and uploads with `if_generation_match`, retrying on 412. Never add a plain
+  `upload_db()` call to the runtime path — with `maxScale: 20` it silently drops whatever
+  another instance wrote. Rows are keyed on `Stream.video_id` / `VTuber.channel_id`; the
+  autoincrement `id`s differ per database and must not be copied across.
 - **Static GitHub Pages site** — read-only export (`dist/`) built by
   `scratch/export_static_gh_pages.py`; serves `index.html` + pre-baked JSON
   (`api/streams.json`, `api/streams/<id>.json`). Cannot serve POST.
@@ -48,7 +58,8 @@ app/
   glossary.py      VTuber name normalizer (fixes caption typos: Crony->Kronii, etc.)
   discord.py       send_discord_summary_embed() webhook dispatcher
   ingestion.py     parse_youtube_atom_feed() (WebSub), poll_channel_rss() (fallback)
-  storage.py       StorageManager — GCS with local data/ fallback
+  storage.py       StorageManager — GCS with local data/ fallback; generation-checked DB I/O
+  persistence.py   compare-and-swap write-back of pipeline results to the GCS DB
   logger.py        named loggers (ingestion/manual/pipeline)
   static/index.html  entire frontend (inline JS+CSS, ~915 lines)
 scratch/           one-off ops scripts (ingest, batch, export, migrate, reseed) — NOT app code
