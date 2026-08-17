@@ -302,9 +302,12 @@ Three invariants:
 1. **The local DB is never authoritative.** It's a working copy. The merge target is always
    freshly downloaded.
 2. **Rows are matched on natural keys.** `_apply_to` upserts `Stream` by `video_id` and
-   resolves `VTuber` by `channel_id`, letting the remote DB assign its own `id`s. Copying
-   `id`s across databases would overwrite unrelated rows — a local stream at `id=1` and a
-   remote stream at `id=1` are different streams.
+   resolves `VTuber` via `_resolve_vtuber`, letting the remote DB assign its own `id`s.
+   Copying `id`s across databases would overwrite unrelated rows — a local stream at `id=1`
+   and a remote stream at `id=1` are different streams. Concretely: FUWAMOCO is `id=8` in
+   GCS but `id=7` in a freshly-seeded DB, because the GCS copy was seeded from an older
+   roster. `_resolve_vtuber` also falls back to canonical-name matching when `channel_id`
+   misses, because the key itself has proven unreliable — see §9.
 3. **NOT NULL columns are only overwritten when present.** A partially-populated snapshot
    would otherwise raise on flush and discard a good summary. Nullable columns are always
    copied, so a successful retry clears a stale `error_message`.
@@ -390,6 +393,26 @@ That loop is the root cause, and §6 + §4b-i are the fix: failures now persist,
 skips them, and retries are capped and backed off. **Any replacement egress IP will be
 burned the same way if that loop is ever reintroduced** — a fresh Cloud NAT address would
 last weeks at that request rate. Fix the loop before buying a new IP.
+
+### ⚠ Data: every channel_id in the GCS roster is wrong
+
+All 10 `VTuber` rows in the shared DB carry fabricated channel_ids — nine are 14 characters
+(`UC_RxY1ovTm5bY`) against YouTube's real 24, and Shiori's is well-formed but simply not
+hers. `on_startup` repairs them from `app/roster.py`, **but only inside the container**;
+nothing writes `VTuber` rows back to GCS, so the remote copy stays bad.
+
+That combination is a trap for §6. The payload carries a *repaired* channel_id, the remote
+still has the *stale* one, so a plain `channel_id` lookup misses and inserts a second row —
+forking each VTuber in two and splitting their streams across both entries. Two mitigations:
+
+- `_resolve_vtuber` falls back to canonical-name matching (via `roster.NAME_ALIASES`, so
+  "Zeta Vestia" still matches "Vestia Zeta") and adopts the corrected id onto the existing
+  row instead of creating a rival.
+- `scratch/fix_vtuber_channel_ids.py` repairs the data at the source. Dry-run by default;
+  `--apply` writes back under the same generation precondition as the runtime writer. It
+  also merges duplicate rows and re-points their streams, so it doubles as a repair tool.
+
+Until that migration has been applied, the fallback is load-bearing rather than defensive.
 
 ### ⚠ Durability gap: mid-run instance termination
 

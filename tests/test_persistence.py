@@ -146,3 +146,55 @@ def test_merge_resolves_vtuber_by_channel_not_id(tmp_path):
 
         assert len(s.exec(select(VTuber)).all()) == 2, "should not have created a duplicate channel"
         assert s.exec(select(Stream).where(Stream.video_id == "VID_NEW")).first().vtuber_id == shiori_id
+
+
+def test_stale_remote_channel_id_does_not_fork_the_vtuber(tmp_path):
+    """Regression: the remote's channel_id is stale, the payload's is repaired.
+
+    app.main fixes malformed channel_ids only inside the container, so the GCS
+    copy still holds the bad value. Matching on channel_id alone misses and
+    inserts a second row, splitting a VTuber's streams across two entries.
+    """
+    engine = _db(tmp_path, "remote.db")
+    with Session(engine) as s:
+        s.add(VTuber(name="Shiori Novella", channel_id="UC1uv2Oq6kNxgATlCiez59zQ",
+                     agency="Hololive English"))
+        s.commit()
+        stale_id = s.exec(select(VTuber)).first().id
+
+        _apply_to(s, _payload())  # payload carries the *corrected* channel_id
+
+        vtubers = s.exec(select(VTuber)).all()
+        assert len(vtubers) == 1, f"forked into {len(vtubers)} rows"
+        assert vtubers[0].id == stale_id, "should reuse the existing row, not replace it"
+        assert vtubers[0].channel_id == CHANNEL, "should adopt the corrected channel_id"
+        assert s.exec(select(Stream).where(Stream.video_id == "VID_NEW")).first().vtuber_id == stale_id
+
+
+def test_legacy_name_spelling_still_matches(tmp_path):
+    """'Zeta Vestia' and 'Vestia Zeta' are the same person across DB vintages."""
+    engine = _db(tmp_path, "remote.db")
+    payload = _payload()
+    payload["vtuber"] = {"channel_id": "UCTvHWSfBZgtxE4sILOaurIQ",
+                         "name": "Vestia Zeta", "agency": "Hololive ID"}
+    with Session(engine) as s:
+        s.add(VTuber(name="Zeta Vestia", channel_id="UC_38fJIy2FoDg", agency="Hololive ID"))
+        s.commit()
+
+        _apply_to(s, payload)
+
+        assert len(s.exec(select(VTuber)).all()) == 1
+        assert s.exec(select(VTuber)).first().channel_id == "UCTvHWSfBZgtxE4sILOaurIQ"
+
+
+def test_genuinely_new_channel_is_still_created(tmp_path):
+    """The fallback must not swallow a real new VTuber."""
+    engine = _db(tmp_path, "remote.db")
+    with Session(engine) as s:
+        s.add(VTuber(name="IRyS", channel_id="UC8rcEBzJSleTkf_-agPM20g", agency="Hololive English"))
+        s.commit()
+
+        _apply_to(s, _payload())  # Shiori — unrelated to IRyS
+
+        names = {v.name for v in s.exec(select(VTuber)).all()}
+        assert names == {"IRyS", "Shiori Novella"}

@@ -28,6 +28,7 @@ from app.ingestion import (
 from app.logger import ingestion_logger, manual_logger, pipeline_logger
 from app.models import JobStatus, Stream, Summary, UserSettings, VTuber
 from app.persistence import persist_stream_to_gcs, restore_db_from_gcs
+from app.roster import ROSTER, canonical_channel_id
 from app.storage import storage_manager
 from app.summarizer import run_map_reduce_pipeline
 from app.transcriber import chunk_cues, download_youtube_subtitles, parse_vtt
@@ -153,37 +154,25 @@ def on_startup():
     # produced here are written back per-stream (see process_stream_pipeline).
     restore_db_from_gcs()
     init_db()
-    # Seed default VTubers if empty or fix invalid legacy channel IDs
-    valid_channel_ids = {
-        "Shiori Novella": "UCgnfPPb9JI3e9A4cXHnWbyg",
-        "Kobo Kanaeru": "UCjLEmnpCNeisMxy134KPwWw",
-        "Nerissa Ravencroft": "UC_sFNM0z0MWm9A6WlKPuMMg",
-        "Vestia Zeta": "UCTvHWSfBZgtxE4sILOaurIQ",
-        "Zeta Vestia": "UCTvHWSfBZgtxE4sILOaurIQ",
-        "Ironmouse": "UCj_TYZ60NDQYY5QpUvOge9g",
-        "Gawr Gura": "UCoSrY_IQQVpmIRZ9Xf-y93g",
-        "FUWAMOCO": "UCt9H_RpQzhxzlyBxFqrdHqA",
-    }
+    # Seed default VTubers if empty, or repair legacy/malformed channel IDs.
+    #
+    # NOTE: this repair is local to the container. It does NOT reach the shared
+    # GCS database — run scratch/fix_vtuber_channel_ids.py for that. Until the
+    # remote is repaired, app.persistence._apply_to falls back to name matching
+    # so a corrected local id can't fork the remote row in two.
     with next(get_session()) as session:
         existing = session.exec(select(VTuber)).all()
         if not existing:
-            default_vtubers = [
-                VTuber(name="Shiori Novella", channel_id="UCgnfPPb9JI3e9A4cXHnWbyg", agency="Hololive English"),
-                VTuber(name="Kobo Kanaeru", channel_id="UCjLEmnpCNeisMxy134KPwWw", agency="Hololive ID"),
-                VTuber(name="Nerissa Ravencroft", channel_id="UC_sFNM0z0MWm9A6WlKPuMMg", agency="Hololive English"),
-                VTuber(name="Vestia Zeta", channel_id="UCTvHWSfBZgtxE4sILOaurIQ", agency="Hololive ID"),
-                VTuber(name="Ironmouse", channel_id="UCj_TYZ60NDQYY5QpUvOge9g", agency="VShojo"),
-                VTuber(name="Gawr Gura", channel_id="UCoSrY_IQQVpmIRZ9Xf-y93g", agency="Hololive English"),
-                VTuber(name="FUWAMOCO", channel_id="UCt9H_RpQzhxzlyBxFqrdHqA", agency="Hololive English"),
-            ]
-            for v in default_vtubers:
-                session.add(v)
+            for name, channel_id, agency in ROSTER:
+                session.add(VTuber(name=name, channel_id=channel_id, agency=agency))
             session.commit()
-            logger.info("Seeded initial VTubers into database.")
+            logger.info(f"Seeded {len(ROSTER)} initial VTubers into database.")
         else:
             for v in existing:
-                if v.name in valid_channel_ids and v.channel_id != valid_channel_ids[v.name]:
-                    v.channel_id = valid_channel_ids[v.name]
+                correct = canonical_channel_id(v.name)
+                if correct and v.channel_id != correct:
+                    logger.info(f"Repairing channel_id for {v.name}: {v.channel_id} -> {correct}")
+                    v.channel_id = correct
                     session.add(v)
             session.commit()
             

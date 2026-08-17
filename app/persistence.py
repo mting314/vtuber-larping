@@ -32,6 +32,7 @@ from sqlmodel import Session, create_engine, select
 
 from app.database import get_session, init_db
 from app.models import Stream, Summary, VTuber
+from app.roster import canonical_name
 from app.storage import storage_manager
 
 logger = logging.getLogger(__name__)
@@ -104,6 +105,47 @@ def snapshot_stream(stream_id: int) -> dict | None:
         return payload
 
 
+def _resolve_vtuber(session: Session, vt_payload: dict) -> VTuber:
+    """Find (or create) the channel in *this* database.
+
+    ids are per-database, so the lookup is by `channel_id`. But channel_id has
+    itself proven unreliable: older databases were seeded with malformed values,
+    and app.main repairs them only in the local container — the shared GCS copy
+    keeps the bad value. A naive channel_id lookup therefore misses and inserts a
+    *second* row for the same VTuber, forking their streams across two entries.
+
+    So: match on channel_id, else fall back to the canonical name, adopting the
+    corrected channel_id onto the row that already exists. Only genuinely unknown
+    channels create a row.
+    """
+    channel_id = vt_payload["channel_id"]
+
+    vtuber = session.exec(select(VTuber).where(VTuber.channel_id == channel_id)).first()
+    if vtuber is not None:
+        return vtuber
+
+    # Same VTuber under a stale/misspelled channel_id? Compare canonical names so
+    # legacy spellings ("Zeta Vestia" vs "Vestia Zeta") still match.
+    wanted = canonical_name(vt_payload["name"])
+    for candidate in session.exec(select(VTuber)).all():
+        if canonical_name(candidate.name) == wanted:
+            logger.info(
+                f"Adopting corrected channel_id for {candidate.name}: "
+                f"{candidate.channel_id} -> {channel_id}"
+            )
+            candidate.channel_id = channel_id
+            session.add(candidate)
+            session.commit()
+            session.refresh(candidate)
+            return candidate
+
+    vtuber = VTuber(**vt_payload)
+    session.add(vtuber)
+    session.commit()
+    session.refresh(vtuber)
+    return vtuber
+
+
 def _apply_to(session: Session, payload: dict) -> None:
     """Upsert the snapshotted stream (+summary) into `session`'s database."""
     video_id = payload["video_id"]
@@ -119,20 +161,9 @@ def _apply_to(session: Session, payload: dict) -> None:
     for field in _STREAM_FIELDS_OPTIONAL:
         setattr(stream, field, payload.get(field))
 
-    # Resolve the channel in *this* database — vtuber ids differ per DB. Create
-    # the row if the remote DB doesn't track this channel yet, so the stream is
-    # never left orphaned.
     vt_payload = payload["vtuber"]
     if vt_payload:
-        vtuber = session.exec(
-            select(VTuber).where(VTuber.channel_id == vt_payload["channel_id"])
-        ).first()
-        if vtuber is None:
-            vtuber = VTuber(**vt_payload)
-            session.add(vtuber)
-            session.commit()
-            session.refresh(vtuber)
-        stream.vtuber_id = vtuber.id
+        stream.vtuber_id = _resolve_vtuber(session, vt_payload).id
 
     session.commit()
     session.refresh(stream)
