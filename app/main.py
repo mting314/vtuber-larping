@@ -89,6 +89,13 @@ async def background_rss_poller():
                             
                             logger.info(f"Background RSS poller discovered new VOD: {video_id} for {vtuber.name}")
                             asyncio.create_task(process_stream_pipeline(stream.id))
+                
+                # Re-check all SCHEDULED streams to see if broadcast ended & captions are ready
+                scheduled_streams = session.exec(select(Stream).where(Stream.status == JobStatus.SCHEDULED)).all()
+                for sched in scheduled_streams:
+                    logger.info(f"Background poller re-checking SCHEDULED stream: {sched.video_id} ('{sched.title}')")
+                    asyncio.create_task(process_stream_pipeline(sched.id))
+
         except Exception as e:
             logger.error(f"Error in background RSS poller loop: {e}")
             
