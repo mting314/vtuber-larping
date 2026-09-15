@@ -65,8 +65,38 @@ def parse_youtube_atom_feed(xml_content: str) -> list[dict[str, Any]]:
         
     return entries
 
+def _yt_dlp_scrape_channel_streams(channel_id: str) -> list[dict[str, Any]]:
+    import yt_dlp
+    url = f"https://www.youtube.com/channel/{channel_id}/streams"
+    ydl_opts = {
+        'extract_flat': 'in_playlist',
+        'playlistend': 5,
+        'quiet': True,
+        'no_warnings': True,
+    }
+    entries = []
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            if info and 'entries' in info:
+                for e in info['entries']:
+                    title_text = e.get('title') or ''
+                    vid = e.get('id')
+                    if vid:
+                        entries.append({
+                            'video_id': vid,
+                            'title': title_text,
+                            'published_at': '',
+                            'channel_id': channel_id,
+                            'channel_name': e.get('uploader') or '',
+                            'thumbnail_url': f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg"
+                        })
+    except Exception as e:
+        logger.error(f"yt-dlp channel scrape error for {channel_id}: {e}")
+    return entries
+
 async def poll_channel_rss(channel_id: str) -> list[dict[str, Any]]:
-    """Fetches public RSS XML feed for a YouTube channel without consuming API quota."""
+    """Fetches recent stream VODs for a YouTube channel via RSS or yt-dlp tab fallback."""
     url = f"https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -76,13 +106,16 @@ async def poll_channel_rss(channel_id: str) -> list[dict[str, Any]]:
         try:
             res = await client.get(url, headers=headers)
             if res.status_code == 200:
-                return parse_youtube_atom_feed(res.text)
-            else:
-                logger.warning(f"RSS fetch status {res.status_code} for channel {channel_id}")
+                parsed = parse_youtube_atom_feed(res.text)
+                if parsed:
+                    return parsed
         except Exception as e:
-            logger.error(f"Failed to fetch RSS for channel {channel_id}: {e}")
-            
-    return []
+            logger.warning(f"RSS XML feed unaccessible for channel {channel_id}: {e}")
+
+    # Fallback to yt-dlp channel /streams tab extraction
+    import asyncio
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(None, _yt_dlp_scrape_channel_streams, channel_id)
 
 async def subscribe_websub_topic(channel_id: str, callback_url: str) -> bool:
     """Subscribes server webhook endpoint to YouTube's WebSub (PubSubHubbub) hub for zero-polling instant push notifications."""
