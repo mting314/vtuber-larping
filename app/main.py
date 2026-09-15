@@ -99,7 +99,7 @@ async def background_rss_poller():
         except Exception as e:
             logger.error(f"Error in background RSS poller loop: {e}")
             
-        await asyncio.sleep(300) # Poll every 5 minutes for real-time stream ingestion right when streams end
+        await asyncio.sleep(86400) # Poll once a day (24h) as a secondary fallback safety net
 
 @app.on_event("startup")
 def on_startup():
