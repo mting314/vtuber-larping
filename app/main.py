@@ -167,12 +167,21 @@ async def process_stream_pipeline(stream_id: int):
         vtt_text, meta = download_youtube_subtitles(video_id)
 
         if not vtt_text:
-            fail_msg = "No auto-captions or subtitles available yet."
-            pipeline_logger.warning(f"[Stream {stream_id}] Status -> FAILED: {fail_msg} (video_id={video_id})")
+            title_lower = (meta.get('title') or stream.title or '').lower()
+            err_lower = (meta.get('error') or '').lower()
+            
+            is_upcoming = ('schedule' in title_lower or 'free chat' in title_lower or 'jailbird' in title_lower or 'catlord' in title_lower or 'upcoming' in err_lower or 'live event' in err_lower or 'begin in' in err_lower)
+            
             with next(get_session()) as session:
                 stream = session.get(Stream, stream_id)
-                stream.status = JobStatus.FAILED
-                stream.error_message = fail_msg
+                if is_upcoming:
+                    stream.status = JobStatus.SCHEDULED
+                    stream.error_message = "Upcoming Stream / Premiere — awaiting broadcast & caption generation"
+                    pipeline_logger.info(f"[Stream {stream_id}] Status -> SCHEDULED: Upcoming premiere/live event (video_id={video_id})")
+                else:
+                    stream.status = JobStatus.FAILED
+                    stream.error_message = meta.get('error') or "No auto-captions or subtitles available yet."
+                    pipeline_logger.warning(f"[Stream {stream_id}] Status -> FAILED: {stream.error_message} (video_id={video_id})")
                 session.add(stream)
                 session.commit()
             return

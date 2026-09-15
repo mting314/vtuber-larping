@@ -90,6 +90,7 @@
         function setViewTab(tab) {
             currentViewTab = tab;
             const tabComp = document.getElementById('tabCompleted');
+            const tabSched = document.getElementById('tabScheduled');
             const tabFail = document.getElementById('tabFailed');
             
             if (tabComp && tabFail) {
@@ -97,6 +98,12 @@
                 tabComp.style.borderColor = tab === 'completed' ? 'rgba(139, 92, 246, 0.5)' : 'var(--border-color)';
                 tabComp.style.color = tab === 'completed' ? '#fff' : 'var(--text-muted)';
                 
+                if (tabSched) {
+                    tabSched.style.background = tab === 'scheduled' ? 'rgba(245, 158, 11, 0.2)' : 'rgba(255, 255, 255, 0.05)';
+                    tabSched.style.borderColor = tab === 'scheduled' ? 'rgba(245, 158, 11, 0.5)' : 'var(--border-color)';
+                    tabSched.style.color = tab === 'scheduled' ? '#fff' : 'var(--text-muted)';
+                }
+
                 tabFail.style.background = tab === 'failed' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.05)';
                 tabFail.style.borderColor = tab === 'failed' ? 'rgba(239, 68, 68, 0.5)' : 'var(--border-color)';
                 tabFail.style.color = tab === 'failed' ? '#fff' : 'var(--text-muted)';
@@ -104,7 +111,7 @@
             
             const filterBar = document.getElementById('filterControlsBar');
             if (filterBar) {
-                filterBar.style.display = tab === 'failed' ? 'none' : 'grid';
+                filterBar.style.display = tab === 'completed' ? 'grid' : 'none';
             }
             applyFiltersAndRender();
         }
@@ -142,14 +149,22 @@
             if (!Array.isArray(cachedStreams)) return;
             
             const completedStreams = cachedStreams.filter(s => s.status === 'COMPLETED' || !s.status);
+            const scheduledStreams = cachedStreams.filter(s => s.status === 'SCHEDULED');
             const failedStreams = cachedStreams.filter(s => s.status === 'FAILED');
             
             const elComp = document.getElementById('countCompleted');
+            const elSched = document.getElementById('countScheduled');
             const elFail = document.getElementById('countFailed');
             if (elComp) elComp.textContent = completedStreams.length;
+            if (elSched) elSched.textContent = scheduledStreams.length;
             if (elFail) elFail.textContent = failedStreams.length;
             
-            let targetList = currentViewTab === 'failed' ? [...failedStreams] : [...completedStreams];
+            let targetList = [...completedStreams];
+            if (currentViewTab === 'scheduled') {
+                targetList = [...scheduledStreams];
+            } else if (currentViewTab === 'failed') {
+                targetList = [...failedStreams];
+            }
             
             if (currentViewTab === 'completed') {
                 if (currentCategory) {
@@ -215,9 +230,37 @@
         function renderStreams(streams) {
             const grid = document.getElementById('streamGrid');
             if (!streams.length) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">
-                    ${currentViewTab === 'failed' ? '🎉 No failed ingestion logs! All streams processed cleanly.' : 'No VTuber stream summaries found for these filter settings.'}
-                </div>`;
+                let msg = 'No VTuber stream summaries found for these filter settings.';
+                if (currentViewTab === 'scheduled') msg = '🎉 No scheduled premieres pending! All aired streams are processed.';
+                if (currentViewTab === 'failed') msg = '🎉 No failed ingestion logs! All streams processed cleanly.';
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">${msg}</div>`;
+                return;
+            }
+
+            if (currentViewTab === 'scheduled') {
+                grid.innerHTML = streams.map(s => `
+                    <div class="stream-card" style="border-color: rgba(245, 158, 11, 0.3);">
+                        <div class="thumbnail-container">
+                            <img src="${s.thumbnail_url || 'https://via.placeholder.com/640x360'}" class="thumbnail-img" alt="${s.title}">
+                            <span class="status-badge" style="background: rgba(245, 158, 11, 0.85); color: white;">SCHEDULED</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="vtuber-meta">
+                                <span class="vtuber-agency-pill" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3); color: #fbbf24;">⏳ ${s.vtuber ? s.vtuber.name : 'VTuber'}</span>
+                            </div>
+                            <div class="stream-title">${s.title}</div>
+                            <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 8px; padding: 0.6rem; font-size: 0.8rem; color: #fde68a;">
+                                <strong>Status:</strong> ${s.error_message || 'Upcoming Stream / Premiere — awaiting stream completion & caption generation.'}
+                            </div>
+                            <div class="stream-footer" style="margin-top: 0.5rem; justify-content: space-between;">
+                                <span>📅 ${formatDateDisplay(s.published_at)}</span>
+                                <button class="btn" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; background: rgba(245, 158, 11, 0.2);" onclick="event.stopPropagation(); retryFailedStream('${s.video_id}')">
+                                    🔄 Check Captions
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
                 return;
             }
 

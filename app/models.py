@@ -11,6 +11,7 @@ class JobStatus(str, Enum):
     SUMMARIZING = "SUMMARIZING"
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
+    SCHEDULED = "SCHEDULED"
 
 class VTuber(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
