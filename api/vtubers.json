@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "Shiori Novella",
+    "agency": "Hololive English",
+    "channel_id": "UCgnfPPb9JI3e9A4cXHnWbyg"
+  },
+  {
+    "id": 2,
+    "name": "Kobo Kanaeru",
+    "agency": "Hololive ID",
+    "channel_id": "UCjLEmnpCNeisMxy134KPwWw"
+  },
+  {
+    "id": 3,
+    "name": "Nerissa Ravencroft",
+    "agency": "Hololive English",
+    "channel_id": "UC_sFNM0z0MWm9A6WlKPuMMg"
+  },
+  {
+    "id": 5,
+    "name": "Ironmouse",
+    "agency": "VShojo",
+    "channel_id": "UCj_TYZ60NDQYY5QpUvOge9g"
+  },
+  {
+    "id": 6,
+    "name": "Gawr Gura",
+    "agency": "Hololive English",
+    "channel_id": "UCoSrY_IQQVpmIRZ9Xf-y93g"
+  },
+  {
+    "id": 8,
+    "name": "FUWAMOCO",
+    "agency": "Hololive English",
+    "channel_id": "UCt9H_RpQzhxzlyBxFqrdHqA"
+  },
+  {
+    "id": 13,
+    "name": "Vestia Zeta",
+    "agency": "Hololive ID",
+    "channel_id": "UCTvHWSfBZgtxE4sILOaurIQ"
+  }
+]

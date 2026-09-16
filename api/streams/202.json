@@ -1,0 +1,19 @@
+{
+  "id": 202,
+  "video_id": "ey3d05sFcOU",
+  "title": "🍝【SPAGHET】🍝",
+  "duration_seconds": 6087,
+  "published_at": "2026-09-01T12:59:12",
+  "thumbnail_url": "https://i.ytimg.com/vi/ey3d05sFcOU/hqdefault.jpg",
+  "status": "FAILED",
+  "stream_category": "chatting",
+  "error_message": "Subtitles / Captions not yet available on YouTube (or members-only)",
+  "warning_message": null,
+  "vtuber": {
+    "id": 13,
+    "name": "Vestia Zeta",
+    "agency": "Hololive ID"
+  },
+  "has_summary": false,
+  "summary": null
+}

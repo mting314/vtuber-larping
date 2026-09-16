@@ -1,0 +1,19 @@
+{
+  "id": 147,
+  "video_id": "ympFsDomlc8",
+  "title": "【Kobolonimbus】Muted when working!",
+  "duration_seconds": 0,
+  "published_at": "2026-09-16T05:43:42.729875",
+  "thumbnail_url": "https://i.ytimg.com/vi/ympFsDomlc8/hqdefault.jpg",
+  "status": "FAILED",
+  "stream_category": "chatting",
+  "error_message": "Subtitles / Captions not yet available on YouTube",
+  "warning_message": null,
+  "vtuber": {
+    "id": 2,
+    "name": "Kobo Kanaeru",
+    "agency": "Hololive ID"
+  },
+  "has_summary": false,
+  "summary": null
+}

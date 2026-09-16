@@ -1,0 +1,19 @@
+{
+  "id": 144,
+  "video_id": "vPbqQiTE2to",
+  "title": "I Yap Therefore I Yap 【Members Only】",
+  "duration_seconds": 0,
+  "published_at": "2026-09-16T05:41:18.905736",
+  "thumbnail_url": "https://i.ytimg.com/vi/vPbqQiTE2to/hqdefault.jpg",
+  "status": "FAILED",
+  "stream_category": "chatting",
+  "error_message": "Subtitles / Captions not yet available on YouTube",
+  "warning_message": null,
+  "vtuber": {
+    "id": 1,
+    "name": "Shiori Novella",
+    "agency": "Hololive English"
+  },
+  "has_summary": false,
+  "summary": null
+}

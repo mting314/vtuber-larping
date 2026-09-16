@@ -1,0 +1,117 @@
+{
+  "id": 117,
+  "video_id": "EAdh6m3E3UI",
+  "title": "【Graduation 3D Mini Live - Gawr Gura】",
+  "duration_seconds": 1579,
+  "published_at": "2025-05-01T00:01:41",
+  "thumbnail_url": "https://i.ytimg.com/vi/EAdh6m3E3UI/maxresdefault.jpg",
+  "status": "COMPLETED",
+  "stream_category": "gaming",
+  "error_message": null,
+  "warning_message": null,
+  "vtuber": {
+    "id": 6,
+    "name": "Gawr Gura",
+    "agency": "Hololive English"
+  },
+  "has_summary": true,
+  "summary": {
+    "master_summary": "# 【Graduation 3D Mini Live - Gawr Gura】\n\n## ⚡ Quick Stream Highlights (TL;DR)\n\n- **[00:01:45 - 00:14:56]**: This segment of the stream primarily features two distinct musical performances, framed by initial chatter and audience interaction. The opening moments include general conversatio...\n- **[00:15:00 - 00:24:26]**: Gawr Gura delivers a heartfelt and emotional message, reflecting on her nearly five-year journey as a VTuber in Hololive. She begins with a powerful spoken word or song performance...",
+    "standout_highlights": [
+      {
+        "timestamp": "00:01:45",
+        "title": "Initial Chat and Interaction",
+        "description": "The segment opens with general conversation, including some foreign speech, and sounds of applause, indicating interaction with the audience or an event before transitioning to music."
+      },
+      {
+        "timestamp": "00:06:05",
+        "title": "Halloween-Themed Song Performance (Myth or Treat)",
+        "description": "A song with strong Halloween imagery is performed, featuring lyrics about frights, chainsaws, and \"Myth or Treat\" references, possibly related to a Hololive EN event or theme."
+      },
+      {
+        "timestamp": "00:10:25",
+        "title": "\"Burn It Down\" Themed Song Performance",
+        "description": "A powerful song is performed with themes of destruction, defiance, and leaving a lasting mark, featuring prominent lyrics like \"Burn it down\" and \"Death will never write my name.\""
+      },
+      {
+        "timestamp": "00:15:00",
+        "title": "Spoken Word Performance",
+        "description": "Gawr Gura opens the segment with an intense and poetic spoken word piece or song, setting a somber and reflective tone."
+      },
+      {
+        "timestamp": "00:16:04",
+        "title": "Heartfelt Thank You & Five-Year Reflection",
+        "description": "Gura transitions from her performance to directly addressing her audience, expressing gratitude 'from the very bottom of my shark heart' and reflecting on her nearly five years as their 'shark idol'."
+      },
+      {
+        "timestamp": "00:17:35",
+        "title": "Growth and Overcoming Struggles",
+        "description": "She shares her initial struggles and lack of experience in streaming, dancing, and singing when she first joined Hololive, admitting it was terrifying but ultimately a pleasure, leading to significant personal growth in confidence."
+      },
+      {
+        "timestamp": "00:18:50",
+        "title": "Appreciation for Community and Colleagues",
+        "description": "Gura thanks her fans for their 'compassion, creativity, and dedication,' calling herself 'your Goomba'. She also expresses deep appreciation for her 'myth ladies' (HoloMyth members), 'Nacho Mama' (staff/artist), and her dedicated 'chumies' (fanbase)."
+      },
+      {
+        "timestamp": "00:19:40",
+        "title": "Final Goodbye and Future Hint",
+        "description": "Gura delivers her final goodbyes, stating she has a 'Gulf Stream current to catch' and it's 'time to OT one last time,' encouraging everyone to take care and be kind, before signing off."
+      }
+    ],
+    "chunks": [
+      {
+        "time_range": "00:01:45 - 00:14:56",
+        "summary": "This segment of the stream primarily features two distinct musical performances, framed by initial chatter and audience interaction. The opening moments include general conversation, interjections in foreign speech, and applause, indicating active engagement. This is followed by a performance of a Halloween-themed song, rich with spooky imagery and allusions to \"Myth or Treat,\" a likely reference to Hololive EN's themed content. The segment concludes with a powerful and emotionally charged song centered on themes of defiance, destruction, and an enduring legacy, highlighted by recurring lines such as \"Burn it down\" and \"Death will never write my name.\"",
+        "highlights": [
+          {
+            "timestamp": "00:01:45",
+            "topic": "Initial Chat and Interaction",
+            "description": "The segment opens with general conversation, including some foreign speech, and sounds of applause, indicating interaction with the audience or an event before transitioning to music."
+          },
+          {
+            "timestamp": "00:06:05",
+            "topic": "Halloween-Themed Song Performance (Myth or Treat)",
+            "description": "A song with strong Halloween imagery is performed, featuring lyrics about frights, chainsaws, and \"Myth or Treat\" references, possibly related to a Hololive EN event or theme."
+          },
+          {
+            "timestamp": "00:10:25",
+            "topic": "\"Burn It Down\" Themed Song Performance",
+            "description": "A powerful song is performed with themes of destruction, defiance, and leaving a lasting mark, featuring prominent lyrics like \"Burn it down\" and \"Death will never write my name.\""
+          }
+        ]
+      },
+      {
+        "time_range": "00:15:00 - 00:24:26",
+        "summary": "Gawr Gura delivers a heartfelt and emotional message, reflecting on her nearly five-year journey as a VTuber in Hololive. She begins with a powerful spoken word or song performance before transitioning into a personal thank you to her audience, expressing deep gratitude for their support, which helped her overcome initial fears and grow in confidence. Gura also extends special thanks to her fellow HoloMyth members, staff, and her fanbase, the 'chumies,' for their companionship and encouragement. The segment concludes with a poignant farewell, hinting at a new chapter while cherishing her time as a 'shark idol'.",
+        "highlights": [
+          {
+            "timestamp": "00:15:00",
+            "topic": "Spoken Word Performance",
+            "description": "Gawr Gura opens the segment with an intense and poetic spoken word piece or song, setting a somber and reflective tone."
+          },
+          {
+            "timestamp": "00:16:04",
+            "topic": "Heartfelt Thank You & Five-Year Reflection",
+            "description": "Gura transitions from her performance to directly addressing her audience, expressing gratitude 'from the very bottom of my shark heart' and reflecting on her nearly five years as their 'shark idol'."
+          },
+          {
+            "timestamp": "00:17:35",
+            "topic": "Growth and Overcoming Struggles",
+            "description": "She shares her initial struggles and lack of experience in streaming, dancing, and singing when she first joined Hololive, admitting it was terrifying but ultimately a pleasure, leading to significant personal growth in confidence."
+          },
+          {
+            "timestamp": "00:18:50",
+            "topic": "Appreciation for Community and Colleagues",
+            "description": "Gura thanks her fans for their 'compassion, creativity, and dedication,' calling herself 'your Goomba'. She also expresses deep appreciation for her 'myth ladies' (HoloMyth members), 'Nacho Mama' (staff/artist), and her dedicated 'chumies' (fanbase)."
+          },
+          {
+            "timestamp": "00:19:40",
+            "topic": "Final Goodbye and Future Hint",
+            "description": "Gura delivers her final goodbyes, stating she has a 'Gulf Stream current to catch' and it's 'time to OT one last time,' encouraging everyone to take care and be kind, before signing off."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": 151,
+  "video_id": "J6RhHgavUYo",
+  "title": "【Kobolonimbus】Yapyap, eating pasta, working",
+  "duration_seconds": 0,
+  "published_at": "2026-09-16T05:47:20.067501",
+  "thumbnail_url": "https://i.ytimg.com/vi/J6RhHgavUYo/hqdefault.jpg",
+  "status": "FAILED",
+  "stream_category": "chatting",
+  "error_message": "Subtitles / Captions not yet available on YouTube",
+  "warning_message": null,
+  "vtuber": {
+    "id": 2,
+    "name": "Kobo Kanaeru",
+    "agency": "Hololive ID"
+  },
+  "has_summary": false,
+  "summary": null
+}

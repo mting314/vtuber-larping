@@ -1,0 +1,2782 @@
+[
+  {
+    "id": 1,
+    "video_id": "Nd9rzBUcOHA",
+    "title": "Peeking Respectfully While Slobbering in the Hot Springs Zatsudan",
+    "duration_seconds": 8882,
+    "published_at": "2026-07-08T20:55:03",
+    "thumbnail_url": "https://i.ytimg.com/vi/Nd9rzBUcOHA/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 2,
+    "video_id": "VMfR5nr8gic",
+    "title": "【Just Chatting】I'M FREE CELEBRATE",
+    "duration_seconds": 15338,
+    "published_at": "2026-06-23T03:34:41",
+    "thumbnail_url": "https://i.ytimg.com/vi/VMfR5nr8gic/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": "Instance <Stream at 0x174867de9e0> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3)",
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 6,
+    "video_id": "3SEBI7aCJQE",
+    "title": "Ring, Ring! Pick Up!  【Schrödinger's Call】 ❗SPOILERS❗",
+    "duration_seconds": 10098,
+    "published_at": "2026-07-21T19:55:19",
+    "thumbnail_url": "https://i.ytimg.com/vi/3SEBI7aCJQE/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 7,
+    "video_id": "1fNUN8pC9PA",
+    "title": "Coming to a Station Near You! 【Denshattack!】",
+    "duration_seconds": 11484,
+    "published_at": "2026-07-20T19:55:37",
+    "thumbnail_url": "https://i.ytimg.com/vi/1fNUN8pC9PA/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 8,
+    "video_id": "7H3S3pyL92o",
+    "title": "Korean Snacks 1st Impressions! 【Handcam】",
+    "duration_seconds": 6945,
+    "published_at": "2026-07-17T22:55:51",
+    "thumbnail_url": "https://i.ytimg.com/vi/7H3S3pyL92o/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 9,
+    "video_id": "k292ILWasCI",
+    "title": "Every Choice Matters but I Make Bad Choices! 【Tides of Tomorrow】",
+    "duration_seconds": 14783,
+    "published_at": "2026-07-15T19:54:53",
+    "thumbnail_url": "https://i.ytimg.com/vi/k292ILWasCI/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 10,
+    "video_id": "ubfmGzYjEUw",
+    "title": "Angela and Andrew My OTP 【The Dark Pictures Anthology: Little Hope】",
+    "duration_seconds": 6183,
+    "published_at": "2026-07-14T23:56:17",
+    "thumbnail_url": "https://i.ytimg.com/vi/ubfmGzYjEUw/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 11,
+    "video_id": "JDtjez4ILUw",
+    "title": "Don't Get Ragebaited Challenge 【The Dark Pictures Anthology: Little Hope】",
+    "duration_seconds": 9208,
+    "published_at": "2026-07-14T00:23:17",
+    "thumbnail_url": "https://i.ytimg.com/vi/JDtjez4ILUw/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 12,
+    "video_id": "JNuifWynpXo",
+    "title": "Novelknights, ROLL OUT! 【MECCHA CHAMELEON】",
+    "duration_seconds": 9149,
+    "published_at": "2026-07-10T22:56:52",
+    "thumbnail_url": "https://i.ytimg.com/vi/JNuifWynpXo/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 14,
+    "video_id": "hOryb1GiCcw",
+    "title": "【Manny's】What Can Kobo Help You With Tonight?",
+    "duration_seconds": 7695,
+    "published_at": "2026-07-23T14:31:51",
+    "thumbnail_url": "https://i.ytimg.com/vi/hOryb1GiCcw/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 17,
+    "video_id": "zpTVDto1PbM",
+    "title": "【FREE TALK】I WENT TO LA!!!!! Story time 😎✨",
+    "duration_seconds": 10988,
+    "published_at": "2026-07-10T15:04:29",
+    "thumbnail_url": "https://i.ytimg.com/vi/zpTVDto1PbM/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 22,
+    "video_id": "Qk-HuGyBsVI",
+    "title": "【PRAGMATA】Sector 03: TERRA DOME!! ⚠️SPOILER ALERT⚠️",
+    "duration_seconds": 9151,
+    "published_at": "2026-05-02T13:00:01",
+    "thumbnail_url": "https://i.ytimg.com/vi/Qk-HuGyBsVI/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 26,
+    "video_id": "0WXjD02P9II",
+    "title": "Sorry, how many stones did you say there were? | The Legend of Zelda: The Wind Waker",
+    "duration_seconds": 19250,
+    "published_at": "2026-07-20T00:55:13",
+    "thumbnail_url": "https://i.ytimg.com/vi/0WXjD02P9II/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 28,
+    "video_id": "zOd1LKP6iCs",
+    "title": "I'm back! + Announcement | Chatting #pr",
+    "duration_seconds": 7757,
+    "published_at": "2026-07-10T00:55:21",
+    "thumbnail_url": "https://i.ytimg.com/vi/zOd1LKP6iCs/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 29,
+    "video_id": "88KyFMqKJO4",
+    "title": "HOLOEN HIDE AND SEEK!!! | MECCHA CHAMELEON",
+    "duration_seconds": 7910,
+    "published_at": "2026-06-30T00:00:37",
+    "thumbnail_url": "https://i.ytimg.com/vi/88KyFMqKJO4/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 34,
+    "video_id": "esvKPneheus",
+    "title": "【Trees Hate You】ragebait",
+    "duration_seconds": 4934,
+    "published_at": "2026-07-18T10:58:47",
+    "thumbnail_url": "https://i.ytimg.com/vi/esvKPneheus/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 36,
+    "video_id": "OvVlD-NZXEU",
+    "title": "【GRANBLUE FANTASY: RELINK – ENDLESS RAGNAROK 】ready for a new oshi ! #PR",
+    "duration_seconds": 11059,
+    "published_at": "2026-07-12T12:00:55",
+    "thumbnail_url": "https://i.ytimg.com/vi/OvVlD-NZXEU/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 37,
+    "video_id": "dFun5at7iLU",
+    "title": "My experience in LA #holoSerendipity",
+    "duration_seconds": 9212,
+    "published_at": "2026-07-10T02:44:16",
+    "thumbnail_url": "https://i.ytimg.com/vi/dFun5at7iLU/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 38,
+    "video_id": "BqeZz2RNLYY",
+    "title": "【Q&A Corner】answering your 95 questions from Holoplus!",
+    "duration_seconds": 9971,
+    "published_at": "2026-06-29T13:59:39",
+    "thumbnail_url": "https://i.ytimg.com/vi/BqeZz2RNLYY/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 39,
+    "video_id": "ZCxVNcZx4Vs",
+    "title": "【SANRIO FES 2026】Let's watch together!!! Kitty-chan I'm rooting for you! 【 #サンリオフェス2026 同時視聴】",
+    "duration_seconds": 5164,
+    "published_at": "2026-06-28T02:27:59",
+    "thumbnail_url": "https://i.ytimg.com/vi/ZCxVNcZx4Vs/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 41,
+    "video_id": "N56LfNu2lBM",
+    "title": "【MECCHA CHAMELEON】 FIND ME ZECRETARY !!!!!!",
+    "duration_seconds": 6757,
+    "published_at": "2026-06-25T11:30:36",
+    "thumbnail_url": "https://i.ytimg.com/vi/N56LfNu2lBM/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 43,
+    "video_id": "JVg3dBYeySo",
+    "title": "Ironmouse, Connor, & Garnt Play Escape The Backrooms..",
+    "duration_seconds": 8436,
+    "published_at": "2026-07-24T06:41:53",
+    "thumbnail_url": "https://i.ytimg.com/vi/JVg3dBYeySo/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 5,
+      "name": "Ironmouse",
+      "agency": "VShojo"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 44,
+    "video_id": "W6Pb4H5-lJQ",
+    "title": "I Went To TennoCon 2026 Part 2!",
+    "duration_seconds": 11714,
+    "published_at": "2026-07-21T06:00:22",
+    "thumbnail_url": "https://i.ytimg.com/vi/W6Pb4H5-lJQ/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 5,
+      "name": "Ironmouse",
+      "agency": "VShojo"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 47,
+    "video_id": "YDAvo47ylXQ",
+    "title": "Ironmouse & Connor Go To Anime Expo Day 3!",
+    "duration_seconds": 5097,
+    "published_at": "2026-07-12T05:30:24",
+    "thumbnail_url": "https://i.ytimg.com/vi/YDAvo47ylXQ/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 5,
+      "name": "Ironmouse",
+      "agency": "VShojo"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 49,
+    "video_id": "RsRed-rJU_Y",
+    "title": "Ironmouse Plays Meccha Chamaleon With Friends!",
+    "duration_seconds": 20755,
+    "published_at": "2026-07-11T01:44:06",
+    "thumbnail_url": "https://i.ytimg.com/vi/RsRed-rJU_Y/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 5,
+      "name": "Ironmouse",
+      "agency": "VShojo"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 51,
+    "video_id": "hl7x63t2YJM",
+    "title": "Ironmouse & Connor Go To Anime Expo Day 1!",
+    "duration_seconds": 2895,
+    "published_at": "2026-07-09T05:02:40",
+    "thumbnail_url": "https://i.ytimg.com/vi/hl7x63t2YJM/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 5,
+      "name": "Ironmouse",
+      "agency": "VShojo"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 52,
+    "video_id": "-00hbI6qMiA",
+    "title": "ironmouse Plays 007 First Light!",
+    "duration_seconds": 7217,
+    "published_at": "2026-07-07T05:15:18",
+    "thumbnail_url": "https://i.ytimg.com/vi/-00hbI6qMiA/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 5,
+      "name": "Ironmouse",
+      "agency": "VShojo"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 54,
+    "video_id": "kLF-1PndbXQ",
+    "title": "【The Elder Scrolls IV: Oblivion Remastered】here's to new adventures!",
+    "duration_seconds": 15667,
+    "published_at": "2025-04-26T21:58:55",
+    "thumbnail_url": "https://i.ytimg.com/vi/kLF-1PndbXQ/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 56,
+    "video_id": "3pS6f3_veik",
+    "title": "chat + announcing my final project",
+    "duration_seconds": 2947,
+    "published_at": "2025-04-20T00:00:18",
+    "thumbnail_url": "https://i.ytimg.com/vi/3pS6f3_veik/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 57,
+    "video_id": "7WFg2wq10rw",
+    "title": "important announcement - gawr gura",
+    "duration_seconds": 528,
+    "published_at": "2025-04-16T02:29:53",
+    "thumbnail_url": "https://i.ytimg.com/vi/7WFg2wq10rw/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 58,
+    "video_id": "qgYK9k2KF7Q",
+    "title": "【R.E.P.O】tax time! secret :3",
+    "duration_seconds": 10511,
+    "published_at": "2025-04-12T23:10:38",
+    "thumbnail_url": "https://i.ytimg.com/vi/qgYK9k2KF7Q/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 61,
+    "video_id": "set_fCDhJgs",
+    "title": "【 Keep Talking and Nobody Explodes 】 The Vtuber to Bomb Diffuser Pipeline is Real",
+    "duration_seconds": 6130,
+    "published_at": "2025-02-02T23:00:44",
+    "thumbnail_url": "https://i.ytimg.com/vi/set_fCDhJgs/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 66,
+    "video_id": "O7BTQM6tmA0",
+    "title": "≪Bum Simulator≫ Smol Bae takeover because Hakos Baelz is useless",
+    "duration_seconds": 7078,
+    "published_at": "2026-07-19T01:01:14",
+    "thumbnail_url": "https://i.ytimg.com/vi/O7BTQM6tmA0/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 69,
+    "video_id": "y9Ej7ie384g",
+    "title": "≪MECCHA CHAMELEON≫ how will they know?",
+    "duration_seconds": 4811,
+    "published_at": "2026-06-30T00:04:54",
+    "thumbnail_url": "https://i.ytimg.com/vi/y9Ej7ie384g/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 72,
+    "video_id": "_5Oa1tab6UI",
+    "title": "≪Organized Inside≫ chill morning with the rat",
+    "duration_seconds": 13834,
+    "published_at": "2026-06-22T01:12:03",
+    "thumbnail_url": "https://i.ytimg.com/vi/_5Oa1tab6UI/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 73,
+    "video_id": "Ws9IXS3PMWY",
+    "title": "【SUPERCHAT READING】comfy cozy silly chatting and some (inevitably) weird stories 🐾 【FUWAMOCO】",
+    "duration_seconds": 17036,
+    "published_at": "2026-07-20T00:55:18",
+    "thumbnail_url": "https://i.ytimg.com/vi/Ws9IXS3PMWY/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 74,
+    "video_id": "BBPOP4HKcXw",
+    "title": "【CASTLEVANIA: SYMPHONY OF THE NIGHT】what is a demon dog 🐾 【FUWAMOCO｜悪魔城ドラキュラX 月下の夜想曲】",
+    "duration_seconds": 14198,
+    "published_at": "2026-07-19T00:56:10",
+    "thumbnail_url": "https://i.ytimg.com/vi/BBPOP4HKcXw/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 76,
+    "video_id": "90q2gS7OOPo",
+    "title": "【CAFE CREW SIMULATOR】moco-chan that's decaf what are you doing 🐾 【FUWAMOCO】",
+    "duration_seconds": 16494,
+    "published_at": "2026-07-17T00:55:09",
+    "thumbnail_url": "https://i.ytimg.com/vi/90q2gS7OOPo/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 77,
+    "video_id": "U8POeCzQqkE",
+    "title": "【CASTLEVANIA: SYMPHONY OF THE NIGHT】iconic ps1 gothic masterpiece 🐾 【FUWAMOCO｜悪魔城ドラキュラX 月下の夜想曲】",
+    "duration_seconds": 20333,
+    "published_at": "2026-07-12T00:55:37",
+    "thumbnail_url": "https://i.ytimg.com/vi/U8POeCzQqkE/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 78,
+    "video_id": "-WHH_8nA5C0",
+    "title": "【#holoEN MECCHA CHAMELEON COLLAB】paint + hide + seek to win 🐾 【FUWAMOCO POV】",
+    "duration_seconds": 7949,
+    "published_at": "2026-06-30T00:00:06",
+    "thumbnail_url": "https://i.ytimg.com/vi/-WHH_8nA5C0/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 79,
+    "video_id": "1AuOtcneQww",
+    "title": "【HOLOEARTH】最後の最後まで！！🌍️ thank you and goodbye holoearth 🐾 【FUWAMOCO｜ホロアース】",
+    "duration_seconds": 2841,
+    "published_at": "2026-06-28T11:17:31",
+    "thumbnail_url": "https://i.ytimg.com/vi/1AuOtcneQww/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 80,
+    "video_id": "9ZO5XCNu2uY",
+    "title": "【KEEP TALKING AND NOBODY EXPLODES with KRONII】how fast can we make the clock crack 🐾 【FUWAMOCO】",
+    "duration_seconds": 6990,
+    "published_at": "2026-06-27T00:56:07",
+    "thumbnail_url": "https://i.ytimg.com/vi/9ZO5XCNu2uY/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 84,
+    "video_id": "7vmmFWL2acE",
+    "title": "【INA INA KITCHEN】】INA IS HUNGRY...FOR SOME CURRY....Hey That Rhymed",
+    "duration_seconds": 5562,
+    "published_at": "2026-07-23T22:01:33",
+    "thumbnail_url": "https://i.ytimg.com/vi/7vmmFWL2acE/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 86,
+    "video_id": "xagdRKOPehw",
+    "title": "【Arknights: Endfield】New Update Time!!!! Arcane....!!!!",
+    "duration_seconds": 13882,
+    "published_at": "2026-07-18T21:01:09",
+    "thumbnail_url": "https://i.ytimg.com/vi/xagdRKOPehw/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 87,
+    "video_id": "x8Rb7HSe320",
+    "title": "【Rhythm Heaven Groove】It's Time to Groove It Groove It",
+    "duration_seconds": 7875,
+    "published_at": "2026-07-16T22:00:25",
+    "thumbnail_url": "https://i.ytimg.com/vi/x8Rb7HSe320/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 90,
+    "video_id": "d-L_fb1rEF0",
+    "title": "【Ibb & Obb】Octo'Clock On the Clock! We Are....Coordinated...?! #holoSerendipity",
+    "duration_seconds": 7605,
+    "published_at": "2026-06-28T23:02:02",
+    "thumbnail_url": "https://i.ytimg.com/vi/d-L_fb1rEF0/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 91,
+    "video_id": "YVmIGZd7Y80",
+    "title": "【Forza Horizon 6】heh",
+    "duration_seconds": 8871,
+    "published_at": "2026-06-27T11:01:09",
+    "thumbnail_url": "https://i.ytimg.com/vi/YVmIGZd7Y80/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 94,
+    "video_id": "JlTQaZE2fVk",
+    "title": "【ポッピュコム / POPUCOM】 協力だー！！！パズルだ！！！PUZZLES AND FUN!!!",
+    "duration_seconds": 10728,
+    "published_at": "2026-07-26T12:03:08",
+    "thumbnail_url": "https://i.ytimg.com/vi/JlTQaZE2fVk/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 95,
+    "video_id": "MyohNb0mRfk",
+    "title": "【Denshattack!】OFF THE RAILS?! #PR",
+    "duration_seconds": 9978,
+    "published_at": "2026-07-18T03:01:04",
+    "thumbnail_url": "https://i.ytimg.com/vi/MyohNb0mRfk/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 96,
+    "video_id": "Nh8Z42TsM98",
+    "title": "[RHYTHM HEAVEN GROOVE] IRyTHM I CAN BE",
+    "duration_seconds": 21396,
+    "published_at": "2026-07-14T03:03:40",
+    "thumbnail_url": "https://i.ytimg.com/vi/Nh8Z42TsM98/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 97,
+    "video_id": "gEp7-SgCods",
+    "title": "[BIG ANNOUNCEMENT / 重大告知] Initial I: Racing for the Fastest & ANNOUNCEMENTS #5thAnniversaRyS",
+    "duration_seconds": 4120,
+    "published_at": "2026-07-11T02:57:09",
+    "thumbnail_url": "https://i.ytimg.com/vi/gEp7-SgCods/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 100,
+    "video_id": "n4pHnQmYl_I",
+    "title": "【Girls' Frontline 2: Exilium】Checking out the Frontlines & Anniversary Update?! #PR",
+    "duration_seconds": 12064,
+    "published_at": "2026-06-26T03:17:20",
+    "thumbnail_url": "https://i.ytimg.com/vi/n4pHnQmYl_I/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 101,
+    "video_id": "TSU8unUzO2I",
+    "title": "【007 First Light】HOPE BOND",
+    "duration_seconds": 17674,
+    "published_at": "2026-06-22T03:40:16",
+    "thumbnail_url": "https://i.ytimg.com/vi/TSU8unUzO2I/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 102,
+    "video_id": "3g6NnXverlU",
+    "title": "【Splatoon 3】フルパでビッグラン！！Full Party Big Run!!",
+    "duration_seconds": 16864,
+    "published_at": "2026-06-21T11:04:15",
+    "thumbnail_url": "https://i.ytimg.com/vi/3g6NnXverlU/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": null,
+    "has_summary": true
+  },
+  {
+    "id": 103,
+    "video_id": "U83ZaZwuPgY",
+    "title": "【Post-Talk💬】LOVE MISSION♡",
+    "duration_seconds": 4785,
+    "published_at": "2026-08-07T12:32:43",
+    "thumbnail_url": "https://i.ytimg.com/vi/U83ZaZwuPgY/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 104,
+    "video_id": "LNAXHC_psU0",
+    "title": "【#holoAdvent Q&A COLLAB】answering your BURNING questions for our 3rd anniversary 🐾 【FUWAMOCO】",
+    "duration_seconds": 7466,
+    "published_at": "2026-08-07T00:56:12",
+    "thumbnail_url": "https://i.ytimg.com/vi/LNAXHC_psU0/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 105,
+    "video_id": "v20tKX4gLIg",
+    "title": "Playing with a -20ms Debuff 【hololive Dreams】",
+    "duration_seconds": 7675,
+    "published_at": "2026-08-06T19:57:37",
+    "thumbnail_url": "https://i.ytimg.com/vi/v20tKX4gLIg/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 106,
+    "video_id": "whjZZ4ZMnBk",
+    "title": "May I Master the Sword of Arts Online? 【Echoes of Aincrad】 ❗SPOILERS",
+    "duration_seconds": 16527,
+    "published_at": "2026-08-05T20:12:47",
+    "thumbnail_url": "https://i.ytimg.com/vi/whjZZ4ZMnBk/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 107,
+    "video_id": "s41pLR0ZKOI",
+    "title": "【Home Sweet Home Ep 2】WAKTUNYA ADU MEKANIK SLEDING HANTU PENARI PART 2",
+    "duration_seconds": 9494,
+    "published_at": "2026-08-09T13:06:29",
+    "thumbnail_url": "https://i.ytimg.com/vi/s41pLR0ZKOI/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 108,
+    "video_id": "x8D5QvYw5bI",
+    "title": "【Home Sweet Home Ep 2】RUMAH MANIS RUMAH EPISODE 2",
+    "duration_seconds": 9767,
+    "published_at": "2026-08-07T13:29:05",
+    "thumbnail_url": "https://i.ytimg.com/vi/x8D5QvYw5bI/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 109,
+    "video_id": "un61Rc9OBFc",
+    "title": "【ELSWORD】WEEKLY RESET!!  CP speedrun cuz I wanted to get to d3 raid T-T",
+    "duration_seconds": 16869,
+    "published_at": "2026-08-07T04:04:57",
+    "thumbnail_url": "https://i.ytimg.com/vi/un61Rc9OBFc/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 110,
+    "video_id": "HE_y-fRn9z8",
+    "title": "【hololive Dreams】LET'S DO GACHA !!!! and daily pokajan... This is my 10th day playing Holodori !",
+    "duration_seconds": 10762,
+    "published_at": "2026-08-07T01:05:16",
+    "thumbnail_url": "https://i.ytimg.com/vi/HE_y-fRn9z8/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 111,
+    "video_id": "mc5B6oogrEM",
+    "title": "【ELSWORD】BELAJAR RAID DOOM DAN CICIL TITLE CONCERTO",
+    "duration_seconds": 42159,
+    "published_at": "2026-08-04T07:02:56",
+    "thumbnail_url": "https://i.ytimg.com/vi/mc5B6oogrEM/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 112,
+    "video_id": "dLV-pnkSWv8",
+    "title": "Where are these freaking triforce charts? | The Legend of Zelda: The Wind Waker",
+    "duration_seconds": 16226,
+    "published_at": "2026-08-08T00:55:08",
+    "thumbnail_url": "https://i.ytimg.com/vi/dLV-pnkSWv8/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 113,
+    "video_id": "jk6GIUH_ojo",
+    "title": "Earth Temple with Bird Friend, Medli! | The Legend of Zelda: The Wind Waker",
+    "duration_seconds": 22893,
+    "published_at": "2026-08-02T00:55:10",
+    "thumbnail_url": "https://i.ytimg.com/vi/jk6GIUH_ojo/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 114,
+    "video_id": "jA6-A-BCRC8",
+    "title": "Today, I turn 3! But so do you~ + Announcements of announcements  | 3RD ANNIVERSARY",
+    "duration_seconds": 7032,
+    "published_at": "2026-07-31T00:55:45",
+    "thumbnail_url": "https://i.ytimg.com/vi/jA6-A-BCRC8/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 115,
+    "video_id": "l1Nopa2Y2jo",
+    "title": "random girl spotted in the wild #ホロドリ",
+    "duration_seconds": 15571,
+    "published_at": "2026-08-05T05:08:58",
+    "thumbnail_url": "https://i.ytimg.com/vi/l1Nopa2Y2jo/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 116,
+    "video_id": "tMo6o2kGHuM",
+    "title": "HENSHIN!!! RAIDAAAAAA【Kamen Rider ZEZTZ】Watchalong / 同時視聴！Episode 14~18",
+    "duration_seconds": 7772,
+    "published_at": "2026-08-04T09:00:16",
+    "thumbnail_url": "https://i.ytimg.com/vi/tMo6o2kGHuM/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 117,
+    "video_id": "EAdh6m3E3UI",
+    "title": "【Graduation 3D Mini Live - Gawr Gura】",
+    "duration_seconds": 1579,
+    "published_at": "2025-05-01T00:01:41",
+    "thumbnail_url": "https://i.ytimg.com/vi/EAdh6m3E3UI/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 118,
+    "video_id": "D5XrQD2RkUw",
+    "title": "【UNO】myth 5 ever!",
+    "duration_seconds": 3730,
+    "published_at": "2025-04-30T22:03:26",
+    "thumbnail_url": "https://i.ytimg.com/vi/D5XrQD2RkUw/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 119,
+    "video_id": "ZP8E9WH71OU",
+    "title": "ROOM REVIEW with @NanashiMumei",
+    "duration_seconds": 6605,
+    "published_at": "2025-04-20T22:08:03",
+    "thumbnail_url": "https://i.ytimg.com/vi/ZP8E9WH71OU/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 120,
+    "video_id": "WxKT1tfrMr8",
+    "title": "【PERO'S BIRTHDAY PARTY】i want a birthday wake-up kiss from the rufferans 🐾✨ 【FUWAMOCO】",
+    "duration_seconds": 1588,
+    "published_at": "2026-08-09T00:00:04",
+    "thumbnail_url": "https://i.ytimg.com/vi/WxKT1tfrMr8/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 121,
+    "video_id": "ZSLfgSfL2Ik",
+    "title": "【PHOGS】3 years straight of our yearly tradition 🐾  #FWMC3rd",
+    "duration_seconds": 18192,
+    "published_at": "2026-08-02T00:56:38",
+    "thumbnail_url": "https://i.ytimg.com/vi/ZSLfgSfL2Ik/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 122,
+    "video_id": "wmBV_fyuyqk",
+    "title": "【#holoSerendipity CONCERT WATCHALONG】it's wondrous, somehow we met along the way 🐾 【FUWAMOCO｜同時視聴】",
+    "duration_seconds": 18733,
+    "published_at": "2026-08-01T04:05:29",
+    "thumbnail_url": "https://i.ytimg.com/vi/wmBV_fyuyqk/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 123,
+    "video_id": "u9qiyujBW-8",
+    "title": "Historically Accurate Apartment Trauma 【The Berlin Apartment】❗ Spoilers",
+    "duration_seconds": 11759,
+    "published_at": "2026-08-10T19:56:29",
+    "thumbnail_url": "https://i.ytimg.com/vi/u9qiyujBW-8/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 124,
+    "video_id": "InA1c0SIJDU",
+    "title": "【ERONOCTOSIS COLLAB with SHIORI】save us from madness in this pixel co-op horror 🐾 【FUWAMOCO】",
+    "duration_seconds": 7853,
+    "published_at": "2026-08-11T00:55:35",
+    "thumbnail_url": "https://i.ytimg.com/vi/InA1c0SIJDU/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 125,
+    "video_id": "UkqwIcO3YN8",
+    "title": "Weekly Tentative Schedule",
+    "duration_seconds": 0,
+    "published_at": "2026-08-13T04:45:21.746578",
+    "thumbnail_url": "https://i.ytimg.com/vi/UkqwIcO3YN8/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "YouTube Free Chatroom Placeholder (Scheduled in future; no video broadcast created)",
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 126,
+    "video_id": "WnBExtoUM5o",
+    "title": "Making My Ideal Husbando with Random Body Parts 【Eronoctosis】",
+    "duration_seconds": 0,
+    "published_at": "2026-08-11T00:55:38",
+    "thumbnail_url": "https://i.ytimg.com/vi/WnBExtoUM5o/hqdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": "Upcoming Stream / Premiere — awaiting stream completion & caption generation",
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 127,
+    "video_id": "Criw5zhE0bI",
+    "title": "🐦‍⬛ JAILBIRD FREE CHAT🎼",
+    "duration_seconds": 0,
+    "published_at": "2026-08-13T04:45:21.751405",
+    "thumbnail_url": "https://i.ytimg.com/vi/Criw5zhE0bI/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "YouTube Free Chatroom Placeholder (Scheduled in future; no video broadcast created)",
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 128,
+    "video_id": "roWaAwUYqFI",
+    "title": "So many fun things have been happening~ | Members-Only",
+    "duration_seconds": 0,
+    "published_at": "2026-08-13T04:45:21.752065",
+    "thumbnail_url": "https://i.ytimg.com/vi/roWaAwUYqFI/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Members-Only Stream (YouTube captions gated behind channel membership login)",
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 129,
+    "video_id": "38fJIy2FoDg",
+    "title": "𝐂𝐀𝐓𝐋𝐎𝐑𝐃",
+    "duration_seconds": 0,
+    "published_at": "2026-08-13T04:45:21.752623",
+    "thumbnail_url": "https://i.ytimg.com/vi/38fJIy2FoDg/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "YouTube Free Chatroom Placeholder (Scheduled in future; no video broadcast created)",
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 130,
+    "video_id": "W2cPwFpX8DE",
+    "title": "【Road to Empress II】ABSOLUTE CINEMA? ※Spoilers",
+    "duration_seconds": 0,
+    "published_at": "2026-07-31T09:58:38",
+    "thumbnail_url": "https://i.ytimg.com/vi/W2cPwFpX8DE/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "No YouTube Auto-Captions or Subtitles Available (Uncaptioned VOD)",
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 131,
+    "video_id": "UpjoFg-f4bU",
+    "title": "Recording a Video While Streaming & Coughing Probably【Members Only】",
+    "duration_seconds": 0,
+    "published_at": "2026-09-15T06:23:16.162272",
+    "thumbnail_url": "https://i.ytimg.com/vi/UpjoFg-f4bU/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube",
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 132,
+    "video_id": "sEu1Yj-cICI",
+    "title": "A Purrfect Day with My AMEWzing Friend! 【VRChat】ft.@VestiaZeta #GreyscaleX",
+    "duration_seconds": 5878,
+    "published_at": "2026-09-05T01:35:42",
+    "thumbnail_url": "https://i.ytimg.com/vi/sEu1Yj-cICI/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 133,
+    "video_id": "oyODlBe7aFU",
+    "title": "Eldan Girl Experiencing Anti-Eldan Things Probably 【Metaphor: ReFantazio】 SPOILERS",
+    "duration_seconds": 16544,
+    "published_at": "2026-08-31T20:00:30",
+    "thumbnail_url": "https://i.ytimg.com/vi/oyODlBe7aFU/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 134,
+    "video_id": "gJYYO3QeisQ",
+    "title": "Framing Your SOUL! 【Soulframe】",
+    "duration_seconds": 13528,
+    "published_at": "2026-08-28T19:55:07",
+    "thumbnail_url": "https://i.ytimg.com/vi/gJYYO3QeisQ/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 135,
+    "video_id": "7seUd8nr6-8",
+    "title": "This Was Always the PARK【Waterpark Simulator】",
+    "duration_seconds": 6883,
+    "published_at": "2026-08-28T01:01:16",
+    "thumbnail_url": "https://i.ytimg.com/vi/7seUd8nr6-8/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 136,
+    "video_id": "KwGZ94H_aPw",
+    "title": "Future Games Show 2026",
+    "duration_seconds": 8810,
+    "published_at": "2026-08-26T16:49:58",
+    "thumbnail_url": "https://i.ytimg.com/vi/KwGZ94H_aPw/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 137,
+    "video_id": "IPfElU9uBso",
+    "title": "Taking Down a Big Goth Boy Probably 【Metaphor: ReFantazio】 SPOILERS",
+    "duration_seconds": 15883,
+    "published_at": "2026-08-25T19:57:38",
+    "thumbnail_url": "https://i.ytimg.com/vi/IPfElU9uBso/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 138,
+    "video_id": "lNpOfFG4HlQ",
+    "title": "POOF! You Turned Into a Cat! 【Meowgic】",
+    "duration_seconds": 7757,
+    "published_at": "2026-08-22T01:00:23",
+    "thumbnail_url": "https://i.ytimg.com/vi/lNpOfFG4HlQ/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 139,
+    "video_id": "BCwy8TXOXjs",
+    "title": "Sleep & Hunger With a Smidge of Fear 【Fear & Hunger 2 Termina】",
+    "duration_seconds": 6563,
+    "published_at": "2026-08-20T19:59:56",
+    "thumbnail_url": "https://i.ytimg.com/vi/BCwy8TXOXjs/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 140,
+    "video_id": "857DmHSjduM",
+    "title": "Running an Unlicensed Waterpark For Funnies 【Waterpark Simulator】",
+    "duration_seconds": 7390,
+    "published_at": "2026-08-20T00:55:59",
+    "thumbnail_url": "https://i.ytimg.com/vi/857DmHSjduM/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 141,
+    "video_id": "XvB8svQ8ffg",
+    "title": "Helping a Homie Out with His Bloodline 【Metaphor: ReFantazio】 SPOILERS",
+    "duration_seconds": 18668,
+    "published_at": "2026-08-18T20:07:44",
+    "thumbnail_url": "https://i.ytimg.com/vi/XvB8svQ8ffg/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 142,
+    "video_id": "uGzQrJw0fJc",
+    "title": "Do NOT Be Tempted By Hot Evil Anime Men 【Metaphor: ReFantazio】 SPOILERS",
+    "duration_seconds": 9667,
+    "published_at": "2026-08-17T20:01:12",
+    "thumbnail_url": "https://i.ytimg.com/vi/uGzQrJw0fJc/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 143,
+    "video_id": "xNlS-8BPLXc",
+    "title": "The Bigger I Walk The Bigger I Talk Probably 【Big Walk】",
+    "duration_seconds": 9078,
+    "published_at": "2026-08-16T00:56:19",
+    "thumbnail_url": "https://i.ytimg.com/vi/xNlS-8BPLXc/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 144,
+    "video_id": "vPbqQiTE2to",
+    "title": "I Yap Therefore I Yap 【Members Only】",
+    "duration_seconds": 0,
+    "published_at": "2026-09-16T05:41:18.905736",
+    "thumbnail_url": "https://i.ytimg.com/vi/vPbqQiTE2to/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube",
+    "warning_message": null,
+    "vtuber": {
+      "id": 1,
+      "name": "Shiori Novella",
+      "agency": "Hololive English"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 145,
+    "video_id": "srmUY7FK00k",
+    "title": "【hololive Dreams】WE ARE TEAM 7, NO SWEATY SWEATY !! #ししドリ杯",
+    "duration_seconds": 12639,
+    "published_at": "2026-09-14T09:59:03",
+    "thumbnail_url": "https://i.ytimg.com/vi/srmUY7FK00k/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 146,
+    "video_id": "B-qxc7rAaOA",
+    "title": "【MECCHA CHAMELEON】WATASHI WA PICASSO FROM HOLOLIVE",
+    "duration_seconds": 6183,
+    "published_at": "2026-09-11T10:55:58",
+    "thumbnail_url": "https://i.ytimg.com/vi/B-qxc7rAaOA/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 147,
+    "video_id": "ympFsDomlc8",
+    "title": "【Kobolonimbus】Muted when working!",
+    "duration_seconds": 0,
+    "published_at": "2026-09-16T05:43:42.729875",
+    "thumbnail_url": "https://i.ytimg.com/vi/ympFsDomlc8/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube",
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 148,
+    "video_id": "TdBiICbhgZ0",
+    "title": "【ELSWORD】Weekly~! I finally got to build my Exascale!!! New IB: Hwarang Gacha !!!",
+    "duration_seconds": 17505,
+    "published_at": "2026-09-10T06:27:59",
+    "thumbnail_url": "https://i.ytimg.com/vi/TdBiICbhgZ0/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 149,
+    "video_id": "Z7PAkmS7M_E",
+    "title": "【An Eggstremely Hard Game】FUN TIME NO RAGING WITH MY CAT PART 2",
+    "duration_seconds": 16662,
+    "published_at": "2026-09-10T01:16:06",
+    "thumbnail_url": "https://i.ytimg.com/vi/Z7PAkmS7M_E/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 150,
+    "video_id": "aBdxn6_hGYE",
+    "title": "【BOMBANANA!】MONKEY SEE MONKEY DO MONKEY DEAF",
+    "duration_seconds": 15012,
+    "published_at": "2026-09-08T06:00:15",
+    "thumbnail_url": "https://i.ytimg.com/vi/aBdxn6_hGYE/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 151,
+    "video_id": "J6RhHgavUYo",
+    "title": "【Kobolonimbus】Yapyap, eating pasta, working",
+    "duration_seconds": 0,
+    "published_at": "2026-09-16T05:47:20.067501",
+    "thumbnail_url": "https://i.ytimg.com/vi/J6RhHgavUYo/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube",
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 152,
+    "video_id": "kxSLGQZmXq8",
+    "title": "【MECCHA CHAMELEON】BATTLE ROYALE DI GAME INI",
+    "duration_seconds": 8501,
+    "published_at": "2026-09-07T06:59:48",
+    "thumbnail_url": "https://i.ytimg.com/vi/kxSLGQZmXq8/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 153,
+    "video_id": "CSpyRByq7YM",
+    "title": "【Little Nightmares III】DOING SOME ADVENTURE WITH @selenaamaris  ⚠️SPOILER ALERT⚠️",
+    "duration_seconds": 8329,
+    "published_at": "2026-09-05T13:34:29",
+    "thumbnail_url": "https://i.ytimg.com/vi/CSpyRByq7YM/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 154,
+    "video_id": "THZs5lz3HV8",
+    "title": "【Kobolonimbus】Part 2!! Going to finish part Chorus B",
+    "duration_seconds": 0,
+    "published_at": "2026-09-16T05:49:39.159835",
+    "thumbnail_url": "https://i.ytimg.com/vi/THZs5lz3HV8/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube",
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 155,
+    "video_id": "y_FRhJJxgLQ",
+    "title": "【Kobolonimbus】Yapyap while multitasking uweeeeeeee",
+    "duration_seconds": 0,
+    "published_at": "2026-09-16T05:49:43.901628",
+    "thumbnail_url": "https://i.ytimg.com/vi/y_FRhJJxgLQ/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube",
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 156,
+    "video_id": "8dFL2U9Py_k",
+    "title": "【VALORANT】Morning valo anyone ???",
+    "duration_seconds": 9739,
+    "published_at": "2026-08-27T00:19:36",
+    "thumbnail_url": "https://i.ytimg.com/vi/8dFL2U9Py_k/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 157,
+    "video_id": "jwNSmOteWRM",
+    "title": "【hololive Dreams】I hope I get a new cut board!",
+    "duration_seconds": 7865,
+    "published_at": "2026-08-17T11:52:48",
+    "thumbnail_url": "https://i.ytimg.com/vi/jwNSmOteWRM/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 158,
+    "video_id": "lyAcHZIRmK0",
+    "title": "【Home Sweet Home Ep 2】MENGATASI TEKA-TEKI DI CHAPTER 4 !!!!",
+    "duration_seconds": 8885,
+    "published_at": "2026-08-13T15:01:11",
+    "thumbnail_url": "https://i.ytimg.com/vi/lyAcHZIRmK0/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 2,
+      "name": "Kobo Kanaeru",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 159,
+    "video_id": "VPCrxhzJ_yk",
+    "title": "just leveling some tools... | Harvest Moon 64",
+    "duration_seconds": 12648,
+    "published_at": "2026-09-06T11:55:07",
+    "thumbnail_url": "https://i.ytimg.com/vi/VPCrxhzJ_yk/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 160,
+    "video_id": "hVBMlz5LYLg",
+    "title": "CHOOSING A WIFE... | Harvest Moon 64",
+    "duration_seconds": 16732,
+    "published_at": "2026-09-05T01:25:06",
+    "thumbnail_url": "https://i.ytimg.com/vi/hVBMlz5LYLg/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 161,
+    "video_id": "1wkSs2_-bss",
+    "title": "holoEN Collab! Nerissa POV~ P.2 | BIG WALK",
+    "duration_seconds": 8888,
+    "published_at": "2026-09-04T00:55:30",
+    "thumbnail_url": "https://i.ytimg.com/vi/1wkSs2_-bss/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 162,
+    "video_id": "zGx9d5H8DEw",
+    "title": "Summer is still here! | Members-Only",
+    "duration_seconds": 0,
+    "published_at": "2026-09-16T05:55:42.780945",
+    "thumbnail_url": "https://i.ytimg.com/vi/zGx9d5H8DEw/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube",
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 163,
+    "video_id": "zq4_FTpvSic",
+    "title": "Welcome to my hometown! | Harvest Moon 64",
+    "duration_seconds": 14134,
+    "published_at": "2026-08-30T00:54:38",
+    "thumbnail_url": "https://i.ytimg.com/vi/zq4_FTpvSic/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 164,
+    "video_id": "yVYcPOUoduE",
+    "title": "Let's enjoy the #AzureWaves ! | SWIMSUIT OUTFIT DEBUT",
+    "duration_seconds": 4132,
+    "published_at": "2026-08-29T00:55:06",
+    "thumbnail_url": "https://i.ytimg.com/vi/yVYcPOUoduE/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 165,
+    "video_id": "DdOrG_i26-M",
+    "title": "THIS WAS THE PLAN ALONG! | #holoAdvent  WATERPARK SIMULATOR",
+    "duration_seconds": 6870,
+    "published_at": "2026-08-28T01:01:17",
+    "thumbnail_url": "https://i.ytimg.com/vi/DdOrG_i26-M/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 166,
+    "video_id": "2dWaPS246gQ",
+    "title": "Good news abound! | ANNOUNCEMENT",
+    "duration_seconds": 5327,
+    "published_at": "2026-08-23T00:55:12",
+    "thumbnail_url": "https://i.ytimg.com/vi/2dWaPS246gQ/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 167,
+    "video_id": "jAF7sZz4Y1E",
+    "title": "Advent Beach Episode | Waterpark Simulator",
+    "duration_seconds": 7407,
+    "published_at": "2026-08-20T00:55:32",
+    "thumbnail_url": "https://i.ytimg.com/vi/jAF7sZz4Y1E/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 168,
+    "video_id": "sjPz86IL4sk",
+    "title": "Let's eat together~ | Members-Only ASMR",
+    "duration_seconds": 0,
+    "published_at": "2026-09-16T06:00:07.825818",
+    "thumbnail_url": "https://i.ytimg.com/vi/sjPz86IL4sk/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube",
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 169,
+    "video_id": "9vkfsnPy6HM",
+    "title": "holoEN Collab! Nerissa POV~ | BIG WALK",
+    "duration_seconds": 8877,
+    "published_at": "2026-08-16T00:59:39",
+    "thumbnail_url": "https://i.ytimg.com/vi/9vkfsnPy6HM/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 170,
+    "video_id": "6LQYX83AcDo",
+    "title": "THE FINALE | The Legend of Zelda: The Wind Waker",
+    "duration_seconds": 9799,
+    "published_at": "2026-08-15T00:55:33",
+    "thumbnail_url": "https://i.ytimg.com/vi/6LQYX83AcDo/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 171,
+    "video_id": "rxiP6vMwstg",
+    "title": "GIVE US YOUR MONEY!!!! | Burglin' Gnomes",
+    "duration_seconds": 6431,
+    "published_at": "2026-08-13T00:55:16",
+    "thumbnail_url": "https://i.ytimg.com/vi/rxiP6vMwstg/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 3,
+      "name": "Nerissa Ravencroft",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 172,
+    "video_id": "56JvXvA51ls",
+    "title": "【WARHAMMER 40K SPACE MARINE 2】BROTHERs",
+    "duration_seconds": 15462,
+    "published_at": "2025-02-18T19:13:51",
+    "thumbnail_url": "https://i.ytimg.com/vi/56JvXvA51ls/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 173,
+    "video_id": "iOK-8J6l_ak",
+    "title": "【Trick Shot Simulator】Real Life Trick Shots | Behind The Scenes",
+    "duration_seconds": 6367,
+    "published_at": "2025-02-08T01:02:45",
+    "thumbnail_url": "https://i.ytimg.com/vi/iOK-8J6l_ak/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 174,
+    "video_id": "ALdqozsw3sw",
+    "title": "【Kingdom Come: Deliverance】get up, lazy man. or im gonna rub dirt in your eyes",
+    "duration_seconds": 16268,
+    "published_at": "2025-02-04T00:59:56",
+    "thumbnail_url": "https://i.ytimg.com/vi/ALdqozsw3sw/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 175,
+    "video_id": "qhTP_DIrSA8",
+    "title": "【 Balatro 】🗣️ LETS GO GAMBLING",
+    "duration_seconds": 14095,
+    "published_at": "2025-02-01T00:59:57",
+    "thumbnail_url": "https://i.ytimg.com/vi/qhTP_DIrSA8/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 176,
+    "video_id": "NhmiChHf56Q",
+    "title": "【 Tokyo Xtreme Racer 】I Believe in Stutututu Supremacy",
+    "duration_seconds": 13316,
+    "published_at": "2025-01-29T00:58:40",
+    "thumbnail_url": "https://i.ytimg.com/vi/NhmiChHf56Q/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 177,
+    "video_id": "7W_Bo6OSi78",
+    "title": "【 Liars Bar 】Me VS You",
+    "duration_seconds": 9335,
+    "published_at": "2025-01-27T01:01:32",
+    "thumbnail_url": "https://i.ytimg.com/vi/7W_Bo6OSi78/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 178,
+    "video_id": "4y4Vgl5XDIE",
+    "title": "【 New Outfit Reveal 】pet the shark  #snowshark",
+    "duration_seconds": 4979,
+    "published_at": "2025-01-26T01:02:19",
+    "thumbnail_url": "https://i.ytimg.com/vi/4y4Vgl5XDIE/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 6,
+      "name": "Gawr Gura",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 179,
+    "video_id": "bWmsSF2NCeE",
+    "title": "【INFO🐾お知らせ】𝗙𝗨𝗪𝗔𝗠𝗢𝗖𝗢 𝟭𝘀𝘁 𝗔𝗹𝗯𝘂𝗺 💿「FUWAMOCO à la mode ～いつだってあなたの笑顔を守るのッ～」予約受付中✨ ON PRE-ORDER NOW🩵🩷",
+    "duration_seconds": 0,
+    "published_at": "2026-09-16T06:09:34.102781",
+    "thumbnail_url": "https://i.ytimg.com/vi/bWmsSF2NCeE/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube (or members-only)",
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 180,
+    "video_id": "QmxzjAsWqAI",
+    "title": "【IMPORTANT ANNOUNCEMENT｜モココからのお知らせ】lots of love to the fuzz 🐾🩷【FUWAMOCO】",
+    "duration_seconds": 846,
+    "published_at": "2026-09-12T23:55:32",
+    "thumbnail_url": "https://i.ytimg.com/vi/QmxzjAsWqAI/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 181,
+    "video_id": "X6RpgsimpvM",
+    "title": "【BOMBANANA COLLAB】fluffy dog + reaper + gremlin solve puzzles 【FUWAMOCO POV】",
+    "duration_seconds": 7959,
+    "published_at": "2026-09-10T13:01:56",
+    "thumbnail_url": "https://i.ytimg.com/vi/X6RpgsimpvM/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 182,
+    "video_id": "lUHDankrXds",
+    "title": "【#holoAdvent OFF-COLLAB KARAOKE in 3D SELF BOOTH】you never need an excuse to jam 🐾 【FUWAMOCO】",
+    "duration_seconds": 3922,
+    "published_at": "2026-09-10T02:58:16",
+    "thumbnail_url": "https://i.ytimg.com/vi/lUHDankrXds/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 183,
+    "video_id": "abKHLvPa56Y",
+    "title": "【SPAGHET】we hate pasta and horror games... thanks for the curse gigi 🐾 【FUWAMOCO】",
+    "duration_seconds": 5805,
+    "published_at": "2026-09-09T00:55:25",
+    "thumbnail_url": "https://i.ytimg.com/vi/abKHLvPa56Y/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 184,
+    "video_id": "rYDHLtxr8Zk",
+    "title": "【#ロゼキャンARK DAY 2】ぽんこつSAURUSの魔界の番犬だよっ🐾【FUWAMOCO｜ARK: SURVIVAL ASCENDED】",
+    "duration_seconds": 10885,
+    "published_at": "2026-09-05T10:25:18",
+    "thumbnail_url": "https://i.ytimg.com/vi/rYDHLtxr8Zk/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 185,
+    "video_id": "nLTRBR4H1KY",
+    "title": "【#ロゼキャンARK DAY 1】TEAM D集合✨️ ミッションをクリアしてわいわいしていこう🐾【FUWAMOCO｜ARK: SURVIVAL ASCENDED】",
+    "duration_seconds": 18753,
+    "published_at": "2026-09-04T09:55:18",
+    "thumbnail_url": "https://i.ytimg.com/vi/nLTRBR4H1KY/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 186,
+    "video_id": "XC1_gKOp-v0",
+    "title": "【#holoEN BIG WALK COLLAB】teamwork + puzzles + friendship = hiking?! 🐾 【FUWAMOCO POV】",
+    "duration_seconds": 8209,
+    "published_at": "2026-09-04T00:58:27",
+    "thumbnail_url": "https://i.ytimg.com/vi/XC1_gKOp-v0/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 187,
+    "video_id": "NLDMst8Zg58",
+    "title": "【#ホロぷよテト大会 PUYO PUYO TETRIS 2】大会前の最終練習🔥 sister battle before the tournament 🐾【FUWAMOCO｜ぷよぷよテトリス2】",
+    "duration_seconds": 8081,
+    "published_at": "2026-08-30T07:40:23",
+    "thumbnail_url": "https://i.ytimg.com/vi/NLDMst8Zg58/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 188,
+    "video_id": "eK-DB73vyR8",
+    "title": "【FUWAMOCO 3D ANNIVERSARY LIVE AFTERPARTY】new song + 1st album + love for hololive 🐾 #FWMC3rd",
+    "duration_seconds": 19359,
+    "published_at": "2026-08-30T00:55:51",
+    "thumbnail_url": "https://i.ytimg.com/vi/eK-DB73vyR8/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 189,
+    "video_id": "Pd1rwtbxO6A",
+    "title": "【3D LIVE CONCERT 3周年記念ライブ】thanks to hololive🐾 重大告知あり✨️【#FWMC3rd】",
+    "duration_seconds": 4105,
+    "published_at": "2026-08-29T10:55:41",
+    "thumbnail_url": "https://i.ytimg.com/vi/Pd1rwtbxO6A/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 190,
+    "video_id": "_emS73CGqYc",
+    "title": "【MOO WHO? COLLAB】FUWAMOOCOWじゃないよ！本物の番犬はここだよ！what sounds can these demon dogs make 🐾【FUWAMOCO視点】",
+    "duration_seconds": 4302,
+    "published_at": "2026-08-28T13:08:02",
+    "thumbnail_url": "https://i.ytimg.com/vi/_emS73CGqYc/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 191,
+    "video_id": "Ese-cCjJ3sk",
+    "title": "【#ホロぷよテト大会 PUYO PUYO TETRIS 2 COLLAB】マリン先輩がコーチ？！coaching from the best again?! 🐾【FUWAMOCO｜ぷよぷよテトリス2】",
+    "duration_seconds": 5185,
+    "published_at": "2026-08-28T10:59:41",
+    "thumbnail_url": "https://i.ytimg.com/vi/Ese-cCjJ3sk/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 192,
+    "video_id": "i6_T0tiQIkE",
+    "title": "【#ホロぷよテト大会 PUYO PUYO TETRIS 2 COLLAB】すいせい先輩コーチしてくれるの？！coaching from the best?! 🐾【FUWAMOCO｜ぷよぷよテトリス2】",
+    "duration_seconds": 4841,
+    "published_at": "2026-08-23T12:00:10",
+    "thumbnail_url": "https://i.ytimg.com/vi/i6_T0tiQIkE/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 193,
+    "video_id": "W98R4zLVz6A",
+    "title": "【FUWAMOCO'S ENGLISH SUMMER SCHOOL】3D企画!!✨️ FUWAMOCOの英会話スクール🎒英語が通じなきゃ魔界の激苦茶！🐾 【#FWMC英会話】",
+    "duration_seconds": 3460,
+    "published_at": "2026-08-22T11:58:11",
+    "thumbnail_url": "https://i.ytimg.com/vi/W98R4zLVz6A/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "chatting",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 8,
+      "name": "FUWAMOCO",
+      "agency": "Hololive English"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 194,
+    "video_id": "HiDorFDVEq8",
+    "title": "【Hololive Dreams】TEAM 08 GANBAAAAROU #ししドリ杯",
+    "duration_seconds": 16794,
+    "published_at": "2026-09-14T10:00:13",
+    "thumbnail_url": "https://i.ytimg.com/vi/HiDorFDVEq8/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 195,
+    "video_id": "16VakjZUxEE",
+    "title": "【Hololive Dreams 】TEAM 08 FIGHTOO~~ Practice! #ししドリ杯",
+    "duration_seconds": 14735,
+    "published_at": "2026-09-13T13:59:16",
+    "thumbnail_url": "https://i.ytimg.com/vi/16VakjZUxEE/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 196,
+    "video_id": "mRlzbsJDjeg",
+    "title": "【MECCHA CHAMELEON】my middle name is invisible",
+    "duration_seconds": 6161,
+    "published_at": "2026-09-11T10:55:37",
+    "thumbnail_url": "https://i.ytimg.com/vi/mRlzbsJDjeg/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 197,
+    "video_id": "2galak4Drxw",
+    "title": "【Adorable Adventures】LOST IN THE WOODS 【#1】",
+    "duration_seconds": 13540,
+    "published_at": "2026-09-08T11:59:23",
+    "thumbnail_url": "https://i.ytimg.com/vi/2galak4Drxw/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 198,
+    "video_id": "r0QXG1mKwag",
+    "title": "【BOMBANANA!】🍌🙈🙉🙊🍌 monke time",
+    "duration_seconds": 14983,
+    "published_at": "2026-09-08T06:01:25",
+    "thumbnail_url": "https://i.ytimg.com/vi/r0QXG1mKwag/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 199,
+    "video_id": "x7ekqcvyx2o",
+    "title": "【MECCHA CHAMELEON】Searching for HoloID!!!!",
+    "duration_seconds": 8555,
+    "published_at": "2026-09-07T06:58:56",
+    "thumbnail_url": "https://i.ytimg.com/vi/x7ekqcvyx2o/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 200,
+    "video_id": "RjaHLLC0Z9o",
+    "title": "Cozy time with Shiorin in【VRChat】+ Announcement!📣 #GreyscaleX",
+    "duration_seconds": 5869,
+    "published_at": "2026-09-05T01:35:50",
+    "thumbnail_url": "https://i.ytimg.com/vi/RjaHLLC0Z9o/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 201,
+    "video_id": "-4mdXGw_3Jc",
+    "title": "【An Eggstremely Hard Game】Bo..... You look guilty asf....",
+    "duration_seconds": 9977,
+    "published_at": "2026-09-04T07:05:54",
+    "thumbnail_url": "https://i.ytimg.com/vi/-4mdXGw_3Jc/maxresdefault.jpg",
+    "status": "COMPLETED",
+    "stream_category": "gaming",
+    "error_message": null,
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": true
+  },
+  {
+    "id": 202,
+    "video_id": "ey3d05sFcOU",
+    "title": "🍝【SPAGHET】🍝",
+    "duration_seconds": 6087,
+    "published_at": "2026-09-01T12:59:12",
+    "thumbnail_url": "https://i.ytimg.com/vi/ey3d05sFcOU/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube (or members-only)",
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 203,
+    "video_id": "LOeEAFI5DPI",
+    "title": "【PUYO PUYO TETRIS 2】YA BE #ホロぷよテト大会",
+    "duration_seconds": 13876,
+    "published_at": "2026-08-29T11:55:13",
+    "thumbnail_url": "https://i.ytimg.com/vi/LOeEAFI5DPI/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube (or members-only)",
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 204,
+    "video_id": "vBwNbx3l5R0",
+    "title": "【MECCHA CHAMELEON】 i am dust u don't see me",
+    "duration_seconds": 10090,
+    "published_at": "2026-08-23T10:59:29",
+    "thumbnail_url": "https://i.ytimg.com/vi/vBwNbx3l5R0/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube (or members-only)",
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 205,
+    "video_id": "XfZXadrIZKs",
+    "title": "【Meowgic】wanna see a magic trick?",
+    "duration_seconds": 7705,
+    "published_at": "2026-08-22T01:01:23",
+    "thumbnail_url": "https://i.ytimg.com/vi/XfZXadrIZKs/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube (or members-only)",
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": false
+  },
+  {
+    "id": 206,
+    "video_id": "KIf5vVa5XNQ",
+    "title": "POKAJANNNNNN #ホロドリ",
+    "duration_seconds": 10992,
+    "published_at": "2026-08-16T13:04:46",
+    "thumbnail_url": "https://i.ytimg.com/vi/KIf5vVa5XNQ/hqdefault.jpg",
+    "status": "FAILED",
+    "stream_category": "chatting",
+    "error_message": "Subtitles / Captions not yet available on YouTube (or members-only)",
+    "warning_message": null,
+    "vtuber": {
+      "id": 13,
+      "name": "Vestia Zeta",
+      "agency": "Hololive ID"
+    },
+    "has_summary": false
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "id": 128,
+  "video_id": "roWaAwUYqFI",
+  "title": "So many fun things have been happening~ | Members-Only",
+  "duration_seconds": 0,
+  "published_at": "2026-08-13T04:45:21.752065",
+  "thumbnail_url": "https://i.ytimg.com/vi/roWaAwUYqFI/hqdefault.jpg",
+  "status": "FAILED",
+  "stream_category": "chatting",
+  "error_message": "Members-Only Stream (YouTube captions gated behind channel membership login)",
+  "warning_message": null,
+  "vtuber": {
+    "id": 3,
+    "name": "Nerissa Ravencroft",
+    "agency": "Hololive English"
+  },
+  "has_summary": false,
+  "summary": null
+}

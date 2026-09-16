@@ -1,0 +1,76 @@
+{
+  "id": 120,
+  "video_id": "WxKT1tfrMr8",
+  "title": "【PERO'S BIRTHDAY PARTY】i want a birthday wake-up kiss from the rufferans 🐾✨ 【FUWAMOCO】",
+  "duration_seconds": 1588,
+  "published_at": "2026-08-09T00:00:04",
+  "thumbnail_url": "https://i.ytimg.com/vi/WxKT1tfrMr8/maxresdefault.jpg",
+  "status": "COMPLETED",
+  "stream_category": "chatting",
+  "error_message": null,
+  "warning_message": null,
+  "vtuber": {
+    "id": 8,
+    "name": "FUWAMOCO",
+    "agency": "Hololive English"
+  },
+  "has_summary": true,
+  "summary": {
+    "master_summary": "# 【PERO'S BIRTHDAY PARTY】i want a birthday wake-up kiss from the rufferans 🐾✨ 【FUWAMOCO】\n\n## ⚡ Quick Stream Highlights (TL;DR)\n- FUWAMOCO engaged in a stream characterized by playful and fragmented vocalizations.\n- FUWAMOCO displayed moments of confusion and candidly admitted to feeling sleepy.\n- FUWAMOCO reacted to various stimuli with sudden and expressive exclamations.\n- The stream segment showcased FUWAMOCO's spontaneous and humorous interjections.\n\n## ⭐ Standout Stories & Timestamps\n- **[⏱️ 00:15:03](#t=00:15:03) Playful Declarations**: FUWAMOCO made brief, affectionate statements like \"I'm going to do I love you\" and whimsically requested to \"play cake.\"\n- **[⏱️ 00:15:03](#t=00:15:03) Moment of Confusion**: FUWAMOCO voiced a confused question, \"What bleeding?\", indicating a bewildering moment during the stream.\n- **[⏱️ 00:15:03](#t=00:15:03) Weary Admission**: FUWAMOCO candidly admitted to feeling \"almost asleep,\" suggesting a moment of fatigue or drowsiness.\n- **[⏱️ 00:15:03](#t=00:15:03) Sudden Exclamations**: FUWAMOCO reacted with abrupt exclamations such as \"Oops\" and \"What the Fire,\" showcasing spontaneous responses to unseen events.\n- **[⏱️ 00:25:24](#t=00:25:24) Concluding Snort and Exclamation**: The stream segment concluded with FUWAMOCO letting out a distinct snort and an \"Oh god\" utterance, marking an expressive end to the fragmented conversation.\n\n## ⏱️ Timeline Breakdown\n- **[⏱️ 00:15:03](#t=00:15:03) Fragmented Utterances & Reactions**: FUWAMOCO's stream segment was characterized by highly fragmented and disjointed utterances. FUWAMOCO made brief statements like \"I'm going to do I love you,\" inquired \"What bleeding?\", and admitted to being \"almost asleep.\" The segment also included abrupt exclamations such as \"Oops\" and \"What the Fire,\" concluding with a distinct snort and an \"Oh god\" utterance, indicating a series of spontaneous, unconnected vocalizations.",
+    "standout_highlights": [
+      {
+        "timestamp": "00:15:03",
+        "title": "Playful Declarations",
+        "description": "FUWAMOCO made brief, affectionate statements like \"I'm going to do I love you\" and whimsically requested to \"play cake.\""
+      },
+      {
+        "timestamp": "00:15:03",
+        "title": "Moment of Confusion",
+        "description": "FUWAMOCO voiced a confused question, \"What bleeding?\", indicating a bewildering moment during the stream."
+      },
+      {
+        "timestamp": "00:15:03",
+        "title": "Weary Admission",
+        "description": "FUWAMOCO candidly admitted to feeling \"almost asleep,\" suggesting a moment of fatigue or drowsiness."
+      },
+      {
+        "timestamp": "00:15:03",
+        "title": "Sudden Exclamations",
+        "description": "FUWAMOCO reacted with abrupt exclamations such as \"Oops\" and \"What the Fire,\" showcasing spontaneous responses to unseen events."
+      },
+      {
+        "timestamp": "00:25:24",
+        "title": "Concluding Snort and Exclamation",
+        "description": "The stream segment concluded with FUWAMOCO letting out a distinct snort and an \"Oh god\" utterance, marking an expressive end to the fragmented conversation."
+      }
+    ],
+    "chunks": [
+      {
+        "time_range": "00:00:00 - 00:14:54",
+        "summary": "This 15-minute segment consisted predominantly of various vocalizations, including groans and screams, along with fragmented, non-coherent speech and sound effects. No distinct conversational topics, stories, or significant member interactions were identifiable for summarization within this timeframe, aligning with the guidelines for suppressing noise and introductory elements.",
+        "highlights": []
+      },
+      {
+        "time_range": "00:15:03 - 00:25:24",
+        "summary": "The segment consists of highly fragmented and disjointed utterances, making it difficult to discern a clear conversation or topic. Phrases like \"I'm going to do I love you,\" \"play cake,\" \"What bleeding?\", \"I'm almost asleep,\" and \"What the Fire\" appear to be spontaneous reactions or playful interjections. The segment ends with a snort and an exclamation, further indicating a series of brief, unconnected vocalizations rather than a structured dialogue.",
+        "highlights": [
+          {
+            "timestamp": "00:15:03",
+            "topic": "Fragmented Declarations",
+            "description": "The speaker makes a series of brief, seemingly unrelated statements, including 'You leave it. we respect. okay.' and 'I'm going to do I love you,' followed by an instruction to 'play cake.'"
+          },
+          {
+            "timestamp": "00:15:03",
+            "topic": "Moments of Confusion and Weariness",
+            "description": "A question of 'What bleeding?' is voiced, followed by an admission of being 'almost asleep,' suggesting a moment of fatigue or bewilderment."
+          },
+          {
+            "timestamp": "00:15:03",
+            "topic": "Sudden Exclamations and Reactions",
+            "description": "The segment features abrupt exclamations such as 'Oops,' 'What the Fire,' and 'Come on feet. I'm cool.', culminating in a distinct snort and an 'Oh god' utterance."
+          }
+        ]
+      }
+    ]
+  }
+}

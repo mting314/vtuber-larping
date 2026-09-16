@@ -1,0 +1,19 @@
+{
+  "id": 131,
+  "video_id": "UpjoFg-f4bU",
+  "title": "Recording a Video While Streaming & Coughing Probably【Members Only】",
+  "duration_seconds": 0,
+  "published_at": "2026-09-15T06:23:16.162272",
+  "thumbnail_url": "https://i.ytimg.com/vi/UpjoFg-f4bU/hqdefault.jpg",
+  "status": "FAILED",
+  "stream_category": "chatting",
+  "error_message": "Subtitles / Captions not yet available on YouTube",
+  "warning_message": null,
+  "vtuber": {
+    "id": 1,
+    "name": "Shiori Novella",
+    "agency": "Hololive English"
+  },
+  "has_summary": false,
+  "summary": null
+}

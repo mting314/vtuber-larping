@@ -1,0 +1,19 @@
+{
+  "id": 205,
+  "video_id": "XfZXadrIZKs",
+  "title": "【Meowgic】wanna see a magic trick?",
+  "duration_seconds": 7705,
+  "published_at": "2026-08-22T01:01:23",
+  "thumbnail_url": "https://i.ytimg.com/vi/XfZXadrIZKs/hqdefault.jpg",
+  "status": "FAILED",
+  "stream_category": "chatting",
+  "error_message": "Subtitles / Captions not yet available on YouTube (or members-only)",
+  "warning_message": null,
+  "vtuber": {
+    "id": 13,
+    "name": "Vestia Zeta",
+    "agency": "Hololive ID"
+  },
+  "has_summary": false,
+  "summary": null
+}
